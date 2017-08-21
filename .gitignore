@@ -1,0 +1,19 @@
+#================Android================
+# ignore directory
+bin/
+gen/
+proj.android/gen/
+proj.android/obj/
+proj.android/libs/armeabi/*.so
+
+cocos2d/cocos/platform/android/libcocos2dx/build/
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
