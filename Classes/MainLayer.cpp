@@ -12,15 +12,18 @@
 #include "NavigationController.h"
 #include "DrawViewTest.h"
 #include "TableViewTest.h"
+#include "ActionTest.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 using namespace ui;
 using namespace std;
+using namespace CocosDenshion;
 
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "裁剪"};
+const string names[] = {"画板", "GridView", "动作"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -65,6 +68,18 @@ bool MainLayer::init() {
         addChild(btn);
     }
     
+    //播放背景音乐
+    SimpleAudioEngine::getInstance()->preloadBackgroundMusic("background.mp3"); //预加载音乐
+    scheduleOnce([](float dt){
+        SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3", true); //播放音乐
+    }, 2.0f, "Audio");
+//    SimpleAudioEngine::getInstance()->pauseBackgroundMusic(); //暂停播放音乐
+//    SimpleAudioEngine::getInstance()->resumeBackgroundMusic(); //重新播放音乐
+//    SimpleAudioEngine::getInstance()->stopBackgroundMusic(); //停止播放音乐
+    
+    //播放音效
+    SimpleAudioEngine::getInstance()->preloadEffect("pew-pew-lei.wav"); //预加载音效
+    
     return true;
 }
 
@@ -73,6 +88,8 @@ HelloWorld* MainLayer::getMainScene() {
 }
 
 void MainLayer::onBtnClick(Ref* pSender) {
+    
+    SimpleAudioEngine::getInstance()->playEffect("pew-pew-lei.wav"); //播放音效
     
     Button* btn = static_cast<Button*>(pSender);
     if(btn) {
@@ -89,6 +106,8 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 2: {
+                ActionTest* actionTest = ActionTest::create();
+                getMainScene()->getRootLayer()->controller->pushView(actionTest);
                 break;
             }
                 

@@ -26,7 +26,7 @@ bool NavigationController::init() {
     return true;
 }
 
-void NavigationController::pushView(cocos2d::Layer* layer) {
+void NavigationController::pushView(Layer* layer) {
 
     layer->retain();
     
@@ -38,18 +38,25 @@ void NavigationController::pushView(cocos2d::Layer* layer) {
     viewList.pushBack(layer);
 }
 
-void NavigationController::popView() {
+void NavigationController::popView(int popNum) {
 
-    if(viewList.size() > 1) {
-        Layer* topLayer = getTopView();
-        if(topLayer) {
-            topLayer->removeFromParent();
-            topLayer = nullptr;
-        }
-        
+    if(viewList.size() <= popNum) {
+        return;
+    }
+    
+    Layer* topLayer = getTopView();
+    if(topLayer) {
+        topLayer->removeFromParent();
+        topLayer = nullptr;
+    }
+    
+    while(popNum > 0) {
         viewList.popBack();
-        
-        Layer* showLayer = getTopView();
+        popNum--;
+    }
+    
+    Layer* showLayer = getTopView();
+    if(showLayer) {
         addChild(showLayer);
     }
 }

@@ -24,7 +24,7 @@ public:
     
     void pushView(cocos2d::Layer* layer);
     
-    void popView();
+    void popView(int popNum = 1);
     
     cocos2d::Layer* getTopView();
     
