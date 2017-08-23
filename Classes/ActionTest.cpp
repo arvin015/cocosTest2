@@ -14,7 +14,7 @@ USING_NS_CC;
 using namespace ui;
 using namespace std;
 
-const string names[] = {"Sequence", "Repeat", "Spawn", "ActionEase", "Bezier", "Animation"};
+const string names[] = {"Sequence", "Repeat", "Spawn", "ActionEase", "Bezier", "Animation", "CardinalSpline", "Progress"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -59,6 +59,8 @@ bool ActionTest::init() {
         return false;
     }
     
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("grossini_dance.plist", "grossini_dance.png");
+    
     float paddingLeft = 20;
     float paddingTop = 20;
     float width = 125;
@@ -67,13 +69,13 @@ bool ActionTest::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 6; i++) {
+    for(int i = 0; i < 8; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(125, 54));
         btn->setPosition(Vec2(startX + (getMCol(i, column) * (width + paddingLeft)),
                               startY - (getMRow(i, column) * (height + paddingTop))));
-        btn->setTitleFontSize(24);
+        btn->setTitleFontSize(20);
         btn->setTitleText(names[i]);
         btn->addClickEventListener(CC_CALLBACK_1(ActionTest::onBtnClick, this));
         btn->setTag(i);
@@ -82,7 +84,7 @@ bool ActionTest::init() {
     
     testSprite = Sprite::create("elephant1_Diffuse.png");
     testSprite->setPosition(Vec2(300, V_HEIGHT / 2));
-    addChild(testSprite);
+    addChild(testSprite, 1);
     
     return true;
 }
@@ -97,6 +99,7 @@ void ActionTest::onBtnClick(Ref* pSender) {
         testSprite->setScale(1);
         testSprite->setOpacity(255);
         testSprite->setRotation(0);
+        testSprite->setVisible(true);
         
         Text* introText = static_cast<Text*>(getChildByTag(400));
         if(introText) {
@@ -104,16 +107,42 @@ void ActionTest::onBtnClick(Ref* pSender) {
             introText->removeFromParent();
         }
         
+        DrawNode* drawNode = static_cast<DrawNode*>(getChildByTag(600));
+        if(drawNode) {
+            drawNode->removeFromParent();
+        }
+        
+        Sprite* sprite = static_cast<Sprite*>(getChildByTag(101));
+        if(sprite) {
+            sprite->removeFromParent();
+        }
+        
+        ProgressTimer* test = static_cast<ProgressTimer*>(getChildByTag(700));
+        if(test) {
+            test->removeFromParent();
+        }
+        
         int tag = btn->getTag();
         
-        if(tag < 5) {
+        if(tag != 5) {
             testSprite->setTexture("elephant1_Diffuse.png");
         }
         
         switch (tag) {
             case 0: {
+                
+                Sprite* sprite = Sprite::createWithSpriteFrameName("grossini_dance_10.png");
+                sprite->setPosition(Vec2(200, 200));
+                sprite->setTag(101);
+                this->addChild(sprite);
+                
                 auto jump = JumpBy::create(1.0f, Vec2(100, 0), 100, 1);
-                auto action = Sequence::create(jump, DelayTime::create(0.5f), Blink::create(0.5f, 3), jump->reverse(), NULL);
+                
+                auto targetAction = TargetedAction::create(sprite, jump); //指定目标，指定动作
+                
+                auto action = Sequence::create(jump, targetAction, Blink::create(0.5f, 3), jump->reverse(), CallFunc::create([sprite](){
+                    sprite->removeFromParent();
+                }), NULL);
                 testSprite->runAction(action);
                 break;
             }
@@ -177,8 +206,6 @@ void ActionTest::onBtnClick(Ref* pSender) {
                 break;
             }
             case 5: {
-
-                SpriteFrameCache::getInstance()->addSpriteFramesWithFile("grossini_dance.plist", "grossini_dance.png");
                 
                 testSprite->setSpriteFrame("grossini_dance_01.png");
                 
@@ -200,6 +227,40 @@ void ActionTest::onBtnClick(Ref* pSender) {
                 
                 Animate* animate = Animate::create(animation);
                 testSprite->runAction(animate);
+                
+                break;
+            }
+            case 6: {
+                
+                PointArray* points = PointArray::create(20);
+                points->addControlPoint(Vec2(testSprite->getPositionX(), testSprite->getPositionY()));
+                points->addControlPoint(Vec2(testSprite->getPositionX(), testSprite->getPositionY() + 200));
+                points->addControlPoint(Vec2(testSprite->getPositionX() + 200, testSprite->getPositionY() + 200));
+                points->addControlPoint(Vec2(testSprite->getPositionX() + 200, testSprite->getPositionY()));
+                points->addControlPoint(Vec2(testSprite->getPositionX(), testSprite->getPositionY()));
+                
+                auto action = RepeatForever::create(CardinalSplineTo::create(3.0f, points, 0));
+                testSprite->runAction(action);
+                
+                DrawNode* drawNode = DrawNode::create();
+                drawNode->drawCardinalSpline(points, 0, 100, Color4F::RED); //100表示顶点个数
+                drawNode->setTag(600);
+                this->addChild(drawNode, 0);
+                
+                break;
+            }
+            case 7: {
+                
+                testSprite->setVisible(false);
+                
+                auto test = ProgressTimer::create(Sprite::create("elephant1_Diffuse.png"));
+                test->setPosition(testSprite->getPosition());
+                test->setType(ProgressTimer::Type::RADIAL);
+                test->setTag(700);
+                this->addChild(test);
+                
+                auto action = ProgressFromTo::create(2.0f, 0, 100);
+                test->runAction(RepeatForever::create(Sequence::create(action, DelayTime::create(0.5f), action->reverse(), DelayTime::create(0.5f), NULL)));
                 
                 break;
             }

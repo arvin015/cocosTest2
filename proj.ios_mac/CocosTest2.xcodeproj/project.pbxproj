@@ -62,6 +62,9 @@
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */; };
+		A28F459B1F4D5A3600359D90 /* hole_effect.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F45991F4D5A3600359D90 /* hole_effect.png */; };
+		A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F459A1F4D5A3600359D90 /* hole_stencil.png */; };
+		A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */; };
 		A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */; };
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
 		A293B5891F4A8DFC009CF915 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5871F4A8DFC009CF915 /* AndroidModelUtils.cpp */; };
@@ -184,6 +187,10 @@
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawView.cpp; sourceTree = "<group>"; };
 		A24BD64F1F43EC4300A32ABF /* UIDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawView.h; sourceTree = "<group>"; };
+		A28F45991F4D5A3600359D90 /* hole_effect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hole_effect.png; sourceTree = "<group>"; };
+		A28F459A1F4D5A3600359D90 /* hole_stencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hole_stencil.png; sourceTree = "<group>"; };
+		A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClippingTest.cpp; sourceTree = "<group>"; };
+		A28F459E1F4D5A8D00359D90 /* ClippingTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClippingTest.h; sourceTree = "<group>"; };
 		A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54.png; sourceTree = "<group>"; };
 		A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54s.png; sourceTree = "<group>"; };
 		A293B5871F4A8DFC009CF915 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
@@ -360,6 +367,8 @@
 				A2ADE4C81F4C0DFB007C09BE /* grossini_dance.png */,
 				A2ADE4CE1F4C2A31007C09BE /* background.mp3 */,
 				A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */,
+				A28F45991F4D5A3600359D90 /* hole_effect.png */,
+				A28F459A1F4D5A3600359D90 /* hole_stencil.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -385,6 +394,8 @@
 				A293B5981F4AE129009CF915 /* TableViewTest.h */,
 				A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */,
 				A2ADE4C21F4BCD78007C09BE /* ActionTest.h */,
+				A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */,
+				A28F459E1F4D5A8D00359D90 /* ClippingTest.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -571,6 +582,7 @@
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
+				A28F459B1F4D5A3600359D90 /* hole_effect.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */,
@@ -588,6 +600,7 @@
 				A2ADE4C91F4C0DFB007C09BE /* grossini_dance.plist in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				A2ADE4D81F4C3CAA007C09BE /* pew-pew-lei.wav in Resources */,
+				A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
@@ -624,6 +637,7 @@
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
