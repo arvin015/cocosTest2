@@ -39,7 +39,7 @@ bool DatasetTableView::init() {
         return false;
     }
     
-    setBasicData(280, 250, 10, 10, 3);
+    setBasicData(280, 250, 10, 10, 3, 560);
     
     setTableViewImpl(this);
     
@@ -91,9 +91,9 @@ void DatasetTableView::setItemData(Layout* itemLayout, long itemIndex, bool isSe
     }
 }
 
-void DatasetTableView::onSelectIndex(int selectIndex) {
+void DatasetTableView::onGridItemClicked(int selectIndex) {
     if(listener) {
-        listener->onGridItemClicked(selectIndex);
+        this->listener(selectIndex);
     }
 }
 

@@ -12,14 +12,7 @@
 #include <stdio.h>
 #include "UICommonTableView.h"
 
-class OnGridItemClickedListener
-{
-public:
-    
-    virtual void onGridItemClicked(int index) = 0; //点击Item回调
-    
-    virtual ~OnGridItemClickedListener(){}
-};
+typedef std::function<void(int)> OnGridItemClickedListener;
 
 class DatasetInfo;
 
@@ -47,9 +40,9 @@ public:
     virtual void setItemData(cocos2d::ui::Layout* itemLayout, long itemIndex, bool isSelected);
     
     /**
-     * Item点击处理
+     * 点击Item回调
      */
-    virtual void onSelectIndex(int selectIndex);
+    virtual void onGridItemClicked(int index);
     
     /**
      * 设置数据
@@ -59,13 +52,13 @@ public:
     /**
      * 设置选中回调
      */
-    void setSelectListener(OnGridItemClickedListener* listener) {
+    void setSelectListener(const OnGridItemClickedListener &listener) {
         this->listener = listener;
     }
     
 private:
     
-    OnGridItemClickedListener* listener; //点击单元格回调函数
+    OnGridItemClickedListener listener; //点击单元格回调函数
     std::vector<DatasetInfo> datasetList;
 };
 

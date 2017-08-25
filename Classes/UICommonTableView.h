@@ -13,7 +13,26 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "ui/UILayout.h"
-#include "TableViewImpl.h"
+
+class TableViewImpl {
+    
+public:
+    
+    /**
+     * 设置Item布局
+     */
+    virtual void layoutItem(cocos2d::ui::Layout* itemLayout) = 0;
+    
+    /**
+     * 设置Item数据
+     */
+    virtual void setItemData(cocos2d::ui::Layout* itemLayout, long itemIndex, bool isSelected) = 0;
+    
+    /**
+     * 点击Item回调
+     */
+    virtual void onGridItemClicked(int index) {};
+};
 
 class CommonTableView :
 		public cocos2d::Node,
@@ -58,13 +77,10 @@ public:
 	/* -------------------- 可選實現的方法 -------------------- */
 
     // 設置基礎數據
-    void setBasicData(int itemW, int itemH, int spaceH, int spaceV, int column);
+    void setBasicData(int itemW, int itemH, int spaceH, int spaceV, int column, int gridViewHeight);
     
     // 設置Item總數
     void setItemCounts(int counts);
-    
-    // Item點擊
-    virtual void onSelectIndex(int selectIndex) {};
     
     // 獲取當前選中的Index
     int getSelectedIndex() {

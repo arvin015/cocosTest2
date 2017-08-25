@@ -65,7 +65,9 @@ void CommonTableView::tableCellTouched(TableView* table, TableViewCell* cell)
         table->updateCellAtIndex(cell->getIdx());
         _isGridClicked = false;
         
-        onSelectIndex(_selectGridIndex); // 交給子類處理
+        if(_impl) {
+            _impl->onGridItemClicked(_selectGridIndex);
+        }
         
         log("tableCellTouched when click Grid. cell #%zd, grid #%d, index #%d", cell->getIdx(), _selectGridColumn, _selectGridIndex);
         
@@ -173,13 +175,16 @@ void CommonTableView::onGridItemClicked(Ref* pSender)
     _isGridClicked = true;
 }
 
-void CommonTableView::setBasicData(int itemW, int itemH, int spaceH, int spaceV, int column) {
+void CommonTableView::setBasicData(int itemW, int itemH, int spaceH, int spaceV, int column, int gridViewHeight) {
    
     GRID_ITEM_WIDTH = itemW;
     GRID_ITEM_HEIGHT = itemH;
     GRID_ITEM_SPACE_HORIZONTAL = spaceH;
     GRID_ITEM_SPACE_VERTICAL = spaceV;
     GRID_VIEW_COLUMN = column;
+    
+    GRID_VIEW_WIDTH = (GRID_ITEM_WIDTH + GRID_ITEM_SPACE_HORIZONTAL) * GRID_VIEW_COLUMN - GRID_ITEM_SPACE_HORIZONTAL;
+    GRID_VIEW_HEIGHT = gridViewHeight;
 }
 
 void CommonTableView::setItemCounts(int counts) {
