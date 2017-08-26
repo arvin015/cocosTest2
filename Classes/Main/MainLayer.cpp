@@ -11,9 +11,9 @@
 #include "ui/UICheckBox.h"
 #include "HelloWorldScene.h"
 #include "NavigationController.h"
-#include "DrawViewTest.h"
-#include "TableViewTest.h"
-#include "ActionTest.h"
+#include "../DrawViewTest.h"
+#include "../TableViewTest.h"
+#include "../ActionTest.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;

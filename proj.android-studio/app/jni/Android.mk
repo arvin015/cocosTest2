@@ -11,21 +11,33 @@ LOCAL_MODULE := MyGame_shared
 
 LOCAL_MODULE_FILENAME := libMyGame
 
-# LOCAL_SRC_FILES := hellocpp/main.cpp \
-#                    ../../../Classes/AppDelegate.cpp \
-#                    ../../../Classes/HelloWorldScene.cpp \
-#                    ../../../Classes/UIDrawView.cpp \
-#                    ../../../Classes/UICommonTableView.cpp \
-#                    ../../../Classes/UIDatasetTableView.cpp \
-#                    ../../../Classes/TableViewImpl.h \
-#                    ../../../Classes/DatasetInfo.cpp \
-#                    ../../../Classes/AndroidModelUtils.cpp
+LOCAL_SRC_FILES := hellocpp/main.cpp \
+                    ../../../Classes/Main/AppDelegate.cpp \
+                    ../../../Classes/Main/HelloWorldScene.cpp \
+                    ../../../Classes/Main/NavigationController.cpp \
+                    ../../../classes/Main/BaseLayer.cpp \
+                    ../../../classes/Main/MainLayer.cpp \
+                    ../../../classes/DrawViewTest.cpp \
+                    ../../../Classes/UIDrawView.cpp \
+                    ../../../Classes/Common/UICommonTableView.cpp \
+                    ../../../Classes/UIDatasetTableView.cpp \
+                    ../../../Classes/DatasetInfo.cpp \
+                    ../../../Classes/Utils/AndroidModelUtils.cpp \
+                    ../../../Classes/ActionTest.cpp \
+                    ../../../Classes/ClippingTest.cpp \
+                    ../../../Classes/TableViewTest.cpp
 
-FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/*.cpp)
+#FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/*.cpp)
+#FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Main/*.cpp)
+#FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Common/*.cpp)
+#FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Utils/*.cpp)
 
-LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
+#LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes/Main
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes/Common
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes/Utils
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END

@@ -3,10 +3,8 @@
 
 #include "cocos2d.h"
 #include "ui/UIRadioButton.h"
-#include "DatasetInfo.h"
 
 class RootLayer;
-class DatasetTableView;
 
 class HelloWorld : public cocos2d::Scene
 {

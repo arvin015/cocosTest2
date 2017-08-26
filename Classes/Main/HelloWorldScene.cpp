@@ -1,7 +1,6 @@
+#include <AndroidModelUtils.h>
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "UIDatasetTableView.h"
-#include "AndroidModelUtils.h"
 #include "MainLayer.h"
 #include "NavigationController.h"
 
@@ -71,10 +70,10 @@ bool HelloWorld::init()
 //    // add the sprite as a child to this layer
 //    this->addChild(sprite, 0);
     
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//    log("--------------- brand = %s, device = %s, model = %s", AndroidModelUtils::getAndroidModel()[0].c_str(),
-//        AndroidModelUtils::getAndroidModel()[1].c_str(), AndroidModelUtils::getAndroidModel()[2].c_str());
-//#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    log("--------------- brand = %s, device = %s, model = %s", AndroidModelUtils::getAndroidModel()[0].c_str(),
+        AndroidModelUtils::getAndroidModel()[1].c_str(), AndroidModelUtils::getAndroidModel()[2].c_str());
+#endif
     
     rootLayer = RootLayer::create();
     this->addChild(rootLayer);

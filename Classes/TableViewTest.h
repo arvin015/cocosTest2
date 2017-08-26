@@ -10,7 +10,7 @@
 #define TableViewTest_h
 
 #include <stdio.h>
-#include "BaseLayer.h"
+#include "Main/BaseLayer.h"
 #include "DatasetInfo.h"
 #include "ui/UIRadioButton.h"
 
