@@ -14,6 +14,7 @@
 #include "../DrawViewTest.h"
 #include "../TableViewTest.h"
 #include "../ActionTest.h"
+#include "../NumberInTen/NumberInTenLayer.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -24,7 +25,7 @@ using namespace CocosDenshion;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_1"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -56,7 +57,7 @@ bool MainLayer::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 5; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(125, 54));
@@ -119,6 +120,12 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 3: {
+                break;
+            }
+            case 4: {
+                NumberInTenLayer* numberInTenLayer = NumberInTenLayer::create();
+                numberInTenLayer->setHotRect(NumberInTenLayer::HotRectType::BIG);
+                getMainScene()->getRootLayer()->controller->pushView(numberInTenLayer);
                 break;
             }
                 
