@@ -1,4 +1,4 @@
-#include "Utils/AndroidModelUtils.h"
+#include "AndroidModelUtils.h"
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "MainLayer.h"

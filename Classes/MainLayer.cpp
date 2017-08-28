@@ -14,7 +14,7 @@
 #include "DrawViewTest.h"
 #include "TableViewTest.h"
 #include "ActionTest.h"
-#include "NumberInTen/NumberInTenLayer.h"
+#include "NumberInTenLayer.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;

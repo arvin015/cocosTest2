@@ -29,7 +29,6 @@ LOCAL_MODULE_FILENAME := libMyGame
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/hellocpp/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Main/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Common/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Utils/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/*.cpp)
@@ -38,7 +37,6 @@ LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/hellocpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Main
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Common
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Utils
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen
