@@ -10,7 +10,7 @@
 #define ClippingTest_h
 
 #include <stdio.h>
-#include "Main/BaseLayer.h"
+#include "BaseLayer.h"
 
 class ClippingTest : public BaseLayer {
     

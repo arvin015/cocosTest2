@@ -10,7 +10,7 @@
 #define DrawViewTest_h
 
 #include <stdio.h>
-#include "Main/BaseLayer.h"
+#include "BaseLayer.h"
 
 class DrawViewTest : public BaseLayer {
 

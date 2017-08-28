@@ -6,7 +6,7 @@
 #define PROJ_ANDROID_STUDIO_NUMBERINTENLAYER_H
 
 #include <stdio.h>
-#include "../Main/BaseLayer.h"
+#include "BaseLayer.h"
 #include "ui/UIImageView.h"
 
 class DragImageView;

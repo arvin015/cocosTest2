@@ -10,7 +10,7 @@
 #define ActionTest_h
 
 #include <stdio.h>
-#include "Main/BaseLayer.h"
+#include "BaseLayer.h"
 
 class ActionTest : public BaseLayer {
 

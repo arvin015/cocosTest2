@@ -21,10 +21,6 @@
 		46880B7E19C43A67006E1F66 /* CloseSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46880B7719C43A67006E1F66 /* CloseSelected.png */; };
 		46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = 46880B7A19C43A67006E1F66 /* HelloWorld.png */; };
 		46880B8219C43A67006E1F66 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = 46880B7A19C43A67006E1F66 /* HelloWorld.png */; };
-		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
-		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
-		46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */; };
-		46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
 		503AE10017EB989F00D1A890 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FB17EB989F00D1A890 /* AppController.mm */; };
 		503AE10117EB989F00D1A890 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FC17EB989F00D1A890 /* main.m */; };
@@ -65,12 +61,24 @@
 		A28F459B1F4D5A3600359D90 /* hole_effect.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F45991F4D5A3600359D90 /* hole_effect.png */; };
 		A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F459A1F4D5A3600359D90 /* hole_stencil.png */; };
 		A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */; };
+		A28F62FE1F53C261008ADA49 /* btn_a_0.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62F81F53C261008ADA49 /* btn_a_0.png */; };
+		A28F62FF1F53C261008ADA49 /* btn_a_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62F91F53C261008ADA49 /* btn_a_1.png */; };
+		A28F63001F53C261008ADA49 /* btn_a_2.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62FA1F53C261008ADA49 /* btn_a_2.png */; };
+		A28F63011F53C261008ADA49 /* btn_b_0.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62FB1F53C261008ADA49 /* btn_b_0.png */; };
+		A28F63021F53C261008ADA49 /* btn_b_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62FC1F53C261008ADA49 /* btn_b_1.png */; };
+		A28F63031F53C261008ADA49 /* btn_b_2.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F62FD1F53C261008ADA49 /* btn_b_2.png */; };
+		A28F63111F53C3BD008ADA49 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63071F53C3BD008ADA49 /* AppDelegate.cpp */; };
+		A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63091F53C3BD008ADA49 /* BaseLayer.cpp */; };
+		A28F63131F53C3BD008ADA49 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630B1F53C3BD008ADA49 /* HelloWorldScene.cpp */; };
+		A28F63141F53C3BD008ADA49 /* MainLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630D1F53C3BD008ADA49 /* MainLayer.cpp */; };
+		A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */; };
+		A28F631F1F53C6AB008ADA49 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63161F53C6AB008ADA49 /* AndroidModelUtils.cpp */; };
+		A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */; };
+		A28F63211F53C6AB008ADA49 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63191F53C6AB008ADA49 /* DragImageView.cpp */; };
+		A28F63221F53C6AB008ADA49 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F631B1F53C6AB008ADA49 /* NumberInTenLayer.cpp */; };
+		A28F63231F53C6AB008ADA49 /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F631D1F53C6AB008ADA49 /* UICommonTableView.cpp */; };
 		A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */; };
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
-		A293B5891F4A8DFC009CF915 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5871F4A8DFC009CF915 /* AndroidModelUtils.cpp */; };
-		A293B58C1F4ABA6C009CF915 /* MainLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B58A1F4ABA6C009CF915 /* MainLayer.cpp */; };
-		A293B58F1F4AC43B009CF915 /* NavigationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B58D1F4AC43B009CF915 /* NavigationController.cpp */; };
-		A293B5921F4ACD36009CF915 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5901F4ACD36009CF915 /* BaseLayer.cpp */; };
 		A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5931F4AD170009CF915 /* DrawViewTest.cpp */; };
 		A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5971F4AE129009CF915 /* TableViewTest.cpp */; };
 		A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */; };
@@ -79,7 +87,6 @@
 		A2ADE4CA1F4C0DFB007C09BE /* grossini_dance.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADE4C81F4C0DFB007C09BE /* grossini_dance.png */; };
 		A2ADE4CF1F4C2A31007C09BE /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A2ADE4CE1F4C2A31007C09BE /* background.mp3 */; };
 		A2ADE4D81F4C3CAA007C09BE /* pew-pew-lei.wav in Resources */ = {isa = PBXBuildFile; fileRef = A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */; };
-		A2B85BE41F46BE6D0049DEED /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2B85BE21F46BE6D0049DEED /* UICommonTableView.cpp */; };
 		A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2B85BE61F46D3920049DEED /* UIDatasetTableView.cpp */; };
 		A2B85BF11F46E49C0049DEED /* tbg_pic_01.png in Resources */ = {isa = PBXBuildFile; fileRef = A2B85BEF1F46E49C0049DEED /* tbg_pic_01.png */; };
 		A2B85BF21F46E49C0049DEED /* tbg_pic_01c.png in Resources */ = {isa = PBXBuildFile; fileRef = A2B85BF01F46E49C0049DEED /* tbg_pic_01c.png */; };
@@ -144,10 +151,6 @@
 		46880B7619C43A67006E1F66 /* CloseNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseNormal.png; sourceTree = "<group>"; };
 		46880B7719C43A67006E1F66 /* CloseSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseSelected.png; sourceTree = "<group>"; };
 		46880B7A19C43A67006E1F66 /* HelloWorld.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelloWorld.png; sourceTree = "<group>"; };
-		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
-		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorldScene.cpp; sourceTree = "<group>"; };
-		46880B8719C43A87006E1F66 /* HelloWorldScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldScene.h; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		503AE0F717EB97AB00D1A890 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503AE0FA17EB989F00D1A890 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = ios/AppController.h; sourceTree = SOURCE_ROOT; };
@@ -191,16 +194,33 @@
 		A28F459A1F4D5A3600359D90 /* hole_stencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hole_stencil.png; sourceTree = "<group>"; };
 		A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClippingTest.cpp; sourceTree = "<group>"; };
 		A28F459E1F4D5A8D00359D90 /* ClippingTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClippingTest.h; sourceTree = "<group>"; };
+		A28F62F81F53C261008ADA49 /* btn_a_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_a_0.png; sourceTree = "<group>"; };
+		A28F62F91F53C261008ADA49 /* btn_a_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_a_1.png; sourceTree = "<group>"; };
+		A28F62FA1F53C261008ADA49 /* btn_a_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_a_2.png; sourceTree = "<group>"; };
+		A28F62FB1F53C261008ADA49 /* btn_b_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_b_0.png; sourceTree = "<group>"; };
+		A28F62FC1F53C261008ADA49 /* btn_b_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_b_1.png; sourceTree = "<group>"; };
+		A28F62FD1F53C261008ADA49 /* btn_b_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_b_2.png; sourceTree = "<group>"; };
+		A28F63071F53C3BD008ADA49 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
+		A28F63081F53C3BD008ADA49 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A28F63091F53C3BD008ADA49 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseLayer.cpp; sourceTree = "<group>"; };
+		A28F630A1F53C3BD008ADA49 /* BaseLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLayer.h; sourceTree = "<group>"; };
+		A28F630B1F53C3BD008ADA49 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorldScene.cpp; sourceTree = "<group>"; };
+		A28F630C1F53C3BD008ADA49 /* HelloWorldScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldScene.h; sourceTree = "<group>"; };
+		A28F630D1F53C3BD008ADA49 /* MainLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainLayer.cpp; sourceTree = "<group>"; };
+		A28F630E1F53C3BD008ADA49 /* MainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainLayer.h; sourceTree = "<group>"; };
+		A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NavigationController.cpp; sourceTree = "<group>"; };
+		A28F63101F53C3BD008ADA49 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
+		A28F63161F53C6AB008ADA49 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
+		A28F63171F53C6AB008ADA49 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
+		A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DatasetInfo.cpp; sourceTree = "<group>"; };
+		A28F63191F53C6AB008ADA49 /* DragImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragImageView.cpp; sourceTree = "<group>"; };
+		A28F631A1F53C6AB008ADA49 /* DragImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragImageView.h; sourceTree = "<group>"; };
+		A28F631B1F53C6AB008ADA49 /* NumberInTenLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenLayer.cpp; sourceTree = "<group>"; };
+		A28F631C1F53C6AB008ADA49 /* NumberInTenLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenLayer.h; sourceTree = "<group>"; };
+		A28F631D1F53C6AB008ADA49 /* UICommonTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICommonTableView.cpp; sourceTree = "<group>"; };
+		A28F631E1F53C6AB008ADA49 /* UICommonTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonTableView.h; sourceTree = "<group>"; };
 		A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54.png; sourceTree = "<group>"; };
 		A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54s.png; sourceTree = "<group>"; };
-		A293B5871F4A8DFC009CF915 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
-		A293B5881F4A8DFC009CF915 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
-		A293B58A1F4ABA6C009CF915 /* MainLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainLayer.cpp; sourceTree = "<group>"; };
-		A293B58B1F4ABA6C009CF915 /* MainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainLayer.h; sourceTree = "<group>"; };
-		A293B58D1F4AC43B009CF915 /* NavigationController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NavigationController.cpp; sourceTree = "<group>"; };
-		A293B58E1F4AC43B009CF915 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
-		A293B5901F4ACD36009CF915 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseLayer.cpp; sourceTree = "<group>"; };
-		A293B5911F4ACD36009CF915 /* BaseLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLayer.h; sourceTree = "<group>"; };
 		A293B5931F4AD170009CF915 /* DrawViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawViewTest.cpp; sourceTree = "<group>"; };
 		A293B5941F4AD170009CF915 /* DrawViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewTest.h; sourceTree = "<group>"; };
 		A293B5971F4AE129009CF915 /* TableViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableViewTest.cpp; sourceTree = "<group>"; };
@@ -212,11 +232,8 @@
 		A2ADE4C81F4C0DFB007C09BE /* grossini_dance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grossini_dance.png; sourceTree = "<group>"; };
 		A2ADE4CE1F4C2A31007C09BE /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "pew-pew-lei.wav"; sourceTree = "<group>"; };
-		A2B85BE21F46BE6D0049DEED /* UICommonTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICommonTableView.cpp; sourceTree = "<group>"; };
-		A2B85BE31F46BE6D0049DEED /* UICommonTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonTableView.h; sourceTree = "<group>"; };
 		A2B85BE61F46D3920049DEED /* UIDatasetTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDatasetTableView.cpp; sourceTree = "<group>"; };
 		A2B85BE71F46D3920049DEED /* UIDatasetTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatasetTableView.h; sourceTree = "<group>"; };
-		A2B85BE91F46D5C20049DEED /* TableViewImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableViewImpl.h; sourceTree = "<group>"; };
 		A2B85BEB1F46D91B0049DEED /* DatasetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatasetInfo.h; sourceTree = "<group>"; };
 		A2B85BEF1F46E49C0049DEED /* tbg_pic_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tbg_pic_01.png; sourceTree = "<group>"; };
 		A2B85BF01F46E49C0049DEED /* tbg_pic_01c.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tbg_pic_01c.png; sourceTree = "<group>"; };
@@ -369,6 +386,12 @@
 				A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */,
 				A28F45991F4D5A3600359D90 /* hole_effect.png */,
 				A28F459A1F4D5A3600359D90 /* hole_stencil.png */,
+				A28F62F81F53C261008ADA49 /* btn_a_0.png */,
+				A28F62F91F53C261008ADA49 /* btn_a_1.png */,
+				A28F62FA1F53C261008ADA49 /* btn_a_2.png */,
+				A28F62FB1F53C261008ADA49 /* btn_b_0.png */,
+				A28F62FC1F53C261008ADA49 /* btn_b_1.png */,
+				A28F62FD1F53C261008ADA49 /* btn_b_2.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -377,25 +400,38 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A293B5961F4AE0AC009CF915 /* Main */,
-				A2B85BE91F46D5C20049DEED /* TableViewImpl.h */,
-				A2B85BE21F46BE6D0049DEED /* UICommonTableView.cpp */,
-				A2B85BE31F46BE6D0049DEED /* UICommonTableView.h */,
-				A2B85BE61F46D3920049DEED /* UIDatasetTableView.cpp */,
-				A2B85BE71F46D3920049DEED /* UIDatasetTableView.h */,
-				A2B85BEB1F46D91B0049DEED /* DatasetInfo.h */,
-				A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */,
-				A24BD64F1F43EC4300A32ABF /* UIDrawView.h */,
-				A293B5871F4A8DFC009CF915 /* AndroidModelUtils.cpp */,
-				A293B5881F4A8DFC009CF915 /* AndroidModelUtils.h */,
-				A293B5931F4AD170009CF915 /* DrawViewTest.cpp */,
-				A293B5941F4AD170009CF915 /* DrawViewTest.h */,
-				A293B5971F4AE129009CF915 /* TableViewTest.cpp */,
-				A293B5981F4AE129009CF915 /* TableViewTest.h */,
 				A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */,
 				A2ADE4C21F4BCD78007C09BE /* ActionTest.h */,
+				A28F63161F53C6AB008ADA49 /* AndroidModelUtils.cpp */,
+				A28F63171F53C6AB008ADA49 /* AndroidModelUtils.h */,
+				A28F63071F53C3BD008ADA49 /* AppDelegate.cpp */,
+				A28F63081F53C3BD008ADA49 /* AppDelegate.h */,
+				A28F63091F53C3BD008ADA49 /* BaseLayer.cpp */,
+				A28F630A1F53C3BD008ADA49 /* BaseLayer.h */,
 				A28F459D1F4D5A8D00359D90 /* ClippingTest.cpp */,
 				A28F459E1F4D5A8D00359D90 /* ClippingTest.h */,
+				A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */,
+				A2B85BEB1F46D91B0049DEED /* DatasetInfo.h */,
+				A28F63191F53C6AB008ADA49 /* DragImageView.cpp */,
+				A28F631A1F53C6AB008ADA49 /* DragImageView.h */,
+				A293B5931F4AD170009CF915 /* DrawViewTest.cpp */,
+				A293B5941F4AD170009CF915 /* DrawViewTest.h */,
+				A28F630B1F53C3BD008ADA49 /* HelloWorldScene.cpp */,
+				A28F630C1F53C3BD008ADA49 /* HelloWorldScene.h */,
+				A28F630D1F53C3BD008ADA49 /* MainLayer.cpp */,
+				A28F630E1F53C3BD008ADA49 /* MainLayer.h */,
+				A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */,
+				A28F63101F53C3BD008ADA49 /* NavigationController.h */,
+				A28F631B1F53C6AB008ADA49 /* NumberInTenLayer.cpp */,
+				A28F631C1F53C6AB008ADA49 /* NumberInTenLayer.h */,
+				A293B5971F4AE129009CF915 /* TableViewTest.cpp */,
+				A293B5981F4AE129009CF915 /* TableViewTest.h */,
+				A28F631D1F53C6AB008ADA49 /* UICommonTableView.cpp */,
+				A28F631E1F53C6AB008ADA49 /* UICommonTableView.h */,
+				A2B85BE61F46D3920049DEED /* UIDatasetTableView.cpp */,
+				A2B85BE71F46D3920049DEED /* UIDatasetTableView.h */,
+				A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */,
+				A24BD64F1F43EC4300A32ABF /* UIDrawView.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -447,23 +483,6 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
-		};
-		A293B5961F4AE0AC009CF915 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
-				46880B8519C43A87006E1F66 /* AppDelegate.h */,
-				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
-				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
-				A293B58D1F4AC43B009CF915 /* NavigationController.cpp */,
-				A293B58E1F4AC43B009CF915 /* NavigationController.h */,
-				A293B5901F4ACD36009CF915 /* BaseLayer.cpp */,
-				A293B5911F4ACD36009CF915 /* BaseLayer.h */,
-				A293B58A1F4ABA6C009CF915 /* MainLayer.cpp */,
-				A293B58B1F4ABA6C009CF915 /* MainLayer.h */,
-			);
-			name = Main;
-			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -573,10 +592,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A28F62FE1F53C261008ADA49 /* btn_a_0.png in Resources */,
 				A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */,
 				A2ADE4CA1F4C0DFB007C09BE /* grossini_dance.png in Resources */,
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
+				A28F63001F53C261008ADA49 /* btn_a_2.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
@@ -588,6 +609,8 @@
 				A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */,
 				A2ADE4C61F4BCF8F007C09BE /* elephant1_Diffuse.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
+				A28F63011F53C261008ADA49 /* btn_b_0.png in Resources */,
+				A28F63031F53C261008ADA49 /* btn_b_2.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
@@ -602,10 +625,12 @@
 				A2ADE4D81F4C3CAA007C09BE /* pew-pew-lei.wav in Resources */,
 				A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
+				A28F62FF1F53C261008ADA49 /* btn_a_1.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				A2B85BF21F46E49C0049DEED /* tbg_pic_01c.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
+				A28F63021F53C261008ADA49 /* btn_b_1.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -630,22 +655,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
-				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
-				A293B58C1F4ABA6C009CF915 /* MainLayer.cpp in Sources */,
-				A293B5891F4A8DFC009CF915 /* AndroidModelUtils.cpp in Sources */,
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
+				A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */,
+				A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */,
+				A28F63221F53C6AB008ADA49 /* NumberInTenLayer.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				A28F63131F53C3BD008ADA49 /* HelloWorldScene.cpp in Sources */,
+				A28F63141F53C3BD008ADA49 /* MainLayer.cpp in Sources */,
+				A28F63111F53C3BD008ADA49 /* AppDelegate.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
+				A28F631F1F53C6AB008ADA49 /* AndroidModelUtils.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
+				A28F63231F53C6AB008ADA49 /* UICommonTableView.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
+				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
+				A28F63211F53C6AB008ADA49 /* DragImageView.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
-				A2B85BE41F46BE6D0049DEED /* UICommonTableView.cpp in Sources */,
 				A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */,
-				A293B5921F4ACD36009CF915 /* BaseLayer.cpp in Sources */,
-				A293B58F1F4AC43B009CF915 /* NavigationController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,9 +681,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
-				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

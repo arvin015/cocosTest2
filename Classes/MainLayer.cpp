@@ -11,10 +11,10 @@
 #include "ui/UICheckBox.h"
 #include "HelloWorldScene.h"
 #include "NavigationController.h"
-#include "../DrawViewTest.h"
-#include "../TableViewTest.h"
-#include "../ActionTest.h"
-#include "../NumberInTen/NumberInTenLayer.h"
+#include "DrawViewTest.h"
+#include "TableViewTest.h"
+#include "ActionTest.h"
+#include "NumberInTen/NumberInTenLayer.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
