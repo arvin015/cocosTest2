@@ -8,9 +8,10 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "ui/UIImageView.h"
+#include "ui/UIButton.h"
 
-class DragImageView;
-typedef std::function<void(DragImageView*)> OnMoveEndedCallback;
+typedef std::function<void()> OnMoveEndedCallback;
+typedef std::function<void()> OnDeleteCallback;
 
 class DragImageView : public cocos2d::ui::ImageView {
 
@@ -35,6 +36,23 @@ public:
     void setOnMoveEndedCallback(OnMoveEndedCallback moveEndedCallback) {
         this->moveEndedCallback = moveEndedCallback;
     }
+    
+    /**
+     * 设置OnDeleteCallback
+     */
+    void setOnDeleteCallback(OnDeleteCallback deleteCallback) {
+        this->deleteCallback = deleteCallback;
+    }
+    
+    /**
+     * 删除按钮显示隐藏
+     */
+    void setDeleteBtnVisible(bool visible);
+    
+    /**
+     * 将图案置顶
+     */
+    void bringToFront();
 
 private:
 
@@ -43,10 +61,13 @@ private:
     void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
 private:
+    cocos2d::ui::Button* deleteBtn; //删除按钮
     cocos2d::EventListenerTouchOneByOne* eventListener;
     bool isMoveEnabled; //是否可移动
-    bool isMoving; //是否正在移动
+    bool isSelected; //是否选中
+    bool isMove; //是否移动
     OnMoveEndedCallback moveEndedCallback;
+    OnDeleteCallback deleteCallback;
 };
 
 

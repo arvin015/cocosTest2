@@ -10,8 +10,10 @@ using namespace std;
 
 DragImageView::DragImageView()
 : eventListener(nullptr)
+, deleteBtn(nullptr)
 , isMoveEnabled(true)
-, isMoving(false) {
+, isSelected(false)
+, isMove(false) {
 
 }
 
@@ -41,6 +43,16 @@ bool DragImageView::init() {
     if(!ImageView::init()) {
         return false;
     }
+    
+    deleteBtn = Button::create("button_bar_delete.png");
+    deleteBtn->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    deleteBtn->setPosition(Vec2(100, 100));
+    deleteBtn->setVisible(false);
+    deleteBtn->addClickEventListener([this](Ref* pSender){
+        this->deleteCallback(); //抛出去
+        this->removeFromParent();
+    });
+    this->addChild(deleteBtn);
 
     return true;
 }
@@ -72,8 +84,20 @@ DragImageView* DragImageView::create(const string &filename) {
     return nullptr;
 }
 
-bool DragImageView::onTouchBegan(Touch* touch, Event* event) {
+void DragImageView::setDeleteBtnVisible(bool visible) {
+    if(deleteBtn) {
+        deleteBtn->setVisible(visible);
+    }
+}
 
+void DragImageView::bringToFront() {
+    Vector<Node*> nodeList = getParent()->getChildren();
+    Node* node = nodeList.at(getParent()->getChildrenCount() - 1); //获取最上面的那个Node
+    this->getParent()->reorderChild(this, node->getLocalZOrder() + 1);
+}
+
+bool DragImageView::onTouchBegan(Touch* touch, Event* event) {
+    
     if(!isMoveEnabled) {
         return false;
     }
@@ -82,29 +106,45 @@ bool DragImageView::onTouchBegan(Touch* touch, Event* event) {
         return false;
     }
 
-    if(getBoundingBox().containsPoint(touch->getLocation())) {
-        isMoving = true;
+    if(getBoundingBox().containsPoint(touch->getLocation())) { //选中了
+        bringToFront(); //置顶
+        
+        isSelected = true;
         eventListener->setSwallowTouches(true);
+    } else { //未选中
+        setDeleteBtnVisible(false);
     }
+    
+    return true;
 }
 
 void DragImageView::onTouchMoved(Touch* touch, Event* event) {
-
     if(touch->getID() != 0) {
         return;
     }
 
-    if(isMoving) {
-        this->setPosition(getPosition() + touch->getDelta());
+    if(isSelected) {
+        if(abs(touch->getDelta().x) > 1.0f || abs(touch->getDelta().y) > 1.0f) { //判定为移动
+            isMove = true;
+            this->setPosition(getPosition() + touch->getDelta());
+        }
+        
     }
 }
 
 void DragImageView::onTouchEnded(Touch* touch, Event* event) {
-    if(isMoving) {
+    if(isSelected) {
 
-        this->moveEndedCallback(this); //回调
-
+        if(isMove) { //移动状态
+            this->moveEndedCallback(); //抛出去
+            isMove = false;
+        } else { //点击状态，显示删除按钮
+            if(deleteBtn) {
+                setDeleteBtnVisible(true);
+            }
+        }
+        
         eventListener->setSwallowTouches(false);
-        isMoving = false;
+        isSelected = false;
     }
 }

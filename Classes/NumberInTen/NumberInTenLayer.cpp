@@ -13,8 +13,10 @@ const Rect BigRect = Rect(100, 100, 500, 500); //大活动区域
 const Rect SmallLeftRect = Rect(100, 100, 250, 500); //小活动左边区域
 const Rect SmallRightRect = Rect(110, 100, 250, 500); //小活动区域右边区域
 
+const int TotalAddNumPer = 10; //每种图案最多能创建个数
 const int TotalPage = 2; //总共页数
-const int PageShowNum = 3; //每页显示图标个数
+const int PageShowNum = 3; //每页显示图案个数
+const int TotalIconNum = 6; //总图案个数
 const string DragImages[] = {"btn_a_0.png", "btn_a_1.png", "btn_a_2.png", "btn_b_0.png", "btn_b_1.png", "btn_b_2.png"};
 const int OffsetH = 10;
 
@@ -24,7 +26,7 @@ NumberInTenLayer::NumberInTenLayer()
 , prevBtn(nullptr)
 , nextBtn(nullptr)
 , currentPage(1)
-, dragImageStr("")
+, seletedImage(nullptr)
 , tempSprite(nullptr) {
 
 }
@@ -75,38 +77,50 @@ bool NumberInTenLayer::init() {
     nextBtn->addClickEventListener(CC_CALLBACK_1(NumberInTenLayer::onBtnClick, this));
     this->addChild(nextBtn);
 
-    setDragIcons(currentPage);
+    initDragIcons();
+    switchDragIcons(currentPage);
 
     return true;
 }
 
-void NumberInTenLayer::setDragIcons(int page) {
+void NumberInTenLayer::initDragIcons() {
 
-    //清除上一批拖拽图标
-    for(ImageView* dragImage : dragImageList) {
-        dragImage->removeFromParent();
-    }
-    dragImageList.clear();
-
-    //重新设置拖拽图标
-    for(int i = 0; i < PageShowNum; i++) {
-        string str = DragImages[PageShowNum * (page - 1) + i];
+    for(int i = 0; i < TotalIconNum; i++) {
+        string str = DragImages[i];
         ImageView* dragImage = ImageView::create(str);
-        dragImage->setPosition(Vec2(V_WIDTH - 300, V_HEIGHT - 200 - (100 + OffsetH) * i));
-        dragImage->setName(str);
+        dragImage->setContentSize(Size(100, 100));
+        dragImage->setScale9Enabled(true);
+        dragImage->setName(str); //设置图片名
+        dragImage->setTag(i / PageShowNum + 1); //设置页码
         dragImage->setTouchEnabled(true);
-        dragImage->setSwallowTouches(false);
         dragImage->addTouchEventListener([this, dragImage](Ref* pSender, Widget::TouchEventType eventType){
             if(!isDragEnabled) {
-                return false;
+                return;
             }
             if(eventType == Widget::TouchEventType::BEGAN) {
-                this->dragImageStr = dragImage->getName(); //设置当前拖拽对象
+                this->seletedImage = dragImage; //设置当前拖拽对象
             }
         });
+        dragImage->setVisible(false);
         this->addChild(dragImage);
 
         dragImageList.pushBack(dragImage);
+    }
+}
+
+void NumberInTenLayer::switchDragIcons(int page) {
+    int count = 0;
+    for(int i = 0; i < dragImageList.size(); i++) {
+        ImageView* playImage = dragImageList.at(i);
+        if(playImage->getTag() == page) {
+            playImage->setVisible(true);
+            playImage->setPosition(Vec2(V_WIDTH - 300, V_HEIGHT - 200 - (100 + OffsetH) * count));
+            playImage->setSwallowTouches(false); //很关键，在创建时设置会无效，一定要在设置setVisible后再设置才有效
+            count++;
+        } else {
+            playImage->setVisible(false);
+            playImage->setPosition(Vec2(V_WIDTH + 100, V_HEIGHT + 100));
+        }
     }
 }
 
@@ -134,8 +148,8 @@ bool NumberInTenLayer::onTouchBegan(Touch* touch, Event* event) {
         return false;
     }
 
-    if(!dragImageStr.empty()) {
-        tempSprite = createTempSprite(dragImageStr, touch->getLocation());
+    if(seletedImage) {
+        tempSprite = createTempSprite(seletedImage->getName(), touch->getLocation());
         this->addChild(tempSprite);
     }
 
@@ -154,6 +168,7 @@ void NumberInTenLayer::onTouchMoved(Touch* touch, Event* event) {
 }
 
 void NumberInTenLayer::onTouchEnded(Touch* touch, Event* event) {
+    
     if(tempSprite) {
 
         if(checkInHotRect(tempSprite)) { //在热区中
@@ -163,20 +178,24 @@ void NumberInTenLayer::onTouchEnded(Touch* touch, Event* event) {
 
             //加入Map集合中
             map<string, Vector<DragImageView*>>::iterator it = dragImageViewMap.find(imgStr);
+            Vector<DragImageView*> dsList;
+            
             if(it != dragImageViewMap.end()) { //存在key值imgStr
-                Vector<DragImageView*> dsList = it->second;
-                dsList.pushBack(dragImageView);
-            } else { //不存在key值imgStr
-                Vector<DragImageView*> dsList;
-                dsList.pushBack(dragImageView);
-                dragImageViewMap.insert(make_pair(imgStr, dsList));
+                dsList = it->second;
+            }
+            dsList.pushBack(dragImageView);
+            dragImageViewMap[imgStr] = dsList; //map一定要再次才有效
+            
+            if(dsList.size() >= TotalAddNumPer) { //达到可加入的最大值，禁止再添加
+                seletedImage->setEnabled(false); //不可加入了，这里切记不能设置setTouchEnabled(false)，否则会阻断父类的Touch事件
             }
         }
 
         tempSprite->removeFromParent();
         tempSprite = nullptr;
+        
+        seletedImage = nullptr;
     }
-    dragImageStr = "";
 }
 
 bool NumberInTenLayer::checkInHotRect(Sprite* dragSprite) {
@@ -226,7 +245,7 @@ void NumberInTenLayer::onBtnClick(cocos2d::Ref* pSender) {
         switch (button->getTag()) {
             case PREV_BTN: {
                 currentPage--;
-                setDragIcons(currentPage);
+                switchDragIcons(currentPage);
                 nextBtn->setEnabled(true);
 
                 if(currentPage == 1) {
@@ -236,7 +255,7 @@ void NumberInTenLayer::onBtnClick(cocos2d::Ref* pSender) {
             }
             case NEXT_BTN: {
                 currentPage++;
-                setDragIcons(currentPage);
+                switchDragIcons(currentPage);
                 prevBtn->setEnabled(true);
 
                 if(currentPage == TotalPage) {
@@ -258,6 +277,7 @@ Sprite* NumberInTenLayer::createTempSprite(const string &picStr, const Vec2 &pos
     Sprite* tempSprite = Sprite::create(picStr);
     tempSprite->setName(picStr);
     tempSprite->setPosition(position);
+    tempSprite->setLocalZOrder(getMaxZOrder() + 1);
 
     return tempSprite;
 }
@@ -271,9 +291,34 @@ DragImageView* NumberInTenLayer::createDragImageView(const string &picStr, const
     dragImageView->setContentSize(Size(100, 100));
     dragImageView->setName(picStr);
     dragImageView->setPosition(position);
-    dragImageView->setOnMoveEndedCallback([this](DragImageView* dragImageView1){
-        checkIsOutBorder(dragImageView1);
+    dragImageView->setLocalZOrder(getMaxZOrder() + 1);
+    dragImageView->setOnMoveEndedCallback([this, dragImageView](){
+        checkIsOutBorder(dragImageView);
     });
-
+    dragImageView->setOnDeleteCallback([this, dragImageView, picStr](){
+        
+        //从map集合中删掉
+        map<string, Vector<DragImageView*>>::iterator it = dragImageViewMap.find(picStr);
+        if(it != dragImageViewMap.end()) {
+            Vector<DragImageView*> dsList = it->second;
+            dsList.eraseObject(dragImageView);
+            dragImageViewMap[picStr] = dsList;
+        }
+        
+        //如果该图案不能Touch了，恢复它可Touch
+        ImageView* image = static_cast<ImageView*>(this->getChildByName(picStr));
+        if(image) {
+            if(!image->isEnabled()) {
+                image->setEnabled(true);
+            }
+        }
+    });
+    
     return dragImageView;
+}
+
+int NumberInTenLayer::getMaxZOrder() {
+    Vector<Node*> nodeList = getParent()->getChildren();
+    Node* node = nodeList.at(getParent()->getChildrenCount() - 1); //获取最上面的那个Node
+    return node->getLocalZOrder();
 }

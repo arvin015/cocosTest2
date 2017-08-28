@@ -77,6 +77,7 @@
 		A28F633E1F53CC11008ADA49 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63361F53CC11008ADA49 /* DragImageView.cpp */; };
 		A28F633F1F53CC11008ADA49 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63381F53CC11008ADA49 /* NumberInTenLayer.cpp */; };
 		A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */; };
+		A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F63421F53F138008ADA49 /* button_bar_delete.png */; };
 		A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */; };
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
 		A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5931F4AD170009CF915 /* DrawViewTest.cpp */; };
@@ -219,6 +220,7 @@
 		A28F63391F53CC11008ADA49 /* NumberInTenLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenLayer.h; sourceTree = "<group>"; };
 		A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
 		A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
+		A28F63421F53F138008ADA49 /* button_bar_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bar_delete.png; sourceTree = "<group>"; };
 		A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54.png; sourceTree = "<group>"; };
 		A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54s.png; sourceTree = "<group>"; };
 		A293B5931F4AD170009CF915 /* DrawViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawViewTest.cpp; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 				A28F62FB1F53C261008ADA49 /* btn_b_0.png */,
 				A28F62FC1F53C261008ADA49 /* btn_b_1.png */,
 				A28F62FD1F53C261008ADA49 /* btn_b_2.png */,
+				A28F63421F53F138008ADA49 /* button_bar_delete.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -635,6 +638,7 @@
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				A28F63011F53C261008ADA49 /* btn_b_0.png in Resources */,
 				A28F63031F53C261008ADA49 /* btn_b_2.png in Resources */,
+				A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
