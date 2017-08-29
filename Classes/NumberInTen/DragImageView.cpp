@@ -11,6 +11,7 @@ using namespace std;
 DragImageView::DragImageView()
 : eventListener(nullptr)
 , deleteBtn(nullptr)
+, showNumText(nullptr)
 , isMoveEnabled(true)
 , isSelected(false)
 , isMove(false) {
@@ -46,7 +47,7 @@ bool DragImageView::init() {
     
     deleteBtn = Button::create("button_bar_delete.png");
     deleteBtn->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    deleteBtn->setPosition(Vec2(100, 100));
+    deleteBtn->setPosition(Vec2(58, 58));
     deleteBtn->setVisible(false);
     deleteBtn->addClickEventListener([this](Ref* pSender){
         this->deleteCallback(); //抛出去
@@ -87,6 +88,34 @@ DragImageView* DragImageView::create(const string &filename) {
 void DragImageView::setDeleteBtnVisible(bool visible) {
     if(deleteBtn) {
         deleteBtn->setVisible(visible);
+    }
+}
+
+void DragImageView::addShowNum(int showNum) {
+    showNumText = Text::create();
+    showNumText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    showNumText->setPosition(Vec2(getContentSize().width / 2, getContentSize().height));
+    showNumText->setFontSize(18);
+    showNumText->setTextColor(Color4B(255, 133, 136, 255));
+    showNumText->setString(Value(showNum).asString());
+    this->addChild(showNumText);
+    
+    setIsMoveEnabled(false); //不可移动
+}
+
+int DragImageView::getShowNum() {
+    if(showNumText) {
+        showNumText->getString();
+    }
+    
+    return -1;
+}
+
+void DragImageView::setIsTranslucent(bool isTranslucent) {
+    if(isTranslucent) {
+        setOpacity(127); //半透明
+    } else {
+        setOpacity(255); //不透明
     }
 }
 
