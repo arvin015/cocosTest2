@@ -1,22 +1,13 @@
 //
-// Created by Administrator on 2017/8/26.
+// Created by Administrator on 2017/8/30.
 //
 
-#include "NumberInTenLayer.h"
-#include "DragImageView.h"
-#include "PlayImageView.h"
-#include "PacToast.h"
+#include "BaseNumberInTenDragLayer.h"
 
 USING_NS_CC;
 using namespace ui;
 using namespace std;
 
-const Rect BigRect = Rect(80, 180, 600, 400); //大活动区域
-const Rect SmallLeftRect = Rect(80, 180, 295, 400); //小活动左边区域
-const Rect SmallRightRect = Rect(90, 180, 295, 400); //小活动区域右边区域
-
-const int IconWidth = 58;
-const int IconHeight = 58;
 const int TotalAddNumPer = 10; //每种图案最多能创建个数
 const int TotalPage = 2; //总共页数
 const int PageShowNum = 5; //每页显示图案个数
@@ -24,16 +15,8 @@ const int TotalIconNum = 10; //总图案个数
 const string NormalDragImages[] = {"zero.png", "one.png", "two.png", "three.png", "four.png", "five.png", "six.png", "seven.png", "eight.png", "nine.png"};
 const string DisableDragImages[] = {"zero_d.png", "one_d.png", "two_d.png", "three_d.png", "four_d.png", "five_d.png", "six_d.png", "seven_d.png", "eight_d.png", "nine_d.png"};
 const int OffsetH = 10; //图案间纵间距
-const int MaxGroups = 5; //最多组数
 
-//舞动相关数据
-const int PaddingH = 2; //舞动结果排列横间距
-const int PaddingV = 22; //舞动结果排列竖间距
-const int ResultSX = 80 + 30; //舞动结果排列开始X位置
-const int ResultSY = 180 + 400 - 50; //舞动结果排列开始Y位置
-float playAnimTime = 1.0f; //每个图案动画播放时间
-
-NumberInTenLayer::NumberInTenLayer()
+BaseNumberInTenDragLayer::BaseNumberInTenDragLayer()
 : eventListener(nullptr)
 , isDragEnabled(true)
 , prevBtn(nullptr)
@@ -42,25 +25,26 @@ NumberInTenLayer::NumberInTenLayer()
 , currentPage(1)
 , seletedImage(nullptr)
 , tempSprite(nullptr)
+, playAnimTime(1.0f)
 , totalSpendTime(0.0f)
-, needSetAlpha(true){
+, numberInTenDragImpl(nullptr){
 
 }
 
-NumberInTenLayer::~NumberInTenLayer() {
+BaseNumberInTenDragLayer::~BaseNumberInTenDragLayer() {
 
 }
 
-void NumberInTenLayer::onEnter() {
+void BaseNumberInTenDragLayer::onEnter() {
     BaseLayer::onEnter();
 
     eventListener = EventListenerTouchOneByOne::create();
-    eventListener->onTouchBegan = CC_CALLBACK_2(NumberInTenLayer::onTouchBegan, this);
-    eventListener->onTouchMoved = CC_CALLBACK_2(NumberInTenLayer::onTouchMoved, this);
-    eventListener->onTouchEnded = CC_CALLBACK_2(NumberInTenLayer::onTouchEnded, this);
+    eventListener->onTouchBegan = CC_CALLBACK_2(BaseNumberInTenDragLayer::onTouchBegan, this);
+    eventListener->onTouchMoved = CC_CALLBACK_2(BaseNumberInTenDragLayer::onTouchMoved, this);
+    eventListener->onTouchEnded = CC_CALLBACK_2(BaseNumberInTenDragLayer::onTouchEnded, this);
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener, this);
 }
-void NumberInTenLayer::onExit() {
+void BaseNumberInTenDragLayer::onExit() {
 
     if(eventListener) {
         Director::getInstance()->getEventDispatcher()->removeEventListener(eventListener);
@@ -69,7 +53,7 @@ void NumberInTenLayer::onExit() {
     BaseLayer::onExit();
 }
 
-bool NumberInTenLayer::init() {
+bool BaseNumberInTenDragLayer::init() {
     if(!BaseLayer::init()) {
         return false;
     }
@@ -80,7 +64,7 @@ bool NumberInTenLayer::init() {
     prevBtn->setTitleText("向前");
     prevBtn->setPosition(Vec2(V_WIDTH - 300, 80));
     prevBtn->setTag(PREV_BTN);
-    prevBtn->addClickEventListener(CC_CALLBACK_1(NumberInTenLayer::onBtnClick, this));
+    prevBtn->addClickEventListener(CC_CALLBACK_1(BaseNumberInTenDragLayer::onBtnClick, this));
     prevBtn->setEnabled(false);
     this->addChild(prevBtn);
 
@@ -90,7 +74,7 @@ bool NumberInTenLayer::init() {
     nextBtn->setTitleText("向后");
     nextBtn->setPosition(Vec2(V_WIDTH - 200, 80));
     nextBtn->setTag(NEXT_BTN);
-    nextBtn->addClickEventListener(CC_CALLBACK_1(NumberInTenLayer::onBtnClick, this));
+    nextBtn->addClickEventListener(CC_CALLBACK_1(BaseNumberInTenDragLayer::onBtnClick, this));
     this->addChild(nextBtn);
     
     danceBtn = Button::create();
@@ -99,16 +83,19 @@ bool NumberInTenLayer::init() {
     danceBtn->setTitleText("舞動");
     danceBtn->setPosition(Vec2(V_WIDTH - 100, 300));
     danceBtn->setTag(DANCE_BTN);
-    danceBtn->addClickEventListener(CC_CALLBACK_1(NumberInTenLayer::onBtnClick, this));
+    danceBtn->addClickEventListener(CC_CALLBACK_1(BaseNumberInTenDragLayer::onBtnClick, this));
     this->addChild(danceBtn);
 
+    if(numberInTenDragImpl) {
+        numberInTenDragImpl->initData(); //初始化数据
+    }
     initDragIcons();
     switchDragIcons(currentPage);
 
     return true;
 }
 
-void NumberInTenLayer::initDragIcons() {
+void BaseNumberInTenDragLayer::initDragIcons() {
 
     for(int i = 0; i < TotalIconNum; i++) {
         string str = NormalDragImages[i];
@@ -133,7 +120,7 @@ void NumberInTenLayer::initDragIcons() {
     }
 }
 
-void NumberInTenLayer::switchDragIcons(int page) {
+void BaseNumberInTenDragLayer::switchDragIcons(int page) {
     int count = 0;
     for(int i = 0; i < dragImageList.size(); i++) {
         ImageView* playImage = dragImageList.at(i);
@@ -149,70 +136,18 @@ void NumberInTenLayer::switchDragIcons(int page) {
     }
 }
 
-void NumberInTenLayer::setHotRect(HotRectType type) {
-    if(type == BIG) {
-        hotRect = BigRect;
-    } else {
-        hotRect = SmallLeftRect;
-    }
-
-    //test 绘制热区
-    DrawNode* drawNode = DrawNode::create();
-    Vec2 points[4];
-    points[0] = hotRect.origin;
-    points[1] = Vec2(hotRect.getMinX(), hotRect.getMaxY());
-    points[2] = Vec2(hotRect.getMaxX(), hotRect.getMaxY());
-    points[3] = Vec2(hotRect.getMaxX(), hotRect.getMinY());
-    drawNode->drawPolygon(points, 4, Color4F(0.0f, 0.0f, 0.0f, 0.0f), 2, Color4F::GREEN);
-    this->addChild(drawNode);
-}
-
-void NumberInTenLayer::dance() {
+void BaseNumberInTenDragLayer::dance() {
     
-    //播放动画
-    int index = 0;
-    map<string, Vector<DragImageView*>>::iterator it;
-    for(it = dragImageViewMap.begin(); it != dragImageViewMap.end(); it++) {
-        string key = it->first;
-        Vector<DragImageView*> value = it->second;
-
-        //需要设置透明度
-        if(needSetAlpha) {
-            //除第一组外，其他组都设置半透明
-            if(index != 0) {
-                for(DragImageView* dragImage : value) {
-                    dragImage->setIsTranslucent(true);
-                }
-            }
-        }
-        
-        //播放一组动画
-        playMoveAnimationForGroup(value, index, key, totalSpendTime, [this](string key){ //每组动画播放后的回调
-            //需要设置透明度
-            if(needSetAlpha) {
-                //关键是获取该组的下一组，将下一组图案取消半透明
-                map<string, Vector<DragImageView*>>::iterator it1 = dragImageViewMap.find(key);
-                it1++;
-                if(it1 != dragImageViewMap.end()) {
-                    string key1 = it1->first;
-                    Vector<DragImageView*> value1 = it1->second;
-                    for(DragImageView* dragImage : value1) {
-                        dragImage->setIsTranslucent(false);
-                    }
-                }
-            }
-        });
-        //统计之前播放动画的总时间
-        totalSpendTime += value.size() * playAnimTime;
-        
-        index++;
+    //播放动画，交给子类处理
+    if(numberInTenDragImpl) {
+        numberInTenDragImpl->playAnim();
     }
     
     //禁止所有图案的操作
-    forbidIconsToDrag();
+    setDragImagesEnabled(false);
 }
 
-bool NumberInTenLayer::onTouchBegan(Touch* touch, Event* event) {
+bool BaseNumberInTenDragLayer::onTouchBegan(Touch* touch, Event* event) {
 
     if(!isDragEnabled || touch->getID() != 0) {
         return false;
@@ -221,8 +156,8 @@ bool NumberInTenLayer::onTouchBegan(Touch* touch, Event* event) {
     if(seletedImage) {
         
         //判断是否达到了最大可放组
-        if(isMaxGroup(seletedImage->getName())) {
-            PacToast::makeText(StringUtils::format("最多只能放入%d組圖案", MaxGroups));
+        if(numberInTenDragImpl != nullptr && numberInTenDragImpl->isMaxGroup(seletedImage->getName())) {
+            PacToast::makeText(StringUtils::format("最多只能放入%d組圖案", maxGroups));
             seletedImage = nullptr;
             return false;
         }
@@ -234,7 +169,7 @@ bool NumberInTenLayer::onTouchBegan(Touch* touch, Event* event) {
     return true;
 }
 
-void NumberInTenLayer::onTouchMoved(Touch* touch, Event* event) {
+void BaseNumberInTenDragLayer::onTouchMoved(Touch* touch, Event* event) {
 
     if(touch->getID() != 0) {
         return;
@@ -245,27 +180,25 @@ void NumberInTenLayer::onTouchMoved(Touch* touch, Event* event) {
     }
 }
 
-void NumberInTenLayer::onTouchEnded(Touch* touch, Event* event) {
+void BaseNumberInTenDragLayer::onTouchEnded(Touch* touch, Event* event) {
     
     if(tempSprite) {
 
-        if(checkInHotRect(tempSprite)) { //在热区中
+        int rectType = numberInTenDragImpl->checkInHotRect(tempSprite);
+        
+        if(rectType) { //在热区中
 
             string imgStr = tempSprite->getName();
             DragImageView* dragImageView = createDragImageView(imgStr, tempSprite->getPosition());
+            dragImageView->setTag(rectType);
             this->addChild(dragImageView, getMaxZOrder() + 1);
 
-            //加入Map集合中
-            map<string, Vector<DragImageView*>>::iterator it = dragImageViewMap.find(imgStr);
-            Vector<DragImageView*> dsList;
-            
-            if(it != dragImageViewMap.end()) { //存在key值imgStr
-                dsList = it->second;
+            //加入集合中
+            if(numberInTenDragImpl) {
+                numberInTenDragImpl->addDragImageToList(dragImageView, imgStr);
             }
-            dsList.pushBack(dragImageView);
-            dragImageViewMap[imgStr] = dsList; //map一定要再次才有效
             
-            if(dsList.size() >= TotalAddNumPer) { //达到可加入的最大值，禁止再添加
+            if(numberInTenDragImpl && numberInTenDragImpl->getNumInGroup(imgStr) >= TotalAddNumPer) { //达到可加入的最大值，禁止再添加
                 seletedImage->setEnabled(false); //不可加入了，这里切记不能设置setTouchEnabled(false)，否则会阻断父类的Touch事件
             }
         }
@@ -277,48 +210,7 @@ void NumberInTenLayer::onTouchEnded(Touch* touch, Event* event) {
     }
 }
 
-bool NumberInTenLayer::checkInHotRect(Sprite* dragSprite) {
-
-    if(!hotRect.containsPoint(dragSprite->getPosition())) {
-        return false;
-    }
-
-    checkIsOutBorder(dragSprite);
-
-    return true;
-}
-
-void NumberInTenLayer::checkIsOutBorder(cocos2d::Node* dragNode) {
-
-    //越界处理
-    float leftX = hotRect.getMinX();
-    float topY = hotRect.getMaxY();
-    float rightX = hotRect.getMaxX();
-    float bottomY = hotRect.getMinY();
-
-    float desLeftX = dragNode->getPositionX() - dragNode->getContentSize().width / 2;
-    float desTopY = dragNode->getPositionY() + dragNode->getContentSize().height / 2;
-    float desRightX = dragNode->getPositionX() + dragNode->getContentSize().width / 2;
-    float desBottomY = dragNode->getPositionY() - dragNode->getContentSize().height / 2;
-
-    if(desLeftX < leftX) {
-        dragNode->setPositionX(leftX + dragNode->getContentSize().width / 2);
-    }
-
-    if(desTopY > topY) {
-        dragNode->setPositionY(topY - dragNode->getContentSize().height / 2);
-    }
-
-    if(desRightX > rightX) {
-        dragNode->setPositionX(rightX - dragNode->getContentSize().width / 2);
-    }
-
-    if(desBottomY < bottomY) {
-        dragNode->setPositionY(bottomY + dragNode->getContentSize().height / 2);
-    }
-}
-
-void NumberInTenLayer::onBtnClick(cocos2d::Ref* pSender) {
+void BaseNumberInTenDragLayer::onBtnClick(cocos2d::Ref* pSender) {
     Button* button = static_cast<Button*>(pSender);
     if(button) {
         switch (button->getTag()) {
@@ -352,7 +244,7 @@ void NumberInTenLayer::onBtnClick(cocos2d::Ref* pSender) {
     }
 }
 
-Sprite* NumberInTenLayer::createTempSprite(const string &picStr, const Vec2 &position) {
+Sprite* BaseNumberInTenDragLayer::createTempSprite(const string &picStr, const Vec2 &position) {
     if(picStr.empty()) {
         return nullptr;
     }
@@ -364,7 +256,7 @@ Sprite* NumberInTenLayer::createTempSprite(const string &picStr, const Vec2 &pos
     return tempSprite;
 }
 
-DragImageView* NumberInTenLayer::createDragImageView(const string &picStr, const Vec2 &position) {
+DragImageView* BaseNumberInTenDragLayer::createDragImageView(const string &picStr, const Vec2 &position) {
     if(picStr.empty()) {
         return nullptr;
     }
@@ -374,20 +266,15 @@ DragImageView* NumberInTenLayer::createDragImageView(const string &picStr, const
     dragImageView->setName(picStr);
     dragImageView->setPosition(position);
     dragImageView->setOnMoveEndedCallback([this, dragImageView](){
-        checkIsOutBorder(dragImageView);
+        if(numberInTenDragImpl) {
+            numberInTenDragImpl->onDragImageViewTouchEnded(dragImageView);
+        }
     });
     dragImageView->setOnDeleteCallback([this, dragImageView, picStr](){
         
-        //从map集合中删掉
-        map<string, Vector<DragImageView*>>::iterator it = dragImageViewMap.find(picStr);
-        if(it != dragImageViewMap.end()) {
-            Vector<DragImageView*> dsList = it->second;
-            dsList.eraseObject(dragImageView);
-            if(dsList.size() == 0) { //该组全部删除了，移出map
-                dragImageViewMap.erase(it);
-            } else {
-                dragImageViewMap[picStr] = dsList;
-            }
+        //从集合中移除
+        if(numberInTenDragImpl) {
+            numberInTenDragImpl->deleteDragImageFromList(dragImageView, picStr);
         }
         
         //如果该图案不能Touch了，恢复它可Touch
@@ -402,29 +289,68 @@ DragImageView* NumberInTenLayer::createDragImageView(const string &picStr, const
     return dragImageView;
 }
 
-int NumberInTenLayer::getMaxZOrder() {
+void BaseNumberInTenDragLayer::checkIsOutBorder(Node* dragNode, const Rect &rect) {
+    
+    //越界处理
+    float leftX = rect.getMinX();
+    float topY = rect.getMaxY();
+    float rightX = rect.getMaxX();
+    float bottomY = rect.getMinY();
+    
+    float desLeftX = dragNode->getPositionX() - dragNode->getContentSize().width / 2;
+    float desTopY = dragNode->getPositionY() + dragNode->getContentSize().height / 2;
+    float desRightX = dragNode->getPositionX() + dragNode->getContentSize().width / 2;
+    float desBottomY = dragNode->getPositionY() - dragNode->getContentSize().height / 2;
+    
+    if(desLeftX < leftX) {
+        dragNode->setPositionX(leftX + dragNode->getContentSize().width / 2);
+    }
+    
+    if(desTopY > topY) {
+        dragNode->setPositionY(topY - dragNode->getContentSize().height / 2);
+    }
+    
+    if(desRightX > rightX) {
+        dragNode->setPositionX(rightX - dragNode->getContentSize().width / 2);
+    }
+    
+    if(desBottomY < bottomY) {
+        dragNode->setPositionY(bottomY + dragNode->getContentSize().height / 2);
+    }
+}
+
+int BaseNumberInTenDragLayer::getMaxZOrder() {
     Vector<Node*> nodeList = getChildren();
     Node* node = nodeList.at(getChildrenCount() - 1); //获取最上面的那个Node
     return node->getLocalZOrder();
 }
 
-void NumberInTenLayer::playMoveAnimationForGroup(Vector<DragImageView*> dragImageList, int index, const string &keyOfFileName, float delayTime, const function<void(string)> &animactionOver)
+void BaseNumberInTenDragLayer::playMoveAnimationForGroup(Vector<DragImageView*> dragImageList, float posSX, float posSY, float paddingH, float paddingV, const string &keyOfFileName, float delayTime, bool isCrosswise, const function<void(string)> &animactionOver)
 {
-    
-    float posX = ResultSX;
-    float posY = ResultSY - (IconHeight + PaddingV) * index;
     
     Vector<FiniteTimeAction*> actionList;
     
     //先加入延时动画，目的使每组动画能先后播放
     auto delayAction = DelayTime::create(delayTime);
     actionList.pushBack(delayAction);
-    
+
     for(int i = 0; i < dragImageList.size(); i++) {
         
         DragImageView* dragImage = dragImageList.at(i);
         
-        posX = ResultSX + (IconWidth + PaddingH) * i;
+        float posX;
+        float posY;
+        if(isCrosswise) { //横向排列---考虑换行情况
+            int maxNumInRow = 10; //一行最多可排列个数
+            if(keyOfFileName.empty()) {
+                maxNumInRow = 5; //数的组合是五个
+            }
+            posX = posSX + (IconWidth + paddingH) * (i % maxNumInRow);
+            posY = posSY - (IconHeight + paddingV) * (i  / maxNumInRow);
+        } else { //纵向排列
+            posX = posSX + i / 2 * (IconWidth + paddingH);
+            posY = posSY - i % 2 * (IconHeight + paddingV);
+        }
         
         auto moveAction = Sequence::create(MoveTo::create(1.0f, Vec2(posX, posY)), CallFunc::create([dragImage, i](){
             dragImage->addShowNum((i + 1)); //单个图案播放完后显示数字
@@ -442,22 +368,22 @@ void NumberInTenLayer::playMoveAnimationForGroup(Vector<DragImageView*> dragImag
     actionList.pushBack(endCall);
     
     auto animation = Sequence::create(actionList);
-    dragImageList.at(0)->runAction(animation);
+    this->runAction(animation);
 }
 
-void NumberInTenLayer::forbidIconsToDrag() {
+void BaseNumberInTenDragLayer::setDragImagesEnabled(bool enabled) {
     for(ImageView* dragImage : dragImageList) {
-        dragImage->setEnabled(false);
+        dragImage->setEnabled(enabled);
     }
 }
 
-bool NumberInTenLayer::isMaxGroup(const string &filename) {
-    if(dragImageViewMap.size() >= MaxGroups) {
-        map<string, Vector<DragImageView*>>::iterator it = dragImageViewMap.find(filename);
-        if(it == dragImageViewMap.end()) {
-            return true;
+void BaseNumberInTenDragLayer::forbidIconsToDrag(const string &filename) {
+    for(ImageView* dragImage : dragImageList) {
+        if(strcmp(dragImage->getName().c_str(), filename.c_str()) == 0) {
+            dragImage->setEnabled(true);
+        } else {
+            dragImage->setEnabled(false);
         }
     }
-    return false;
 }
 

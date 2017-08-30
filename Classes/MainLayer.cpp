@@ -14,7 +14,9 @@
 #include "DrawViewTest.h"
 #include "TableViewTest.h"
 #include "ActionTest.h"
-#include "NumberInTenLayer.h"
+#include "NumberInTenCompareLayer.h"
+#include "NumberInTenSingularLayer.h"
+#include "NumberInTenComBineLayer.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -25,7 +27,7 @@ using namespace CocosDenshion;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_1"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_COMPARE", "10_SINGULAR", "10_COMBINE", "10_FLY"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -51,16 +53,17 @@ bool MainLayer::init() {
     
     float paddingLeft = 20;
     float paddingTop = 20;
-    float width = 125;
+    float width = 150;
     float height = 54;
     int column = 6;
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 8; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-        btn->setContentSize(Size(125, 54));
+        btn->setContentSize(Size(150, 54));
+        btn->setScale9Enabled(true);
         btn->setPosition(Vec2(startX + (getMCol(i, column) * (width + paddingLeft)),
                               startY - (getMRow(i, column) * (height + paddingTop))));
         btn->setTitleFontSize(24);
@@ -123,9 +126,21 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 4: {
-                NumberInTenLayer* numberInTenLayer = NumberInTenLayer::create();
-                numberInTenLayer->setHotRect(NumberInTenLayer::HotRectType::BIG);
-                getMainScene()->getRootLayer()->controller->pushView(numberInTenLayer);
+                BaseNumberInTenDragLayer* baseDragLayer = NumberInTenCompareLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(baseDragLayer);
+                break;
+            }
+            case 5: {
+                BaseNumberInTenDragLayer* baseDragLayer = NumberInTenSingularLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(baseDragLayer);
+                break;
+            }
+            case 6: {
+                BaseNumberInTenDragLayer* baseDragLayer = NumberInTenCombineLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(baseDragLayer);
+                break;
+            }
+            case 7: {
                 break;
             }
                 

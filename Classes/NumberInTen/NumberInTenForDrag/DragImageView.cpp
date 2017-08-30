@@ -12,6 +12,7 @@ DragImageView::DragImageView()
 : eventListener(nullptr)
 , deleteBtn(nullptr)
 , showNumText(nullptr)
+, showCountText(nullptr)
 , isMoveEnabled(true)
 , isSelected(false)
 , isMove(false) {
@@ -101,6 +102,17 @@ void DragImageView::addShowNum(int showNum) {
     this->addChild(showNumText);
     
     setIsMoveEnabled(false); //不可移动
+}
+
+void DragImageView::addShowCountNum(int countNum, int opacity) {
+    showCountText = Text::create();
+    showCountText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+    showCountText->setPosition(Vec2(getContentSize().width / 2, 0));
+    showCountText->setFontSize(18);
+    showCountText->setTextColor(Color4B(91, 155, 213, 255));
+    showCountText->setString(Value(countNum).asString());
+    showCountText->setOpacity(opacity);
+    this->addChild(showCountText);
 }
 
 int DragImageView::getShowNum() {

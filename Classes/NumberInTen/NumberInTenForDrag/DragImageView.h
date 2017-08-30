@@ -56,6 +56,11 @@ public:
     void addShowNum(int showNum);
     
     /**
+     * 添加下方统计数字
+     */
+    void addShowCountNum(int countNum, int opacity = 255);
+    
+    /**
      * 获取显示数字
      */
     int getShowNum();
@@ -76,6 +81,13 @@ public:
      * 将图案置顶
      */
     void bringToFront();
+    
+    /**
+     * 获取统计文本
+     */
+    cocos2d::ui::Text* getCountText() {
+        return showCountText;
+    }
 
 private:
 
@@ -86,6 +98,7 @@ private:
 private:
     cocos2d::ui::Button* deleteBtn; //删除按钮
     cocos2d::ui::Text* showNumText; //显示数字文本
+    cocos2d::ui::Text* showCountText; //显示下方统计文本
     cocos2d::EventListenerTouchOneByOne* eventListener;
     bool isMoveEnabled; //是否可移动
     bool isSelected; //是否选中

@@ -78,15 +78,19 @@
 		A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */; };
 		A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */; };
 		A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */; };
-		A28F633E1F53CC11008ADA49 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63361F53CC11008ADA49 /* DragImageView.cpp */; };
-		A28F633F1F53CC11008ADA49 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63381F53CC11008ADA49 /* NumberInTenLayer.cpp */; };
 		A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */; };
 		A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F63421F53F138008ADA49 /* button_bar_delete.png */; };
 		A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */; };
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
 		A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5931F4AD170009CF915 /* DrawViewTest.cpp */; };
 		A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5971F4AE129009CF915 /* TableViewTest.cpp */; };
-		A2A9EFDE1F556DBE00C9AFA4 /* PlayImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A9EFDC1F556DBE00C9AFA4 /* PlayImageView.cpp */; };
+		A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */; };
+		A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1A51F56483B00C8D1F9 /* PlayImageView.cpp */; };
+		A2A0F1AD1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1AB1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp */; };
+		A2A0F1B31F56562100C8D1F9 /* NumberInTenCompareLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B11F56562100C8D1F9 /* NumberInTenCompareLayer.cpp */; };
+		A2A0F1B61F5663A100C8D1F9 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B41F5663A100C8D1F9 /* NumberInTenLayer.cpp */; };
+		A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B71F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp */; };
+		A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */; };
 		A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */; };
 		A2A9F0141F556FB500C9AFA4 /* eight.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F00A1F556FB500C9AFA4 /* eight.png */; };
 		A2A9F0151F556FB500C9AFA4 /* five.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F00B1F556FB500C9AFA4 /* five.png */; };
@@ -234,10 +238,6 @@
 		A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DatasetInfo.cpp; sourceTree = "<group>"; };
 		A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICommonTableView.cpp; sourceTree = "<group>"; };
 		A28F63341F53CC11008ADA49 /* UICommonTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonTableView.h; sourceTree = "<group>"; };
-		A28F63361F53CC11008ADA49 /* DragImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragImageView.cpp; sourceTree = "<group>"; };
-		A28F63371F53CC11008ADA49 /* DragImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragImageView.h; sourceTree = "<group>"; };
-		A28F63381F53CC11008ADA49 /* NumberInTenLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenLayer.cpp; sourceTree = "<group>"; };
-		A28F63391F53CC11008ADA49 /* NumberInTenLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenLayer.h; sourceTree = "<group>"; };
 		A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
 		A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
 		A28F63421F53F138008ADA49 /* button_bar_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bar_delete.png; sourceTree = "<group>"; };
@@ -247,8 +247,20 @@
 		A293B5941F4AD170009CF915 /* DrawViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewTest.h; sourceTree = "<group>"; };
 		A293B5971F4AE129009CF915 /* TableViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableViewTest.cpp; sourceTree = "<group>"; };
 		A293B5981F4AE129009CF915 /* TableViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTest.h; sourceTree = "<group>"; };
-		A2A9EFDC1F556DBE00C9AFA4 /* PlayImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayImageView.cpp; sourceTree = "<group>"; };
-		A2A9EFDD1F556DBE00C9AFA4 /* PlayImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayImageView.h; sourceTree = "<group>"; };
+		A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragImageView.cpp; sourceTree = "<group>"; };
+		A2A0F1A21F56483B00C8D1F9 /* DragImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragImageView.h; sourceTree = "<group>"; };
+		A2A0F1A51F56483B00C8D1F9 /* PlayImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayImageView.cpp; sourceTree = "<group>"; };
+		A2A0F1A61F56483B00C8D1F9 /* PlayImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayImageView.h; sourceTree = "<group>"; };
+		A2A0F1AB1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseNumberInTenDragLayer.cpp; sourceTree = "<group>"; };
+		A2A0F1AC1F56490600C8D1F9 /* BaseNumberInTenDragLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNumberInTenDragLayer.h; sourceTree = "<group>"; };
+		A2A0F1B11F56562100C8D1F9 /* NumberInTenCompareLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenCompareLayer.cpp; sourceTree = "<group>"; };
+		A2A0F1B21F56562100C8D1F9 /* NumberInTenCompareLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenCompareLayer.h; sourceTree = "<group>"; };
+		A2A0F1B41F5663A100C8D1F9 /* NumberInTenLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenLayer.cpp; sourceTree = "<group>"; };
+		A2A0F1B51F5663A100C8D1F9 /* NumberInTenLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenLayer.h; sourceTree = "<group>"; };
+		A2A0F1B71F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenSingularLayer.cpp; sourceTree = "<group>"; };
+		A2A0F1B81F566B0B00C8D1F9 /* NumberInTenSingularLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenSingularLayer.h; sourceTree = "<group>"; };
+		A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenCombineLayer.cpp; sourceTree = "<group>"; };
+		A2A0F1BB1F5677F600C8D1F9 /* NumberInTenCombineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenCombineLayer.h; sourceTree = "<group>"; };
 		A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacToast.cpp; sourceTree = "<group>"; };
 		A2A9EFE01F556DC900C9AFA4 /* PacToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacToast.h; sourceTree = "<group>"; };
 		A2A9F00A1F556FB500C9AFA4 /* eight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eight.png; sourceTree = "<group>"; };
@@ -542,12 +554,8 @@
 		A28F63351F53CC11008ADA49 /* NumberInTen */ = {
 			isa = PBXGroup;
 			children = (
-				A2A9EFDC1F556DBE00C9AFA4 /* PlayImageView.cpp */,
-				A2A9EFDD1F556DBE00C9AFA4 /* PlayImageView.h */,
-				A28F63361F53CC11008ADA49 /* DragImageView.cpp */,
-				A28F63371F53CC11008ADA49 /* DragImageView.h */,
-				A28F63381F53CC11008ADA49 /* NumberInTenLayer.cpp */,
-				A28F63391F53CC11008ADA49 /* NumberInTenLayer.h */,
+				A2A0F1A01F56483B00C8D1F9 /* NumberInTenForDrag */,
+				A2A0F1A71F56483B00C8D1F9 /* NumberInTenForFly */,
 			);
 			path = NumberInTen;
 			sourceTree = "<group>";
@@ -561,6 +569,34 @@
 				A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		A2A0F1A01F56483B00C8D1F9 /* NumberInTenForDrag */ = {
+			isa = PBXGroup;
+			children = (
+				A2A0F1B41F5663A100C8D1F9 /* NumberInTenLayer.cpp */,
+				A2A0F1B51F5663A100C8D1F9 /* NumberInTenLayer.h */,
+				A2A0F1AB1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp */,
+				A2A0F1AC1F56490600C8D1F9 /* BaseNumberInTenDragLayer.h */,
+				A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */,
+				A2A0F1A21F56483B00C8D1F9 /* DragImageView.h */,
+				A2A0F1A51F56483B00C8D1F9 /* PlayImageView.cpp */,
+				A2A0F1A61F56483B00C8D1F9 /* PlayImageView.h */,
+				A2A0F1B11F56562100C8D1F9 /* NumberInTenCompareLayer.cpp */,
+				A2A0F1B21F56562100C8D1F9 /* NumberInTenCompareLayer.h */,
+				A2A0F1B71F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp */,
+				A2A0F1B81F566B0B00C8D1F9 /* NumberInTenSingularLayer.h */,
+				A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */,
+				A2A0F1BB1F5677F600C8D1F9 /* NumberInTenCombineLayer.h */,
+			);
+			path = NumberInTenForDrag;
+			sourceTree = "<group>";
+		};
+		A2A0F1A71F56483B00C8D1F9 /* NumberInTenForFly */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NumberInTenForFly;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -750,25 +786,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */,
+				A2A0F1B31F56562100C8D1F9 /* NumberInTenCompareLayer.cpp in Sources */,
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
-				A2A9EFDE1F556DBE00C9AFA4 /* PlayImageView.cpp in Sources */,
 				A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */,
-				A28F633F1F53CC11008ADA49 /* NumberInTenLayer.cpp in Sources */,
 				A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				A2A0F1B61F5663A100C8D1F9 /* NumberInTenLayer.cpp in Sources */,
 				A28F63131F53C3BD008ADA49 /* HelloWorldScene.cpp in Sources */,
 				A28F63141F53C3BD008ADA49 /* MainLayer.cpp in Sources */,
 				A28F63111F53C3BD008ADA49 /* AppDelegate.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				A2A0F1AD1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp in Sources */,
+				A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */,
 				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
+				A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */,
 				A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
+				A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
 				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
-				A28F633E1F53CC11008ADA49 /* DragImageView.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
+				A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */,
 				A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
