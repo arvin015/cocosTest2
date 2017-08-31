@@ -84,6 +84,18 @@
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
 		A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5931F4AD170009CF915 /* DrawViewTest.cpp */; };
 		A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5971F4AE129009CF915 /* TableViewTest.cpp */; };
+		A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A297C6801F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp */; };
+		A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A297C6841F579ED700F4BAAD /* FlyView.cpp */; };
+		A297C6891F57B25500F4BAAD /* tip_text_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6881F57B25500F4BAAD /* tip_text_bg.png */; };
+		A297C68B1F57B46C00F4BAAD /* bee.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C68A1F57B46C00F4BAAD /* bee.png */; };
+		A297C68E1F57BBE100F4BAAD /* UISpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A297C68C1F57BBE100F4BAAD /* UISpinner.cpp */; };
+		A297C6911F57BC7300F4BAAD /* UIMathNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A297C68F1F57BC7300F4BAAD /* UIMathNumber.cpp */; };
+		A297C69C1F57DD9800F4BAAD /* image_begin.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6991F57DD9800F4BAAD /* image_begin.png */; };
+		A297C69D1F57DD9800F4BAAD /* image_end.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C69A1F57DD9800F4BAAD /* image_end.png */; };
+		A297C69F1F57DDE500F4BAAD /* black_frame.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C69E1F57DDE500F4BAAD /* black_frame.png */; };
+		A297C6A11F57F68300F4BAAD /* blue_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A01F57F68300F4BAAD /* blue_arrow.png */; };
+		A297C6A41F57FDF700F4BAAD /* end.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A21F57FDF700F4BAAD /* end.png */; };
+		A297C6A51F57FDF700F4BAAD /* head.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A31F57FDF700F4BAAD /* head.png */; };
 		A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */; };
 		A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1A51F56483B00C8D1F9 /* PlayImageView.cpp */; };
 		A2A0F1AD1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1AB1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp */; };
@@ -247,6 +259,22 @@
 		A293B5941F4AD170009CF915 /* DrawViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewTest.h; sourceTree = "<group>"; };
 		A293B5971F4AE129009CF915 /* TableViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableViewTest.cpp; sourceTree = "<group>"; };
 		A293B5981F4AE129009CF915 /* TableViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTest.h; sourceTree = "<group>"; };
+		A297C6801F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenFlyLayer.cpp; sourceTree = "<group>"; };
+		A297C6811F579AEF00F4BAAD /* NumberInTenFlyLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenFlyLayer.h; sourceTree = "<group>"; };
+		A297C6841F579ED700F4BAAD /* FlyView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlyView.cpp; sourceTree = "<group>"; };
+		A297C6851F579ED700F4BAAD /* FlyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyView.h; sourceTree = "<group>"; };
+		A297C6881F57B25500F4BAAD /* tip_text_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_text_bg.png; sourceTree = "<group>"; };
+		A297C68A1F57B46C00F4BAAD /* bee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bee.png; sourceTree = "<group>"; };
+		A297C68C1F57BBE100F4BAAD /* UISpinner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UISpinner.cpp; sourceTree = "<group>"; };
+		A297C68D1F57BBE100F4BAAD /* UISpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISpinner.h; sourceTree = "<group>"; };
+		A297C68F1F57BC7300F4BAAD /* UIMathNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIMathNumber.cpp; sourceTree = "<group>"; };
+		A297C6901F57BC7300F4BAAD /* UIMathNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMathNumber.h; sourceTree = "<group>"; };
+		A297C6991F57DD9800F4BAAD /* image_begin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_begin.png; sourceTree = "<group>"; };
+		A297C69A1F57DD9800F4BAAD /* image_end.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_end.png; sourceTree = "<group>"; };
+		A297C69E1F57DDE500F4BAAD /* black_frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_frame.png; sourceTree = "<group>"; };
+		A297C6A01F57F68300F4BAAD /* blue_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_arrow.png; sourceTree = "<group>"; };
+		A297C6A21F57FDF700F4BAAD /* end.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = end.png; sourceTree = "<group>"; };
+		A297C6A31F57FDF700F4BAAD /* head.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head.png; sourceTree = "<group>"; };
 		A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragImageView.cpp; sourceTree = "<group>"; };
 		A2A0F1A21F56483B00C8D1F9 /* DragImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragImageView.h; sourceTree = "<group>"; };
 		A2A0F1A51F56483B00C8D1F9 /* PlayImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayImageView.cpp; sourceTree = "<group>"; };
@@ -455,6 +483,14 @@
 				A22931171F5577480089B2AE /* three_d.png */,
 				A22931181F5577480089B2AE /* two_d.png */,
 				A22931191F5577480089B2AE /* zero_d.png */,
+				A297C6881F57B25500F4BAAD /* tip_text_bg.png */,
+				A297C68A1F57B46C00F4BAAD /* bee.png */,
+				A297C6991F57DD9800F4BAAD /* image_begin.png */,
+				A297C69A1F57DD9800F4BAAD /* image_end.png */,
+				A297C69E1F57DDE500F4BAAD /* black_frame.png */,
+				A297C6A01F57F68300F4BAAD /* blue_arrow.png */,
+				A297C6A21F57FDF700F4BAAD /* end.png */,
+				A297C6A31F57FDF700F4BAAD /* head.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -545,6 +581,10 @@
 		A28F63321F53CC11008ADA49 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A297C68C1F57BBE100F4BAAD /* UISpinner.cpp */,
+				A297C68D1F57BBE100F4BAAD /* UISpinner.h */,
+				A297C68F1F57BC7300F4BAAD /* UIMathNumber.cpp */,
+				A297C6901F57BC7300F4BAAD /* UIMathNumber.h */,
 				A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */,
 				A28F63341F53CC11008ADA49 /* UICommonTableView.h */,
 			);
@@ -595,6 +635,10 @@
 		A2A0F1A71F56483B00C8D1F9 /* NumberInTenForFly */ = {
 			isa = PBXGroup;
 			children = (
+				A297C6801F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp */,
+				A297C6811F579AEF00F4BAAD /* NumberInTenFlyLayer.h */,
+				A297C6841F579ED700F4BAAD /* FlyView.cpp */,
+				A297C6851F579ED700F4BAAD /* FlyView.h */,
 			);
 			path = NumberInTenForFly;
 			sourceTree = "<group>";
@@ -712,9 +756,13 @@
 				A2ADE4CA1F4C0DFB007C09BE /* grossini_dance.png in Resources */,
 				A22931201F5577480089B2AE /* six_d.png in Resources */,
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
+				A297C69D1F57DD9800F4BAAD /* image_end.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
+				A297C68B1F57B46C00F4BAAD /* bee.png in Resources */,
 				A2A9F01D1F556FB500C9AFA4 /* zero.png in Resources */,
+				A297C69F1F57DDE500F4BAAD /* black_frame.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
+				A297C6A51F57FDF700F4BAAD /* head.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
@@ -733,6 +781,7 @@
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				A2A9F01B1F556FB500C9AFA4 /* three.png in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
+				A297C69C1F57DD9800F4BAAD /* image_begin.png in Resources */,
 				A22931211F5577480089B2AE /* three_d.png in Resources */,
 				A22931231F5577480089B2AE /* zero_d.png in Resources */,
 				A2A9F0161F556FB500C9AFA4 /* four.png in Resources */,
@@ -756,8 +805,11 @@
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				A2A9F0141F556FB500C9AFA4 /* eight.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
+				A297C6A41F57FDF700F4BAAD /* end.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				A2A9F0151F556FB500C9AFA4 /* five.png in Resources */,
+				A297C6891F57B25500F4BAAD /* tip_text_bg.png in Resources */,
+				A297C6A11F57F68300F4BAAD /* blue_arrow.png in Resources */,
 				A2B85BF21F46E49C0049DEED /* tbg_pic_01c.png in Resources */,
 				A229311B1F5577480089B2AE /* five_d.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
@@ -798,14 +850,18 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				A2A0F1AD1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp in Sources */,
 				A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */,
+				A297C6911F57BC7300F4BAAD /* UIMathNumber.cpp in Sources */,
 				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
 				A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */,
+				A297C68E1F57BBE100F4BAAD /* UISpinner.cpp in Sources */,
 				A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
 				A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
 				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
+				A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */,
+				A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
 				A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */,

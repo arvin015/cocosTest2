@@ -17,6 +17,7 @@
 #include "NumberInTenCompareLayer.h"
 #include "NumberInTenSingularLayer.h"
 #include "NumberInTenComBineLayer.h"
+#include "NumberInTenFlyLayer.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -27,7 +28,7 @@ using namespace CocosDenshion;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_COMPARE", "10_SINGULAR", "10_COMBINE", "10_FLY"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -86,9 +87,9 @@ bool MainLayer::init() {
     addChild(audioBtn);
     
     SimpleAudioEngine::getInstance()->preloadBackgroundMusic("background.mp3"); //预加载音乐
-    scheduleOnce([](float dt){
-        SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3", true); //播放音乐
-    }, 2.0f, "Audio");
+//    scheduleOnce([](float dt){
+//        SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3", true); //播放音乐
+//    }, 2.0f, "Audio");
     
     SimpleAudioEngine::getInstance()->preloadEffect("pew-pew-lei.wav"); //预加载音效
     
@@ -141,6 +142,8 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 7: {
+                NumberInTenFlyLayer* flyLayer = NumberInTenFlyLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(flyLayer);
                 break;
             }
                 
