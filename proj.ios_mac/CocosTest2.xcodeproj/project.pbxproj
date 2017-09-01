@@ -301,6 +301,7 @@
 		A2A9F0111F556FB500C9AFA4 /* three.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = three.png; sourceTree = "<group>"; };
 		A2A9F0121F556FB500C9AFA4 /* two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = two.png; sourceTree = "<group>"; };
 		A2A9F0131F556FB500C9AFA4 /* zero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zero.png; sourceTree = "<group>"; };
+		A2ADA2731F590648000CA298 /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActionTest.cpp; sourceTree = "<group>"; };
 		A2ADE4C21F4BCD78007C09BE /* ActionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionTest.h; sourceTree = "<group>"; };
 		A2ADE4C51F4BCF8F007C09BE /* elephant1_Diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = elephant1_Diffuse.png; sourceTree = "<group>"; };
@@ -603,10 +604,11 @@
 		A28F633A1F53CC11008ADA49 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */,
-				A2A9EFE01F556DC900C9AFA4 /* PacToast.h */,
 				A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */,
 				A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */,
+				A2ADA2731F590648000CA298 /* CommonUtils.h */,
+				A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */,
+				A2A9EFE01F556DC900C9AFA4 /* PacToast.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

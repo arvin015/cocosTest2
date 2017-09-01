@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "BaseLayer.h"
+#include "json/document.h"
 
 class FlyView;
 
@@ -28,8 +29,24 @@ public:
     
     CREATE_FUNC(NumberInTenFlyLayer);
     
+    /**
+     * 返回处理
+     */
+    virtual void onBackHandle();
+    
+    /**
+     * fromJson
+     */
+    void fromJson(const rapidjson::Value &json);
+    
+    /**
+     * toJson
+     */
+    void toJson(rapidjson::Document &json);
+    
 private:
     FlyView* flyView;
+    bool isDanced;
 };
 
 #endif /* NumberInTenFlyLayer_h */

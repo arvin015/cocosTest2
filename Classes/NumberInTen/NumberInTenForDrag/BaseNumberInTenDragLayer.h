@@ -7,10 +7,14 @@
 
 #include <stdio.h>
 #include "BaseLayer.h"
+#include "json/document.h"
+#include "json/prettywriter.h"
+#include "json/stringbuffer.h"
 #include "ui/UIImageView.h"
 #include "DragImageView.h"
 #include "PlayImageView.h"
 #include "PacToast.h"
+#include "CommonUtils.h"
 
 const int IconWidth = 58;
 const int IconHeight = 58;
@@ -18,6 +22,10 @@ const int IconHeight = 58;
 //热区编号
 const int LEFT_RECT = 1;
 const int RIGHT_RECT = 2;
+
+const std::string CompareSaveFile = "NumberInTenCompare.txt";
+const std::string SingularSaveFile = "NumberInTenSingular.txt";
+const std::string CombineSaveFile = "NumberInTenCombine.txt";
 
 class NumberInTenDragImpl {
 
@@ -76,6 +84,11 @@ public:
     virtual void onExit();
 
     virtual bool init();
+    
+    /**
+     * 返回处理
+     */
+    virtual void onBackHandle();
 
     /**
      * 设置是否可拖拽
@@ -87,14 +100,17 @@ public:
     /**
      * 舞动
      */
-    void dance();
+    virtual void dance();
     
     /**
-     * 设置接口
+     * fromJson
      */
-    void setNumberInTenDragImpl(NumberInTenDragImpl* numberInTenDragImpl) {
-        this->numberInTenDragImpl = numberInTenDragImpl;
-    }
+    virtual void fromJson(const rapidjson::Document &json);
+    
+    /**
+     * toJson
+     */
+    virtual void toJson(rapidjson::Document &json);
 
 private:
 
@@ -122,13 +138,15 @@ private:
      * 创建Temp拖拽图案
      */
     cocos2d::Sprite* createTempSprite(const std::string &picStr, const cocos2d::Vec2 &position);
-
-    /**
-     * 创建拖拽图案
-     */
-    DragImageView* createDragImageView(const std::string &picStr, const cocos2d::Vec2 &position);
     
 public:
+    
+    /**
+     * 设置接口
+     */
+    void setNumberInTenDragImpl(NumberInTenDragImpl* numberInTenDragImpl) {
+        this->numberInTenDragImpl = numberInTenDragImpl;
+    }
     
     /**
      * 越界检测
@@ -163,6 +181,11 @@ public:
      * 禁止除指定外的图案拖拽
      */
     void forbidIconsToDrag(const std::string &filename);
+    
+    /**
+     * 创建拖拽图案
+     */
+    DragImageView* createDragImageView(const std::string &picStr, const cocos2d::Vec2 &position);
 
 public:
 
@@ -171,6 +194,8 @@ public:
         NEXT_BTN,
         DANCE_BTN
     };
+    
+    std::string saveFileName; //保存名字
 
     cocos2d::EventListenerTouchOneByOne* eventListener;
     bool isDragEnabled;
@@ -184,6 +209,7 @@ public:
     float totalSpendTime; //统计动画播放时间
     int maxGroups; //最大可放组数
     float playAnimTime; //每个图案动画播放时间
+    bool isDanced; //是否舞动
     
 private:
     NumberInTenDragImpl* numberInTenDragImpl;

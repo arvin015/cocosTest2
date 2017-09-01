@@ -8,13 +8,19 @@
 
 #include "NumberInTenFlyLayer.h"
 #include "FlyView.h"
+#include "json/prettywriter.h"
+#include "json/stringbuffer.h"
+#include "CommonUtils.h"
 
 USING_NS_CC;
 using namespace ui;
 using namespace std;
 
+const string SaveFileName = "numberInTenFly.txt";
+
 NumberInTenFlyLayer::NumberInTenFlyLayer()
-: flyView(nullptr) {
+: flyView(nullptr)
+, isDanced(false) {
 
 }
 
@@ -46,10 +52,53 @@ bool NumberInTenFlyLayer::init() {
     danceBtn->setTitleText("舞動");
     danceBtn->setPosition(Vec2(V_WIDTH - 100, 300));
     danceBtn->addClickEventListener([this](Ref* pSender){
+        isDanced = true;
         flyView->dance();
     });
     this->addChild(danceBtn);
     
+    Button* restoreBtn = Button::create();
+    restoreBtn->setTitleFontSize(24);
+    restoreBtn->setTitleColor(Color3B::BLACK);
+    restoreBtn->setTitleText("恢復");
+    restoreBtn->setPosition(Vec2(V_WIDTH - 100, 200));
+    restoreBtn->addClickEventListener([this](Ref* pSender){
+        string result = FileUtils::getInstance()->getStringFromFile(FileUtils::getInstance()->getWritablePath() + "/" + SaveFileName);
+        rapidjson::Document doc;
+        doc.Parse(result.c_str());
+        fromJson(doc);
+    });
+    this->addChild(restoreBtn);
+    
     return true;
+}
+
+void NumberInTenFlyLayer::onBackHandle() {
+    rapidjson::Document doc(rapidjson::kObjectType);
+    toJson(doc);
+    string result = getStringFromJson(doc);
+    FileUtils::getInstance()->writeStringToFile(result, FileUtils::getInstance()->getWritablePath() + "/" + SaveFileName);
+}
+
+void NumberInTenFlyLayer::fromJson(const rapidjson::Value &json) {
+    if(!json.IsObject()) {
+        return;
+    }
+    
+    if(json.HasMember("isDanced")) {
+        isDanced = json["isDanced"].GetBool();
+    }
+    
+    if(flyView) {
+        flyView->fromJson(json);
+    }
+}
+
+void NumberInTenFlyLayer::toJson(rapidjson::Document &json) {
+    json.AddMember("isDanced", isDanced, json.GetAllocator());
+    
+    if(flyView) {
+        flyView->toJson(json);
+    }
 }
 

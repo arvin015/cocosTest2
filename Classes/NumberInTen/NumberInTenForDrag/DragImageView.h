@@ -10,6 +10,7 @@
 #include "ui/UIImageView.h"
 #include "ui/UIButton.h"
 #include "ui/UIText.h"
+#include "json/document.h"
 
 typedef std::function<void()> OnMoveEndedCallback;
 typedef std::function<void()> OnDeleteCallback;
@@ -88,6 +89,16 @@ public:
     cocos2d::ui::Text* getCountText() {
         return showCountText;
     }
+    
+    /**
+     * fromJson
+     */
+    void fromJson(const rapidjson::Value &json);
+    
+    /**
+     * toJson
+     */
+    void toJson(rapidjson::Document &obj);
 
 private:
 

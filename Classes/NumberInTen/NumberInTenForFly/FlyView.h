@@ -15,6 +15,7 @@
 #include "ui/UIButton.h"
 #include "ui/UIImageView.h"
 #include "UISpinner.h"
+#include "json/document.h"
 
 //每个格子的宽高
 const int FLY_GRID_WIDTH = 60;
@@ -53,6 +54,16 @@ public:
      * 舞动
      */
     void dance();
+    
+    /**
+     * fromJson
+     */
+    void fromJson(const rapidjson::Value &json);
+    
+    /**
+     * toJson
+     */
+    void toJson(rapidjson::Document &json);
     
 private:
     

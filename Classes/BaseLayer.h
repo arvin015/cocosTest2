@@ -29,6 +29,8 @@ public:
     void getMainScene();
     
     void goBack();
+    
+    virtual void onBackHandle() {};
 
 public:
     

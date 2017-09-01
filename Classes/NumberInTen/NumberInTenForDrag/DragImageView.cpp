@@ -3,6 +3,7 @@
 //
 
 #include "DragImageView.h"
+#include "CommonUtils.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -135,6 +136,49 @@ void DragImageView::bringToFront() {
     Vector<Node*> nodeList = getParent()->getChildren();
     Node* node = nodeList.at(getParent()->getChildrenCount() - 1); //获取最上面的那个Node
     this->getParent()->reorderChild(this, node->getLocalZOrder() + 1);
+}
+
+void DragImageView::fromJson(const rapidjson::Value &json) {
+    if(!json.IsObject()) {
+        return;
+    }
+    
+    float x = json["x"].GetFloat();
+    float y = json["y"].GetFloat();
+    string image = json["image"].GetString();
+    int showNum = json["showNum"].GetInt();
+    int countNum = json["countNum"].GetInt();
+    int rectType = json["rectType"].GetInt();
+    
+    setPosition(Vec2(x, y));
+    loadTexture(image);
+    setName(image);
+    setTag(rectType);
+    
+    //是否显示数字
+    if(showNum != -1) {
+        addShowNum(showNum);
+    }
+    //是否显示统计数字
+    if(countNum != -1) {
+        addShowCountNum(countNum);
+    }
+}
+
+void DragImageView::toJson(rapidjson::Document &obj) {
+
+    obj.SetObject();
+    
+    //x, y, image, showNum, countNum
+    int showNum = showNumText ? Value(showNumText->getString()).asInt() : -1;
+    int countNum = showCountText ? Value(showCountText->getString()).asInt() : -1;
+    
+    obj.AddMember("x", getPositionX(), obj.GetAllocator());
+    obj.AddMember("y", getPositionY(), obj.GetAllocator());
+    obj.AddMember("image", rapidjson::Value(getName().c_str(), obj.GetAllocator()), obj.GetAllocator());
+    obj.AddMember("showNum", showNum, obj.GetAllocator());
+    obj.AddMember("countNum", countNum, obj.GetAllocator());
+    obj.AddMember("rectType", getTag(), obj.GetAllocator());
 }
 
 bool DragImageView::onTouchBegan(Touch* touch, Event* event) {

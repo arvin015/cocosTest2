@@ -1184,8 +1184,8 @@ public:
         \note Amortized Constant time complexity.
     */
     GenericValue& AddMember(GenericValue& name, GenericValue& value, Allocator& allocator) {
-        RAPIDJSON_ASSERT(IsObject());
-        RAPIDJSON_ASSERT(name.IsString());
+//        RAPIDJSON_ASSERT(IsObject());
+//        RAPIDJSON_ASSERT(name.IsString());
 
         ObjectData& o = data_.o;
         if (o.size >= o.capacity) {

@@ -39,6 +39,7 @@ bool BaseLayer::init() {
     backBtn->setTitleFontSize(22);
     backBtn->addClickEventListener([this](Ref* pSender){
         goBack();
+        this->onBackHandle();
     });
     addChild(backBtn);
     

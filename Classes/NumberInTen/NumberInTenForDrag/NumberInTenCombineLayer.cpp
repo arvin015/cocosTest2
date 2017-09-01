@@ -59,6 +59,7 @@ void NumberInTenCombineLayer::initData() {
     dragImageListMap.insert(make_pair(LEFT_RECT, leftDragList));
     dragImageListMap.insert(make_pair(RIGHT_RECT, rightDragList));
     maxGroups = MaxGroups;
+    saveFileName = CombineSaveFile;
     
     //test 绘制热区
     DrawNode* drawNode = DrawNode::create();
@@ -236,4 +237,25 @@ int NumberInTenCombineLayer::getNumInGroup(const string &filename) {
     count += it2->second.size();
     
     return count;
+}
+
+void NumberInTenCombineLayer::toJson(rapidjson::Document &json) {
+    
+    json.SetObject();
+    
+    BaseNumberInTenDragLayer::toJson(json);
+    
+    //活动图案集合
+    rapidjson::Value dragArray(rapidjson::kArrayType);
+    map<int, Vector<DragImageView*>>::iterator it;
+    for(it = dragImageListMap.begin(); it != dragImageListMap.end(); it++) {
+        Vector<DragImageView*> dragList = it->second;
+        for(DragImageView* dragImage : dragList) {
+            rapidjson::Document dragObj(&json.GetAllocator());
+            dragImage->toJson(dragObj);
+            dragArray.PushBack(dragObj, json.GetAllocator());
+        }
+    }
+    
+    json.AddMember("dragImages", dragArray, json.GetAllocator());
 }

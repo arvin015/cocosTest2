@@ -52,6 +52,7 @@ void NumberInTenSingularLayer::initData() {
     
     hotRect = BigRect;
     maxGroups = MaxGroups;
+    saveFileName = SingularSaveFile;
     
     //test 绘制热区
     DrawNode* drawNode = DrawNode::create();
@@ -161,4 +162,26 @@ int NumberInTenSingularLayer::getNumInGroup(const string &filename) {
         return (int)it->second.size();
     }
     return 0;
+}
+
+void NumberInTenSingularLayer::toJson(rapidjson::Document &json) {
+    
+    json.SetObject();
+    
+    BaseNumberInTenDragLayer::toJson(json);
+    
+    //活动图案集合
+    rapidjson::Value dragArray(rapidjson::kArrayType);
+    map<string, Vector<DragImageView*>>::iterator it;
+    for(it = dragImageViewMap.begin(); it != dragImageViewMap.end(); it++) {
+        Vector<DragImageView*> dragList = it->second;
+        rapidjson::Value dragImageArray(rapidjson::kArrayType);
+        for(DragImageView* dragImage : dragList) {
+            rapidjson::Document dragObj(&json.GetAllocator());
+            dragImage->toJson(dragObj);
+            dragArray.PushBack(dragObj, json.GetAllocator());
+        }
+    }
+    
+    json.AddMember("dragImages", dragArray, json.GetAllocator());
 }

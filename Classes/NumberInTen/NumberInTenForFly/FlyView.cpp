@@ -140,6 +140,7 @@ bool FlyView::init() {
     beginBtn->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
     beginBtn->setVisible(false);
     beginBtn->setTag(-1); //beginBtn关联的数字
+    beginBtn->setPositionY(-10);
     beginBtn->addClickEventListener([this](Ref* pSender){
         this->onClickNumHandle(beginBtn->getTag());
     });
@@ -150,6 +151,7 @@ bool FlyView::init() {
     endBtn->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
     endBtn->setVisible(false);
     endBtn->setTag(-1); //endBtn关联的数字
+    endBtn->setPositionY(-10);
     endBtn->addClickEventListener([this](Ref* pSender){
         this->onClickNumHandle(endBtn->getTag());
     });
@@ -268,7 +270,7 @@ void FlyView::onItemSelected(int index, const string &content) {
         
         curBtn->setVisible(true);
         curBtn->setTag(selectNum);
-        curBtn->setPosition(Vec2(x, -10));
+        curBtn->setPositionX(x);
         
         //设置起点时，蜜蜂移动到起点位置
         if(index == 0) {
@@ -325,6 +327,55 @@ void FlyView::dance() {
         this->updateColor(getNumByX(beeSprite->getPositionX()));
     }, playTime / abs(beginNum - endNum), "updateColor");
 
+}
+
+void FlyView::fromJson(const rapidjson::Value &json) {
+    int begin = json["begin"].GetInt();
+    int end = json["end"].GetInt();
+    
+    if(begin != -1) {
+        beginBtn->setVisible(true);
+        beginBtn->setTag(begin);
+        
+        float x = getXByNum(begin);
+        
+        beginBtn->setPositionX(x);
+        beeSprite->setPositionX(x);
+    }
+    
+    if(end != -1) {
+        endBtn->setVisible(true);
+        endBtn->setTag(end);
+        endBtn->setPositionX(getXByNum(end));
+    }
+    
+    //舞动处理
+    bool isDanced = json["isDanced"].GetBool();
+    if(isDanced) {
+        beeSprite->setPositionX(getXByNum(end));
+        addDirectArrow(begin, end);
+        beginBtn->setVisible(false);
+        endBtn->setVisible(false);
+        setClickEnabled(false);
+        tipView->setVisible(false);
+        
+        int b, e;
+        if(begin > end) {
+            b = end;
+            e = begin;
+        } else {
+            b = begin;
+            e = end;
+        }
+        for(int i = b; i < e + 1; i++) {
+            updateColor(i);
+        }
+    }
+}
+
+void FlyView::toJson(rapidjson::Document &json) {
+    json.AddMember("begin", beginBtn->getTag(), json.GetAllocator());
+    json.AddMember("end", endBtn->getTag(), json.GetAllocator());
 }
 
 void FlyView::updateColor(int num) {

@@ -28,6 +28,11 @@ public:
     
     CREATE_FUNC(NumberInTenSingularLayer);
     
+    /**
+     * toJson
+     */
+    virtual void toJson(rapidjson::Document &json);
+    
 public:
     
     /**

@@ -27,7 +27,8 @@ BaseNumberInTenDragLayer::BaseNumberInTenDragLayer()
 , tempSprite(nullptr)
 , playAnimTime(1.0f)
 , totalSpendTime(0.0f)
-, numberInTenDragImpl(nullptr){
+, numberInTenDragImpl(nullptr)
+, isDanced(false) {
 
 }
 
@@ -91,6 +92,11 @@ bool BaseNumberInTenDragLayer::init() {
     }
     initDragIcons();
     switchDragIcons(currentPage);
+    
+    string result = FileUtils::getInstance()->getStringFromFile(FileUtils::getInstance()->getWritablePath() + "/" + saveFileName);
+    rapidjson::Document doc;
+    doc.Parse(result.c_str());
+    fromJson(doc);
 
     return true;
 }
@@ -136,7 +142,16 @@ void BaseNumberInTenDragLayer::switchDragIcons(int page) {
     }
 }
 
+void BaseNumberInTenDragLayer::onBackHandle() {
+    rapidjson::Document doc(rapidjson::kObjectType);
+    toJson(doc);
+    string result = getStringFromJson(doc);
+    FileUtils::getInstance()->writeStringToFile(result, FileUtils::getInstance()->getWritablePath() + "/" + saveFileName);
+}
+
 void BaseNumberInTenDragLayer::dance() {
+    
+    isDanced = true;
     
     //播放动画，交给子类处理
     if(numberInTenDragImpl) {
@@ -145,6 +160,63 @@ void BaseNumberInTenDragLayer::dance() {
     
     //禁止所有图案的操作
     setDragImagesEnabled(false);
+}
+
+void BaseNumberInTenDragLayer::fromJson(const rapidjson::Document &doc) {
+    
+    if(!doc.IsObject()) {
+        return;
+    }
+    
+    //操作栏图案
+    if(doc.HasMember("playImages")) {
+        const rapidjson::Value &playArray = doc["playImages"];
+        for(rapidjson::SizeType i = 0; i < playArray.Size(); i++) {
+            bool flag = playArray[i].GetBool();
+            PlayImageView* playImage = dragImageList.at(i);
+            if(playImage) {
+                playImage->setEnabled(flag);
+            }
+        }
+    }
+    
+    //拖拽图案
+    if(doc.HasMember("dragImages")) {
+        const rapidjson::Value &dragArray = doc["dragImages"];
+        if(dragArray.IsArray()) {
+            for(rapidjson::SizeType i = 0; i < dragArray.Size(); i++) {
+                const rapidjson::Value &dragObj = dragArray[i];
+                if(dragObj.IsObject()) {
+                    string filename = dragObj["image"].GetString();
+                    DragImageView* dragImage = createDragImageView(filename, Vec2::ZERO);
+                    dragImage->fromJson(dragObj);
+                    this->addChild(dragImage);
+                    
+                    if(numberInTenDragImpl) {
+                        numberInTenDragImpl->addDragImageToList(dragImage, filename); //加入集合中
+                    }
+                }
+            }
+        }
+    }
+    
+    if(doc.HasMember("isDanced")) {
+        isDanced = doc["isDanced"].GetBool();
+        if(isDanced) {
+            setDragImagesEnabled(false);
+        }
+    }
+}
+
+void BaseNumberInTenDragLayer::toJson(rapidjson::Document &json) {
+    json.AddMember("isDanced", isDanced, json.GetAllocator());
+    
+    //操作栏图案状态
+    rapidjson::Value playArray(rapidjson::kArrayType);
+    for(PlayImageView* imageView : dragImageList) {
+        playArray.PushBack(imageView->isEnabled(), json.GetAllocator());
+    }
+    json.AddMember("playImages", playArray, json.GetAllocator());
 }
 
 bool BaseNumberInTenDragLayer::onTouchBegan(Touch* touch, Event* event) {
@@ -257,9 +329,6 @@ Sprite* BaseNumberInTenDragLayer::createTempSprite(const string &picStr, const V
 }
 
 DragImageView* BaseNumberInTenDragLayer::createDragImageView(const string &picStr, const Vec2 &position) {
-    if(picStr.empty()) {
-        return nullptr;
-    }
 
     DragImageView* dragImageView = DragImageView::create(picStr);
     dragImageView->setContentSize(Size(IconWidth, IconHeight));
