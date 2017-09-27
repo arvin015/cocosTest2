@@ -114,6 +114,11 @@
 		A2A9F01B1F556FB500C9AFA4 /* three.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0111F556FB500C9AFA4 /* three.png */; };
 		A2A9F01C1F556FB500C9AFA4 /* two.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0121F556FB500C9AFA4 /* two.png */; };
 		A2A9F01D1F556FB500C9AFA4 /* zero.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0131F556FB500C9AFA4 /* zero.png */; };
+		A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */; };
+		A2ADD4C61F7BAB0F009F1B49 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADD4C41F7BAB0F009F1B49 /* loading.png */; };
+		A2ADD4C71F7BAB0F009F1B49 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADD4C51F7BAB0F009F1B49 /* white.png */; };
+		A2ADD4CB1F7BADFC009F1B49 /* NumberInTwentySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADD4C91F7BADFC009F1B49 /* NumberInTwentySequence.cpp */; };
+		A2ADD4CE1F7BAF6D009F1B49 /* SequenceView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADD4CC1F7BAF6D009F1B49 /* SequenceView.cpp */; };
 		A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */; };
 		A2ADE4C61F4BCF8F007C09BE /* elephant1_Diffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADE4C51F4BCF8F007C09BE /* elephant1_Diffuse.png */; };
 		A2ADE4C91F4C0DFB007C09BE /* grossini_dance.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2ADE4C71F4C0DFB007C09BE /* grossini_dance.plist */; };
@@ -302,6 +307,14 @@
 		A2A9F0121F556FB500C9AFA4 /* two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = two.png; sourceTree = "<group>"; };
 		A2A9F0131F556FB500C9AFA4 /* zero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zero.png; sourceTree = "<group>"; };
 		A2ADA2731F590648000CA298 /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
+		A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadDialog.cpp; sourceTree = "<group>"; };
+		A2ADD4C21F7BA380009F1B49 /* LoadDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadDialog.h; sourceTree = "<group>"; };
+		A2ADD4C41F7BAB0F009F1B49 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
+		A2ADD4C51F7BAB0F009F1B49 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
+		A2ADD4C91F7BADFC009F1B49 /* NumberInTwentySequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTwentySequence.cpp; sourceTree = "<group>"; };
+		A2ADD4CA1F7BADFC009F1B49 /* NumberInTwentySequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTwentySequence.h; sourceTree = "<group>"; };
+		A2ADD4CC1F7BAF6D009F1B49 /* SequenceView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequenceView.cpp; sourceTree = "<group>"; };
+		A2ADD4CD1F7BAF6D009F1B49 /* SequenceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequenceView.h; sourceTree = "<group>"; };
 		A2ADE4C11F4BCD78007C09BE /* ActionTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActionTest.cpp; sourceTree = "<group>"; };
 		A2ADE4C21F4BCD78007C09BE /* ActionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionTest.h; sourceTree = "<group>"; };
 		A2ADE4C51F4BCF8F007C09BE /* elephant1_Diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = elephant1_Diffuse.png; sourceTree = "<group>"; };
@@ -447,51 +460,53 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				521A8EA819F11F5000D177D7 /* fonts */,
-				3EACC98E19EE6D4300EB3C5E /* res */,
-				46880B7619C43A67006E1F66 /* CloseNormal.png */,
-				46880B7719C43A67006E1F66 /* CloseSelected.png */,
-				46880B7A19C43A67006E1F66 /* HelloWorld.png */,
-				A2B85BEF1F46E49C0049DEED /* tbg_pic_01.png */,
-				A2B85BF01F46E49C0049DEED /* tbg_pic_01c.png */,
-				A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */,
-				A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */,
-				A2ADE4C51F4BCF8F007C09BE /* elephant1_Diffuse.png */,
-				A2ADE4C71F4C0DFB007C09BE /* grossini_dance.plist */,
-				A2ADE4C81F4C0DFB007C09BE /* grossini_dance.png */,
 				A2ADE4CE1F4C2A31007C09BE /* background.mp3 */,
-				A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */,
-				A28F45991F4D5A3600359D90 /* hole_effect.png */,
-				A28F459A1F4D5A3600359D90 /* hole_stencil.png */,
-				A28F63421F53F138008ADA49 /* button_bar_delete.png */,
-				A2A9F00A1F556FB500C9AFA4 /* eight.png */,
-				A2A9F00B1F556FB500C9AFA4 /* five.png */,
-				A2A9F00C1F556FB500C9AFA4 /* four.png */,
-				A2A9F00D1F556FB500C9AFA4 /* nine.png */,
-				A2A9F00E1F556FB500C9AFA4 /* one.png */,
-				A2A9F00F1F556FB500C9AFA4 /* seven.png */,
-				A2A9F0101F556FB500C9AFA4 /* six.png */,
-				A2A9F0111F556FB500C9AFA4 /* three.png */,
-				A2A9F0121F556FB500C9AFA4 /* two.png */,
-				A2A9F0131F556FB500C9AFA4 /* zero.png */,
-				A22931101F5577480089B2AE /* eight_d.png */,
-				A22931111F5577480089B2AE /* five_d.png */,
-				A22931121F5577480089B2AE /* four_d.png */,
-				A22931131F5577480089B2AE /* nine_d.png */,
-				A22931141F5577480089B2AE /* one_d.png */,
-				A22931151F5577480089B2AE /* seven_d.png */,
-				A22931161F5577480089B2AE /* six_d.png */,
-				A22931171F5577480089B2AE /* three_d.png */,
-				A22931181F5577480089B2AE /* two_d.png */,
-				A22931191F5577480089B2AE /* zero_d.png */,
-				A297C6881F57B25500F4BAAD /* tip_text_bg.png */,
 				A297C68A1F57B46C00F4BAAD /* bee.png */,
-				A297C6991F57DD9800F4BAAD /* image_begin.png */,
-				A297C69A1F57DD9800F4BAAD /* image_end.png */,
 				A297C69E1F57DDE500F4BAAD /* black_frame.png */,
 				A297C6A01F57F68300F4BAAD /* blue_arrow.png */,
+				A28F63421F53F138008ADA49 /* button_bar_delete.png */,
+				46880B7619C43A67006E1F66 /* CloseNormal.png */,
+				46880B7719C43A67006E1F66 /* CloseSelected.png */,
+				A22931101F5577480089B2AE /* eight_d.png */,
+				A2A9F00A1F556FB500C9AFA4 /* eight.png */,
+				A2ADE4C51F4BCF8F007C09BE /* elephant1_Diffuse.png */,
 				A297C6A21F57FDF700F4BAAD /* end.png */,
+				A22931111F5577480089B2AE /* five_d.png */,
+				A2A9F00B1F556FB500C9AFA4 /* five.png */,
+				521A8EA819F11F5000D177D7 /* fonts */,
+				A22931121F5577480089B2AE /* four_d.png */,
+				A2A9F00C1F556FB500C9AFA4 /* four.png */,
+				A2ADE4C71F4C0DFB007C09BE /* grossini_dance.plist */,
+				A2ADE4C81F4C0DFB007C09BE /* grossini_dance.png */,
 				A297C6A31F57FDF700F4BAAD /* head.png */,
+				46880B7A19C43A67006E1F66 /* HelloWorld.png */,
+				A28F45991F4D5A3600359D90 /* hole_effect.png */,
+				A28F459A1F4D5A3600359D90 /* hole_stencil.png */,
+				A297C6991F57DD9800F4BAAD /* image_begin.png */,
+				A297C69A1F57DD9800F4BAAD /* image_end.png */,
+				A2ADD4C41F7BAB0F009F1B49 /* loading.png */,
+				A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */,
+				A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */,
+				A22931131F5577480089B2AE /* nine_d.png */,
+				A2A9F00D1F556FB500C9AFA4 /* nine.png */,
+				A22931141F5577480089B2AE /* one_d.png */,
+				A2A9F00E1F556FB500C9AFA4 /* one.png */,
+				A2ADE4D71F4C3CAA007C09BE /* pew-pew-lei.wav */,
+				3EACC98E19EE6D4300EB3C5E /* res */,
+				A22931151F5577480089B2AE /* seven_d.png */,
+				A2A9F00F1F556FB500C9AFA4 /* seven.png */,
+				A22931161F5577480089B2AE /* six_d.png */,
+				A2A9F0101F556FB500C9AFA4 /* six.png */,
+				A2B85BEF1F46E49C0049DEED /* tbg_pic_01.png */,
+				A2B85BF01F46E49C0049DEED /* tbg_pic_01c.png */,
+				A22931171F5577480089B2AE /* three_d.png */,
+				A2A9F0111F556FB500C9AFA4 /* three.png */,
+				A297C6881F57B25500F4BAAD /* tip_text_bg.png */,
+				A22931181F5577480089B2AE /* two_d.png */,
+				A2A9F0121F556FB500C9AFA4 /* two.png */,
+				A2ADD4C51F7BAB0F009F1B49 /* white.png */,
+				A22931191F5577480089B2AE /* zero_d.png */,
+				A2A9F0131F556FB500C9AFA4 /* zero.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -595,6 +610,7 @@
 		A28F63351F53CC11008ADA49 /* NumberInTen */ = {
 			isa = PBXGroup;
 			children = (
+				A2ADD4C81F7BADC0009F1B49 /* NumberInTwentyForSequence */,
 				A2A0F1A01F56483B00C8D1F9 /* NumberInTenForDrag */,
 				A2A0F1A71F56483B00C8D1F9 /* NumberInTenForFly */,
 			);
@@ -604,6 +620,8 @@
 		A28F633A1F53CC11008ADA49 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */,
+				A2ADD4C21F7BA380009F1B49 /* LoadDialog.h */,
 				A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */,
 				A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */,
 				A2ADA2731F590648000CA298 /* CommonUtils.h */,
@@ -643,6 +661,17 @@
 				A297C6851F579ED700F4BAAD /* FlyView.h */,
 			);
 			path = NumberInTenForFly;
+			sourceTree = "<group>";
+		};
+		A2ADD4C81F7BADC0009F1B49 /* NumberInTwentyForSequence */ = {
+			isa = PBXGroup;
+			children = (
+				A2ADD4C91F7BADFC009F1B49 /* NumberInTwentySequence.cpp */,
+				A2ADD4CA1F7BADFC009F1B49 /* NumberInTwentySequence.h */,
+				A2ADD4CC1F7BAF6D009F1B49 /* SequenceView.cpp */,
+				A2ADD4CD1F7BAF6D009F1B49 /* SequenceView.h */,
+			);
+			path = NumberInTwentyForSequence;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -773,6 +802,7 @@
 				A229311C1F5577480089B2AE /* four_d.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				A2A9F0181F556FB500C9AFA4 /* one.png in Resources */,
+				A2ADD4C71F7BAB0F009F1B49 /* white.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				A2A9F01A1F556FB500C9AFA4 /* six.png in Resources */,
 				A229311A1F5577480089B2AE /* eight_d.png in Resources */,
@@ -781,6 +811,7 @@
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
+				A2ADD4C61F7BAB0F009F1B49 /* loading.png in Resources */,
 				A2A9F01B1F556FB500C9AFA4 /* three.png in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				A297C69C1F57DD9800F4BAAD /* image_begin.png in Resources */,
@@ -860,8 +891,11 @@
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
 				A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				A2ADD4CE1F7BAF6D009F1B49 /* SequenceView.cpp in Sources */,
+				A2ADD4CB1F7BADFC009F1B49 /* NumberInTwentySequence.cpp in Sources */,
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
 				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
+				A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */,
 				A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */,
 				A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,

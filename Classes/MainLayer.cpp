@@ -18,7 +18,9 @@
 #include "NumberInTenSingularLayer.h"
 #include "NumberInTenComBineLayer.h"
 #include "NumberInTenFlyLayer.h"
+#include "NumberInTwentySequence.h"
 #include "SimpleAudioEngine.h"
+#include "LoadDialog.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -28,7 +30,7 @@ using namespace CocosDenshion;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -60,7 +62,7 @@ bool MainLayer::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 8; i++) {
+    for(int i = 0; i < 9; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(150, 54));
@@ -92,6 +94,11 @@ bool MainLayer::init() {
 //    }, 2.0f, "Audio");
     
     SimpleAudioEngine::getInstance()->preloadEffect("pew-pew-lei.wav"); //预加载音效
+
+    LoadDialog* loadDialog = LoadDialog::create();
+    loadDialog->setText("正在登录系统，请稍后...");
+    loadDialog->setCancelable(true);
+    loadDialog->show(this);
     
     return true;
 }
@@ -144,6 +151,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 7: {
                 NumberInTenFlyLayer* flyLayer = NumberInTenFlyLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(flyLayer);
+                break;
+            }
+            case 8: {
+                NumberInTwentySequenceLayer* sequenceLayer = NumberInTwentySequenceLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(sequenceLayer);
                 break;
             }
                 

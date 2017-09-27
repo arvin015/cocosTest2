@@ -39,8 +39,11 @@
     <content url="file://$MODULE_DIR$/../../Classes/Common">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/Common" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../Classes/NumberInTen">
-      <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForDrag">
+      <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForDrag" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForFly">
+      <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForFly" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../Classes/Utils">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/Utils" isTestSource="false" />
