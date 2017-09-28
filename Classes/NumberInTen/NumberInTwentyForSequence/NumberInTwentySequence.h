@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "BaseLayer.h"
+#include "json/document.h"
 
 class SequenceView;
 
@@ -28,10 +29,24 @@ public:
     
     CREATE_FUNC(NumberInTwentySequenceLayer);
     
+    /**
+     * 返回处理
+     */
+    virtual void onBackHandle();
+    
+    /**
+     * fromJson
+     */
+    void fromJson(const rapidjson::Value &json);
+    
+    /**
+     * toJson
+     */
+    void toJson(rapidjson::Document &json);
+    
 private:
-    
     SequenceView* sequenceView;
-    
+    bool isDanced;
 };
 
 #endif /* NumberInTwentySequence_h */

@@ -11,6 +11,7 @@
 #include "json/prettywriter.h"
 #include "json/stringbuffer.h"
 #include "CommonUtils.h"
+#include "PacToast.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -52,8 +53,15 @@ bool NumberInTenFlyLayer::init() {
     danceBtn->setTitleText("舞動");
     danceBtn->setPosition(Vec2(V_WIDTH - 100, 300));
     danceBtn->addClickEventListener([this](Ref* pSender){
-        isDanced = true;
-        flyView->dance();
+        if(isDanced) {
+            PacToast::makeText("該對象已舞動");
+            return;
+        }
+        
+        if(flyView->checkCanDance()) {
+            isDanced = true;
+            flyView->dance();
+        }
     });
     this->addChild(danceBtn);
     

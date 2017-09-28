@@ -19,12 +19,12 @@ using namespace std;
 const int BEE_FLY_AREA_HEIGHT = 80;
 
 //根据编号获取X坐标
-inline float getXByNum(int num) {
+float getXByNum(int num) {
     return (num - 1) * FLY_GRID_WIDTH + FLY_GRID_WIDTH / 2;
 }
 
 //根据X坐标获取对应的编号
-inline int getNumByX(float x) {
+int getNumByX(float x) {
     return (int)ceil((x * 1.0 / (10 * FLY_GRID_WIDTH) * 10));
 }
 
@@ -226,14 +226,14 @@ void FlyView::onClickNumHandle(int num) {
         spinner->setItemBackgroundColor(Color3B(255, 124, 128), Color3B::ORANGE);
         spinner->setItemDividerColor(Color3B::WHITE);
         spinner->setParameters(list, FLY_GRID_WIDTH + 10, 30);
-        this->addChild(spinner);
+        Director::getInstance()->getRunningScene()->addChild(spinner);
     }
     
     spinner->setVisible(true);
     
     selectNum = num;
     
-    spinner->setPosition(Vec2(getXByNum(selectNum), -10));
+    spinner->setPosition(convertToWorldSpace(Vec2(getXByNum(selectNum), -10)));
 }
 
 void FlyView::onItemSelected(int index, const string &content) {
@@ -287,12 +287,17 @@ void FlyView::setClickEnabled(bool clickEnabled) {
     this->isClickEnabled = clickEnabled;
 }
 
-void FlyView::dance() {
+bool FlyView::checkCanDance() {
     if(!existB_E()) {
         PacToast::makeText("請檢查起點和終點是否都已設定");
-        return;
+        return false;
     }
     
+    return true;
+}
+
+void FlyView::dance() {
+
     //设置数字不可点击了
     setClickEnabled(false);
     
@@ -306,7 +311,7 @@ void FlyView::dance() {
     addDirectArrow(beginNum, endNum);
     
     //执行动画---蜜蜂和箭头同时执行
-    float playTime = abs(beginNum - endNum) * 0.4f; //动画播放时间
+    float playTime = (abs(beginNum - endNum) + 1) * 0.4f; //动画播放时间
     //蜜蜂动画
     auto beeAction = Sequence::create(MoveTo::create(playTime, Vec2(getXByNum(endNum), beeSprite->getPositionY())), DelayTime::create(0.5f),  CallFunc::create([this, beginNum, endNum](){
         

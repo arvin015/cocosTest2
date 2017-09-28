@@ -51,6 +51,11 @@ public:
     void setClickEnabled(bool clickEnabled);
     
     /**
+     * 检查是否可舞动
+     */
+    bool checkCanDance();
+    
+    /**
      * 舞动
      */
     void dance();
