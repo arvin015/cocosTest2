@@ -27,9 +27,22 @@ public:
     CREATE_FUNC(ClippingTest);
     
 private:
+    
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    
+    void shoot(cocos2d::Vec2 position);
+    void playShootAnimation();
+    
+private:
+    cocos2d::EventListenerTouchOneByOne* eventListener;
     cocos2d::Node* holoContents;
     cocos2d::Node* holoStencils;
     cocos2d::ClippingNode* clippingNode;
+    cocos2d::Sprite* contentSprite;
+    bool isInArea;
+    bool isMove;
 };
 
 #endif /* ClippingTest_h */

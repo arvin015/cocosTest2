@@ -14,6 +14,7 @@
 #include "DrawViewTest.h"
 #include "TableViewTest.h"
 #include "ActionTest.h"
+#include "ClippingTest.h"
 #include "NumberInTenCompareLayer.h"
 #include "NumberInTenSingularLayer.h"
 #include "NumberInTenComBineLayer.h"
@@ -131,6 +132,8 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 3: {
+                ClippingTest* clipplingTest = ClippingTest::create();
+                getMainScene()->getRootLayer()->controller->pushView(clipplingTest);
                 break;
             }
             case 4: {
