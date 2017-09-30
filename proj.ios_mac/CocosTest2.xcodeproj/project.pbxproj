@@ -93,6 +93,9 @@
 		A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */; };
 		A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */; };
 		A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F63421F53F138008ADA49 /* button_bar_delete.png */; };
+		A290ABE31F7F400900AA88B6 /* tank.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A290ABE01F7F400900AA88B6 /* tank.atlas */; };
+		A290ABE41F7F400900AA88B6 /* tank.json in Resources */ = {isa = PBXBuildFile; fileRef = A290ABE11F7F400900AA88B6 /* tank.json */; };
+		A290ABE51F7F400900AA88B6 /* tank.png in Resources */ = {isa = PBXBuildFile; fileRef = A290ABE21F7F400900AA88B6 /* tank.png */; };
 		A293B5831F4A7062009CF915 /* mian_button_01_125x54.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */; };
 		A293B5841F4A7062009CF915 /* mian_button_01_125x54s.png in Resources */ = {isa = PBXBuildFile; fileRef = A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */; };
 		A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293B5931F4AD170009CF915 /* DrawViewTest.cpp */; };
@@ -286,6 +289,9 @@
 		A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
 		A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
 		A28F63421F53F138008ADA49 /* button_bar_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bar_delete.png; sourceTree = "<group>"; };
+		A290ABE01F7F400900AA88B6 /* tank.atlas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tank.atlas; sourceTree = "<group>"; };
+		A290ABE11F7F400900AA88B6 /* tank.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tank.json; sourceTree = "<group>"; };
+		A290ABE21F7F400900AA88B6 /* tank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank.png; sourceTree = "<group>"; };
 		A293B5811F4A7062009CF915 /* mian_button_01_125x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54.png; sourceTree = "<group>"; };
 		A293B5821F4A7062009CF915 /* mian_button_01_125x54s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mian_button_01_125x54s.png; sourceTree = "<group>"; };
 		A293B5931F4AD170009CF915 /* DrawViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawViewTest.cpp; sourceTree = "<group>"; };
@@ -542,6 +548,9 @@
 				A2A9F00F1F556FB500C9AFA4 /* seven.png */,
 				A22931161F5577480089B2AE /* six_d.png */,
 				A2A9F0101F556FB500C9AFA4 /* six.png */,
+				A290ABE01F7F400900AA88B6 /* tank.atlas */,
+				A290ABE11F7F400900AA88B6 /* tank.json */,
+				A290ABE21F7F400900AA88B6 /* tank.png */,
 				A2B85BEF1F46E49C0049DEED /* tbg_pic_01.png */,
 				A2B85BF01F46E49C0049DEED /* tbg_pic_01c.png */,
 				A22931171F5577480089B2AE /* three_d.png */,
@@ -849,6 +858,7 @@
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
 				A28F459B1F4D5A3600359D90 /* hole_effect.png in Resources */,
 				A229311C1F5577480089B2AE /* four_d.png in Resources */,
+				A290ABE51F7F400900AA88B6 /* tank.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				A2A9F0181F556FB500C9AFA4 /* one.png in Resources */,
 				A28AF3221F7C997000FDD70F /* child_2.png in Resources */,
@@ -876,6 +886,7 @@
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
 				A2ADE4CF1F4C2A31007C09BE /* background.mp3 in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
+				A290ABE41F7F400900AA88B6 /* tank.json in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
 				A28AF3371F7CAE6A00FDD70F /* direct_arrow.png in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
@@ -890,6 +901,7 @@
 				A229311D1F5577480089B2AE /* nine_d.png in Resources */,
 				A2ADE4D81F4C3CAA007C09BE /* pew-pew-lei.wav in Resources */,
 				A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */,
+				A290ABE31F7F400900AA88B6 /* tank.atlas in Resources */,
 				A2A9F01C1F556FB500C9AFA4 /* two.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				A2A9F0141F556FB500C9AFA4 /* eight.png in Resources */,

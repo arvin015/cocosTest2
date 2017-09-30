@@ -9,6 +9,8 @@
 #include "MainLayer.h"
 #include "ui/UIButton.h"
 #include "ui/UICheckBox.h"
+#include <spine/spine-cocos2dx.h>
+#include "spine/spine.h"
 #include "HelloWorldScene.h"
 #include "NavigationController.h"
 #include "DrawViewTest.h"
@@ -27,6 +29,7 @@ USING_NS_CC;
 using namespace ui;
 using namespace std;
 using namespace CocosDenshion;
+using namespace spine;
 
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
@@ -100,6 +103,14 @@ bool MainLayer::init() {
     loadDialog->setText("正在登录系统，请稍后...");
     loadDialog->setCancelable(true);
     loadDialog->show(this);
+    
+    spine::SkeletonAnimation* skeleton = spine::SkeletonAnimation::createWithJsonFile("tank.json", "tank.atlas");
+    skeleton->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    skeleton->setPosition(Vec2(V_WIDTH - 100, V_HEIGHT / 2 - 200));
+    skeleton->setScale(0.3);
+    this->addChild(skeleton);
+    
+    skeleton->setAnimation(0, "drive", true);
     
     return true;
 }
