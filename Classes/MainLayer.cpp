@@ -24,6 +24,7 @@
 #include "NumberInTwentySequence.h"
 #include "SimpleAudioEngine.h"
 #include "LoadDialog.h"
+#include "ElectronicBoardsLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -34,7 +35,7 @@ using namespace spine;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -66,7 +67,7 @@ bool MainLayer::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 9; i++) {
+    for(int i = 0; i < 10; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(150, 54));
@@ -170,6 +171,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 8: {
                 NumberInTwentySequenceLayer* sequenceLayer = NumberInTwentySequenceLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(sequenceLayer);
+                break;
+            }
+            case 9: {
+                ElectronicBoardsLayer* boardsLayer = ElectronicBoardsLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(boardsLayer);
                 break;
             }
                 

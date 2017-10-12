@@ -30,9 +30,6 @@
     <output url="file://$MODULE_DIR$/build/intermediates/classes/debug" />
     <output-test url="file://$MODULE_DIR$/build/intermediates/classes/test/debug" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../../android/tools/android-ndk-r14b/sources/android/cpufeatures">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../../android/tools/android-ndk-r14b/sources/android/cpufeatures" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$/../../Classes">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes" isTestSource="false" />
     </content>
@@ -44,6 +41,9 @@
     </content>
     <content url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForFly">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForFly" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTwentyForSequence">
+      <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTwentyForSequence" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../Classes/Utils">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/Utils" isTestSource="false" />
@@ -449,6 +449,9 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../../software/sdk/ndk-bundle/sources/android/cpufeatures">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../software/sdk/ndk-bundle/sources/android/cpufeatures" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

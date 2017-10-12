@@ -19,7 +19,7 @@ ElectronicBoards::ElectronicBoards() {
     boardHeight = 640;
     padding = 40;
     startX = START_X + padding;
-    startY = START_X + padding;
+    startY = START_Y + padding;
 }
 
 ElectronicBoards::~ElectronicBoards() {
@@ -36,7 +36,7 @@ void ElectronicBoards::onExit() {
 }
 
 bool ElectronicBoards::init() {
-    if(Layer::init()) {
+    if(!Layer::init()) {
         return false;
     }
     
@@ -49,7 +49,7 @@ void ElectronicBoards::initBoard(float boardWidth, float boardHeight, float padd
     this->padding = padding;
     
     startX = START_X + padding;
-    startY = START_X + padding;
+    startY = START_Y + padding;
 }
 
 void ElectronicBoards::setBoard(int row, int col) {
@@ -68,12 +68,20 @@ void ElectronicBoards::setBoard(int row, int col) {
     }
     
     for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; i++) {
-            
+
+        float x = rowXList.at(i);
+
+        for(int j = 0; j < col; j++) {
+            float y = colYList.at(j);
+            Sprite* snapSprite = createNagSprite("snap.png", Vec2(x, y));
+            snapSprite->setName(StringUtils::format("%d-%d", row, col));
+            this->addChild(snapSprite);
         }
     }
 }
 
 Sprite* ElectronicBoards::createNagSprite(const string &imageName, const Vec2 &position) {
-    return nullptr;
+    Sprite* sprite = Sprite::create(imageName);
+    sprite->setPosition(position);
+    return sprite;
 }

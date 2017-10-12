@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include "BaseLayer.h"
 
+class ElectronicBoards;
+
 class ElectronicBoardsLayer : public BaseLayer {
 
 public:
@@ -27,6 +29,8 @@ public:
     CREATE_FUNC(ElectronicBoardsLayer);
     
 private:
+
+    ElectronicBoards* electronicBoards;
 };
 
 #endif /* ElectronicBoardsLayer_h */
