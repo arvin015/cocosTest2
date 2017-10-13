@@ -57,6 +57,11 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
+		A21C39951F9050A8009644E8 /* ElectronicBoards.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */; };
+		A21C39961F9050A8009644E8 /* ElectronicBoardsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */; };
+		A21C39991F905217009644E8 /* select.png in Resources */ = {isa = PBXBuildFile; fileRef = A21C39971F905217009644E8 /* select.png */; };
+		A21C399A1F905217009644E8 /* snap.png in Resources */ = {isa = PBXBuildFile; fileRef = A21C39981F905217009644E8 /* snap.png */; };
+		A21C399D1F905852009644E8 /* BandView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C399B1F905852009644E8 /* BandView.cpp */; };
 		A229311A1F5577480089B2AE /* eight_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931101F5577480089B2AE /* eight_d.png */; };
 		A229311B1F5577480089B2AE /* five_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931111F5577480089B2AE /* five_d.png */; };
 		A229311C1F5577480089B2AE /* four_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931121F5577480089B2AE /* four_d.png */; };
@@ -121,8 +126,6 @@
 		A2A0F1B61F5663A100C8D1F9 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B41F5663A100C8D1F9 /* NumberInTenLayer.cpp */; };
 		A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B71F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp */; };
 		A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */; };
-		A2A290741F8F6061003ED05F /* ElectronicBoardsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A290721F8F6061003ED05F /* ElectronicBoardsLayer.cpp */; };
-		A2A290771F8F61AE003ED05F /* ElectronicBoards.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A290751F8F61AE003ED05F /* ElectronicBoards.cpp */; };
 		A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */; };
 		A2A9F0141F556FB500C9AFA4 /* eight.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F00A1F556FB500C9AFA4 /* eight.png */; };
 		A2A9F0151F556FB500C9AFA4 /* five.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F00B1F556FB500C9AFA4 /* five.png */; };
@@ -246,6 +249,14 @@
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoards.cpp; sourceTree = "<group>"; };
+		A21C39921F9050A8009644E8 /* ElectronicBoards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoards.h; sourceTree = "<group>"; };
+		A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoardsLayer.cpp; sourceTree = "<group>"; };
+		A21C39941F9050A8009644E8 /* ElectronicBoardsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoardsLayer.h; sourceTree = "<group>"; };
+		A21C39971F905217009644E8 /* select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select.png; sourceTree = "<group>"; };
+		A21C39981F905217009644E8 /* snap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snap.png; sourceTree = "<group>"; };
+		A21C399B1F905852009644E8 /* BandView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BandView.cpp; sourceTree = "<group>"; };
+		A21C399C1F905852009644E8 /* BandView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BandView.h; sourceTree = "<group>"; };
 		A22931101F5577480089B2AE /* eight_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eight_d.png; sourceTree = "<group>"; };
 		A22931111F5577480089B2AE /* five_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = five_d.png; sourceTree = "<group>"; };
 		A22931121F5577480089B2AE /* four_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = four_d.png; sourceTree = "<group>"; };
@@ -332,10 +343,6 @@
 		A2A0F1B81F566B0B00C8D1F9 /* NumberInTenSingularLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenSingularLayer.h; sourceTree = "<group>"; };
 		A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenCombineLayer.cpp; sourceTree = "<group>"; };
 		A2A0F1BB1F5677F600C8D1F9 /* NumberInTenCombineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenCombineLayer.h; sourceTree = "<group>"; };
-		A2A290721F8F6061003ED05F /* ElectronicBoardsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoardsLayer.cpp; sourceTree = "<group>"; };
-		A2A290731F8F6061003ED05F /* ElectronicBoardsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoardsLayer.h; sourceTree = "<group>"; };
-		A2A290751F8F61AE003ED05F /* ElectronicBoards.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoards.cpp; sourceTree = "<group>"; };
-		A2A290761F8F61AE003ED05F /* ElectronicBoards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoards.h; sourceTree = "<group>"; };
 		A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacToast.cpp; sourceTree = "<group>"; };
 		A2A9EFE01F556DC900C9AFA4 /* PacToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacToast.h; sourceTree = "<group>"; };
 		A2A9F00A1F556FB500C9AFA4 /* eight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eight.png; sourceTree = "<group>"; };
@@ -502,6 +509,8 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A21C39971F905217009644E8 /* select.png */,
+				A21C39981F905217009644E8 /* snap.png */,
 				A2ADE4CE1F4C2A31007C09BE /* background.mp3 */,
 				A297C68A1F57B46C00F4BAAD /* bee.png */,
 				A297C69E1F57DDE500F4BAAD /* black_frame.png */,
@@ -575,7 +584,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A2A290701F8F6020003ED05F /* ElectronicBoards */,
+				A21C39901F9050A8009644E8 /* ElectronicBoards */,
 				A28F63321F53CC11008ADA49 /* Common */,
 				A28F63351F53CC11008ADA49 /* NumberInTen */,
 				A28F633A1F53CC11008ADA49 /* Utils */,
@@ -655,6 +664,19 @@
 			path = ios;
 			sourceTree = SOURCE_ROOT;
 		};
+		A21C39901F9050A8009644E8 /* ElectronicBoards */ = {
+			isa = PBXGroup;
+			children = (
+				A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */,
+				A21C39941F9050A8009644E8 /* ElectronicBoardsLayer.h */,
+				A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */,
+				A21C39921F9050A8009644E8 /* ElectronicBoards.h */,
+				A21C399B1F905852009644E8 /* BandView.cpp */,
+				A21C399C1F905852009644E8 /* BandView.h */,
+			);
+			path = ElectronicBoards;
+			sourceTree = "<group>";
+		};
 		A28F63321F53CC11008ADA49 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -722,17 +744,6 @@
 				A297C6851F579ED700F4BAAD /* FlyView.h */,
 			);
 			path = NumberInTenForFly;
-			sourceTree = "<group>";
-		};
-		A2A290701F8F6020003ED05F /* ElectronicBoards */ = {
-			isa = PBXGroup;
-			children = (
-				A2A290721F8F6061003ED05F /* ElectronicBoardsLayer.cpp */,
-				A2A290731F8F6061003ED05F /* ElectronicBoardsLayer.h */,
-				A2A290751F8F61AE003ED05F /* ElectronicBoards.cpp */,
-				A2A290761F8F61AE003ED05F /* ElectronicBoards.h */,
-			);
-			name = ElectronicBoards;
 			sourceTree = "<group>";
 		};
 		A2ADD4C81F7BADC0009F1B49 /* NumberInTwentyForSequence */ = {
@@ -865,6 +876,7 @@
 				A28AF3291F7C997000FDD70F /* child_10.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				A297C68B1F57B46C00F4BAAD /* bee.png in Resources */,
+				A21C399A1F905217009644E8 /* snap.png in Resources */,
 				A28AF3241F7C997000FDD70F /* child_4.png in Resources */,
 				A2A9F01D1F556FB500C9AFA4 /* zero.png in Resources */,
 				A297C69F1F57DDE500F4BAAD /* black_frame.png in Resources */,
@@ -899,6 +911,7 @@
 				A22931211F5577480089B2AE /* three_d.png in Resources */,
 				A22931231F5577480089B2AE /* zero_d.png in Resources */,
 				A2A9F0161F556FB500C9AFA4 /* four.png in Resources */,
+				A21C39991F905217009644E8 /* select.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
 				A229311E1F5577480089B2AE /* one_d.png in Resources */,
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
@@ -961,7 +974,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */,
-				A2A290741F8F6061003ED05F /* ElectronicBoardsLayer.cpp in Sources */,
 				A2A0F1B31F56562100C8D1F9 /* NumberInTenCompareLayer.cpp in Sources */,
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
 				A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */,
@@ -980,6 +992,7 @@
 				A297C68E1F57BBE100F4BAAD /* UISpinner.cpp in Sources */,
 				A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
+				A21C39951F9050A8009644E8 /* ElectronicBoards.cpp in Sources */,
 				A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				A2ADD4CE1F7BAF6D009F1B49 /* SequenceView.cpp in Sources */,
@@ -987,12 +1000,13 @@
 				A2ADE4C31F4BCD78007C09BE /* ActionTest.cpp in Sources */,
 				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
 				A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */,
+				A21C399D1F905852009644E8 /* BandView.cpp in Sources */,
 				A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */,
 				A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
 				A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */,
-				A2A290771F8F61AE003ED05F /* ElectronicBoards.cpp in Sources */,
+				A21C39961F9050A8009644E8 /* ElectronicBoardsLayer.cpp in Sources */,
 				A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

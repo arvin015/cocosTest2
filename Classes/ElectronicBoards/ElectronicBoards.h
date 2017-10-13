@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include "cocos2d.h"
 
+class BandView;
+
 class ElectronicBoards : public cocos2d::Layer {
 
 public:
@@ -38,12 +40,17 @@ public:
      */
     void setBoard(int row, int col);
     
+    /**
+     * 加入橡皮筋
+     */
+    void addBand(const cocos2d::Color4F &color);
+    
 private:
     
     /**
      * 创建钉子
      */
-    cocos2d::Sprite* createNagSprite(const std::string &imageName, const cocos2d::Vec2 &position);
+    cocos2d::Sprite* createSnagSprite(const std::string &imageName, const cocos2d::Vec2 &position);
     
 private:
 
@@ -54,9 +61,13 @@ private:
     float startY; //开始Y
     float marginX; //纵间距
     float marginY; //横间距
+    int totalRow; //总行数
+    int totalCol; //总列数
     
-    std::vector<float> colYList; //行Y值集合
-    std::vector<float> rowXList; //列X值集合
+    std::map<int, float> rowYMap; //行Y值Map集合
+    std::map<int, float> colXMap; //列X值Map集合
+    
+    BandView* curBandView; //当前橡皮筋
 };
 
 #endif /* ElectronicBoards_h */
