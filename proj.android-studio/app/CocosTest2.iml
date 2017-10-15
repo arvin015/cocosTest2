@@ -36,6 +36,9 @@
     <content url="file://$MODULE_DIR$/../../Classes/Common">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/Common" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../../Classes/ElectronicBoards">
+      <sourceFolder url="file://$MODULE_DIR$/../../Classes/ElectronicBoards" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForDrag">
       <sourceFolder url="file://$MODULE_DIR$/../../Classes/NumberInTen/NumberInTenForDrag" isTestSource="false" />
     </content>

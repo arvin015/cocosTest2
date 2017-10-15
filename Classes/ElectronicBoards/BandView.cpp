@@ -80,13 +80,11 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
     }
     
     operateSnapImage = checkIsSelectSnapImage(touch->getLocation());
-    if(operateSnapImage) { //获取依赖的钉子
+    if(operateSnapImage) { //touch 在钉子上
         
         eventListener->setSwallowTouches(true);
         
         bringToFront(); //置顶
-        
-        dependSnapImageList.clear();
         
         //检测以它为key值是否有对应的value值
 //        map<ImageView*, ImageView*>::iterator it = bandLineMap.find(operateSnapImage);
@@ -107,8 +105,20 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
                 dependSnapImageList.pushBack(keyImage);
             }
         }
+    } else  { //touch不在钉子上，判断是否在橡皮筋上
+        ImageView* image = checkIsOnBand(touch->getLocation());
+        if(image) { //touch在橡皮筋上
+            ImageView* newImage = createSnapImage("select.png", touch->getLocation());
+            this->addChild(newImage);
+            snapImageList.pushBack(newImage);
+
+            operateSnapImage = newImage;
+
+            dependSnapImageList.pushBack(image);
+            dependSnapImageList.pushBack(bandLineMap.at(image));
+        }
     }
-    
+
     return true;
 }
 
@@ -160,6 +170,33 @@ ImageView* BandView::checkIsSelectSnapImage(const Vec2 &point) {
     }
     
     return nullptr;
+}
+
+ImageView* BandView::checkIsOnBand(const cocos2d::Vec2 &point) {
+
+    map<ImageView*, ImageView*>::iterator it;
+    for(it = bandLineMap.begin(); it != bandLineMap.end(); it++) {
+        ImageView* image1 = it->first;
+        ImageView* image2 = it->second;
+
+        if(checkIsOnSegment(image1->getPosition(), image2->getPosition(), point)) {
+            return image1;
+        }
+    }
+
+    return nullptr;
+}
+
+bool BandView::checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Vec2 &point) {
+    float AC = point.distance(point1);
+    float BC = point.distance(point2);
+    float AB = point1.distance(point2);
+
+    if(fabs(AC + BC - AB) <= 0.1) {
+        return true;
+    }
+
+    return false;
 }
 
 ImageView* BandView::createSnapImage(const string &imageName, const Vec2 &position) {

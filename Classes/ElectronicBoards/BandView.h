@@ -63,6 +63,16 @@ private:
      * 检测是否选中钉子
      */
     cocos2d::ui::ImageView* checkIsSelectSnapImage(const cocos2d::Vec2 &point);
+
+    /**
+     * 检测触摸点是否在橡皮筋上
+     */
+    cocos2d::ui::ImageView* checkIsOnBand(const cocos2d::Vec2 &point);
+
+    /**
+     * 检测是否在线段上
+     */
+    bool checkIsOnSegment(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
     
     /**
      * 置顶

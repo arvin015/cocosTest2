@@ -35,6 +35,7 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTenForDrag/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTenForFly/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTwentyForSequence/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/ElectronicBoards/*.cpp)
 
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
@@ -46,6 +47,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTenForDrag
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTenForFly
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTwentyForSequence
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/ElectronicBoards
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
