@@ -17,7 +17,7 @@ class BandView : public cocos2d::Node {
 
 public:
     
-    typedef std::function<void(BandView*, float, float)> OnBandTouchEndedCallback;
+    typedef std::function<void(BandView*, float, float, bool)> OnBandTouchEndedCallback;
     
     BandView();
     ~BandView();
@@ -44,6 +44,11 @@ public:
      * 初始化皮筋
      */
     void initData(const cocos2d::Vec2 &startPoint, const cocos2d::Vec2 &endPoint, const cocos2d::Color4F &color);
+    
+    /**
+     * 设置橡皮筋是否挂住
+     */
+    void setIsHanged(bool isHanged);
     
     /**
      * 设置touchEnded回调
@@ -88,8 +93,9 @@ private:
     std::map<cocos2d::ui::ImageView*, cocos2d::ui::ImageView*> bandLineMap; //每段皮筋Map集合
     bool enableTouch;
     cocos2d::ui::ImageView* operateSnapImage; //当前操作的钉子
-    cocos2d::Vector<cocos2d::ui::ImageView*> dependSnapImageList; //依赖的钉子集合
     OnBandTouchEndedCallback touchEndedCallback;
+    bool isUnfold; //橡皮筋是否展开
+    bool isHangBand; //是否挂橡皮筋
 };
 
 #endif /* BandView_h */

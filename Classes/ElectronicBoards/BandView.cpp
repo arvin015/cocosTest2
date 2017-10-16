@@ -21,6 +21,8 @@ BandView::BandView() {
     enableTouch = true;
     operateSnapImage = nullptr;
     touchEndedCallback = nullptr;
+    isUnfold = false;
+    isHangBand = false;
 }
 
 BandView::~BandView() {
@@ -74,6 +76,10 @@ void BandView::initData(const Vec2 &startPoint, const Vec2 &endPoint, const Colo
     bandLineMap.insert(make_pair(startSnapImage, endSnapImage));
 }
 
+void BandView::setIsHanged(bool isHanged) {
+    
+}
+
 bool BandView::onTouchBegan(Touch* touch, Event* event) {
     if(!enableTouch) {
         return false;
@@ -86,36 +92,37 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
         
         bringToFront(); //置顶
         
-        //检测以它为key值是否有对应的value值
-//        map<ImageView*, ImageView*>::iterator it = bandLineMap.find(operateSnapImage);
-//        if(it != bandLineMap.end()) {
-//            dependSnapImage.pushBack(it->second);
-//        }
+        isHangBand = isUnfold; //是否挂橡皮筋
         
-        //检测以它为key值是否有对应的value值
-        //检测以它为value值是否有对应的key值
-        map<ImageView*, ImageView*>::iterator it1;
-        for(it1 = bandLineMap.begin(); it1 != bandLineMap.end(); it1++) {
-            ImageView* keyImage = it1->first;
-            ImageView* valueImage = it1->second;
-            if(keyImage == operateSnapImage) {
-                dependSnapImageList.pushBack(valueImage);
-            }
-            if(valueImage == operateSnapImage) {
-                dependSnapImageList.pushBack(keyImage);
-            }
-        }
     } else  { //touch不在钉子上，判断是否在橡皮筋上
-        ImageView* image = checkIsOnBand(touch->getLocation());
-        if(image) { //touch在橡皮筋上
+        ImageView* keyImage = checkIsOnBand(touch->getLocation());
+        if(keyImage) { //touch在橡皮筋上
+            
+            ImageView* valueImage = bandLineMap.at(keyImage);
+            
             ImageView* newImage = createSnapImage("select.png", touch->getLocation());
             this->addChild(newImage);
             snapImageList.pushBack(newImage);
 
             operateSnapImage = newImage;
-
-            dependSnapImageList.pushBack(image);
-            dependSnapImageList.pushBack(bandLineMap.at(image));
+            
+            if(isUnfold) { //已展开，删除展开的那条
+                map<ImageView*, ImageView*>::iterator it = bandLineMap.find(keyImage);
+                if(it != bandLineMap.end()) {
+                    bandLineMap.erase(it);
+                }
+                
+                bandLineMap.insert(make_pair(newImage, valueImage));
+                bandLineMap.insert(make_pair(keyImage, newImage));
+                
+            } else { //未展开，直接添加两条线段
+                isUnfold = true;
+                
+                bandLineMap.insert(make_pair(newImage, keyImage));
+                bandLineMap.insert(make_pair(valueImage, newImage));
+            }
+            
+            isHangBand = true; //挂橡皮筋
         }
     }
 
@@ -123,7 +130,7 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
 }
 
 void BandView::onTouchMoved(Touch* touch, Event* event) {
-    if(operateSnapImage && dependSnapImageList.size() > 0) {
+    if(operateSnapImage) {
         update(touch->getLocation());
     }
 }
@@ -135,12 +142,11 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
         float y = touch->getLocation().y;
         
         if(touchEndedCallback) {
-            this->touchEndedCallback(this, x, y);
+            this->touchEndedCallback(this, x, y, isHangBand);
         }
     }
     
     operateSnapImage = nullptr;
-    dependSnapImageList.clear();
 
     eventListener->setSwallowTouches(false);
 }
@@ -153,10 +159,13 @@ void BandView::update(const Vec2 &curPosition) {
     }
     
     //更新皮筋
-    if(dependSnapImageList.size() > 0) {
-        lineDraw->clear();
-        for(ImageView* image : dependSnapImageList) {
-            lineDraw->drawSegment(image->getPosition(), operateSnapImage->getPosition(), BAND_WIDTH, lineColor);
+    lineDraw->clear();
+    if(bandLineMap.size() > 0) {
+        map<ImageView*, ImageView*>::iterator it;
+        for(it = bandLineMap.begin(); it != bandLineMap.end(); it++) {
+            ImageView* image1 = it->first;
+            ImageView* image2 = it->second;
+            lineDraw->drawSegment(image1->getPosition(), image2->getPosition(), BAND_WIDTH, lineColor);
         }
     }
 }
@@ -192,7 +201,7 @@ bool BandView::checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Ve
     float BC = point.distance(point2);
     float AB = point1.distance(point2);
 
-    if(fabs(AC + BC - AB) <= 0.1) {
+    if(fabs(AC + BC - AB) <= 1.0f) {
         return true;
     }
 

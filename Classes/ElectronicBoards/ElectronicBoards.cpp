@@ -92,32 +92,35 @@ void ElectronicBoards::addBand(const Color4F &color) {
     curBandView = BandView::create();
     curBandView->initData(startPoint, endPoint, color);
     curBandView->setTag(getChildrenCount() + 1);
-    curBandView->setOnBandTouchEndedListener([this](BandView* bandView, float x, float y){
-        float rx = x - START_X - padding;
-        float ry = y - START_Y - padding;
+    curBandView->setOnBandTouchEndedListener([this](BandView* bandView, float x, float y, bool isHangBand){
         
-        //越界处理
-        int minRow = ry / marginY + 1;
-        if(minRow < 1) {
-            minRow = 1;
-        } else if(minRow > totalRow) {
-            minRow = totalRow;
+        if(!isHangBand) {
+            float rx = x - START_X - padding;
+            float ry = y - START_Y - padding;
+            
+            //越界处理
+            int minRow = ry / marginY + 1;
+            if(minRow < 1) {
+                minRow = 1;
+            } else if(minRow > totalRow) {
+                minRow = totalRow;
+            }
+            int maxRow = minRow == totalRow ? minRow : minRow + 1;
+            
+            //越界处理
+            int minCol = rx / marginX + 1;
+            if(minCol < 1) {
+                minCol = 1;
+            } else if(minCol > totalCol) {
+                minCol = totalCol;
+            }
+            int maxCol = minCol == totalCol ? minCol : minCol + 1;
+            
+            int rRow = abs(y - rowYMap.at(minRow)) > abs(y - rowYMap.at(maxRow)) ? maxRow : minRow;
+            int rCol = abs(x - colXMap.at(minCol)) > abs(x - colXMap.at(maxCol)) ? maxCol : minCol;
+        
+            bandView->update(Vec2(colXMap.at(rCol), rowYMap.at(rRow)));
         }
-        int maxRow = minRow == totalRow ? minRow : minRow + 1;
-        
-        //越界处理
-        int minCol = rx / marginX + 1;
-        if(minCol < 1) {
-            minCol = 1;
-        } else if(minCol > totalCol) {
-            minCol = totalCol;
-        }
-        int maxCol = minCol == totalCol ? minCol : minCol + 1;
-    
-        int rRow = abs(y - rowYMap.at(minRow)) > abs(y - rowYMap.at(maxRow)) ? maxRow : minRow;
-        int rCol = abs(x - colXMap.at(minCol)) > abs(x - colXMap.at(maxCol)) ? maxCol : minCol;
-        
-        bandView->update(Vec2(colXMap.at(rCol), rowYMap.at(rRow)));
     });
     this->addChild(curBandView);
 }
