@@ -20,6 +20,7 @@ BandView::BandView() {
     lineColor = Color4F::YELLOW;
     enableTouch = true;
     operateSnapImage = nullptr;
+    keyImage = nullptr;
     touchEndedCallback = nullptr;
     isUnfold = false;
     isHangBand = false;
@@ -76,10 +77,6 @@ void BandView::initData(const Vec2 &startPoint, const Vec2 &endPoint, const Colo
     bandLineMap.insert(make_pair(startSnapImage, endSnapImage));
 }
 
-void BandView::setIsHanged(bool isHanged) {
-    
-}
-
 bool BandView::onTouchBegan(Touch* touch, Event* event) {
     if(!enableTouch) {
         return false;
@@ -95,7 +92,7 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
         isHangBand = isUnfold; //是否挂橡皮筋
         
     } else  { //touch不在钉子上，判断是否在橡皮筋上
-        ImageView* keyImage = checkIsOnBand(touch->getLocation());
+        keyImage = checkIsOnBand(touch->getLocation());
         if(keyImage) { //touch在橡皮筋上
             
             ImageView* valueImage = bandLineMap.at(keyImage);
@@ -149,6 +146,63 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
     operateSnapImage = nullptr;
 
     eventListener->setSwallowTouches(false);
+}
+
+void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
+
+    if(operateSnapImage && keyImage) {
+        ImageView* valueImage = bandLineMap.at(keyImage);
+        Vector<Vec2> hangPointList;
+
+        for(int i = 0; i < pointList.size(); i++) {
+
+            Vec2 point = pointList.at(i);
+
+            if(checkIsInTrig(operateSnapImage->getPosition(), keyImage->getPosition(), valueImage->getPosition(), point)) {
+                hangPointList.pushBack(point);
+            }
+        }
+
+        if(hangPointList.size() > 0) {
+            if(hangPointList.size() > 1) {
+                map<ImageView*, ImageView*>::iterator it1 = bandLineMap.find(valueImage);
+                if(it1 != bandLineMap.end()) {
+                    bandLineMap.erase(it1);
+                }
+                map<ImageView*, ImageView*>::iterator it2 = bandLineMap.find(operateSnapImage);
+                if(it2 != bandLineMap.end()) {
+                    bandLineMap.erase(it2);
+                }
+
+                Vector<ImageView*> tempImageList;
+                ImageView* prevImage = keyImage;
+                ImageView* nextImage = nullptr;
+
+                for(int i = 1; i < hangPointList.size(); i++) {
+                    ImageView *newImage = createSnapImage("select.png", hangPointList.at(i));
+                    this->addChild(newImage);
+                    snapImageList.pushBack(newImage);
+
+                    tempImageList.pushBack(newImage);
+                }
+                for(int j = 1; j < hangPointList.size(); j++) {
+
+                    ImageView* newImage = tempImageList.at(j - 1);
+
+                    if(j == hangPointList.size() - 1) {
+                        nextImage = valueImage;
+                    } else {
+                        nextImage = tempImageList.at(j);
+                    }
+
+                    bandLineMap.insert(make_pair(newImage, prevImage));
+                    bandLineMap.insert(make_pair(nextImage, newImage));
+                }
+            }
+
+            update(hangPointList.at(0));
+        }
+    }
 }
 
 void BandView::update(const Vec2 &curPosition) {
@@ -206,6 +260,21 @@ bool BandView::checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Ve
     }
 
     return false;
+}
+
+bool BandView::checkIsInTrig(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3,
+                   const cocos2d::Vec2 &point) {
+
+    float signOfTrig = (point2.x - point1.x)*(point3.y - point1.y) - (point2.y - point1.y)*(point3.x - point1.x);
+    float signOfAB = (point2.x - point1.x)*(point.y - point1.y) - (point2.y - point1.y)*(point.x - point1.x);
+    float signOfCA = (point1.x - point3.x)*(point.y - point3.y) - (point1.y - point3.y)*(point.x - point3.x);
+    float signOfBC = (point3.x - point2.x)*(point.y - point3.y) - (point3.y - point2.y)*(point.x - point3.x);
+
+    bool d1 = (signOfAB * signOfTrig > 0);
+    bool d2 = (signOfCA * signOfTrig > 0);
+    bool d3 = (signOfBC * signOfTrig > 0);
+
+    return d1 && d2 && d3;
 }
 
 ImageView* BandView::createSnapImage(const string &imageName, const Vec2 &position) {

@@ -44,12 +44,12 @@ public:
      * 初始化皮筋
      */
     void initData(const cocos2d::Vec2 &startPoint, const cocos2d::Vec2 &endPoint, const cocos2d::Color4F &color);
-    
+
     /**
-     * 设置橡皮筋是否挂住
+     * 处理橡皮筋是否挂住
      */
-    void setIsHanged(bool isHanged);
-    
+    void checkBandIsHanged(const std::vector<cocos2d::Vec2> &pointList);
+
     /**
      * 设置touchEnded回调
      */
@@ -78,6 +78,12 @@ private:
      * 检测是否在线段上
      */
     bool checkIsOnSegment(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
+
+    /**
+     * 检测是否在三角形内
+     */
+    bool checkIsInTrig(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3,
+                       const cocos2d::Vec2 &point);
     
     /**
      * 置顶
@@ -93,6 +99,7 @@ private:
     std::map<cocos2d::ui::ImageView*, cocos2d::ui::ImageView*> bandLineMap; //每段皮筋Map集合
     bool enableTouch;
     cocos2d::ui::ImageView* operateSnapImage; //当前操作的钉子
+    cocos2d::ui::ImageView* keyImage; //操作依赖的橡皮筋key值钉子
     OnBandTouchEndedCallback touchEndedCallback;
     bool isUnfold; //橡皮筋是否展开
     bool isHangBand; //是否挂橡皮筋
