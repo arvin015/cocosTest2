@@ -66,6 +66,7 @@ private:
     
     std::map<int, float> rowYMap; //行Y值Map集合
     std::map<int, float> colXMap; //列X值Map集合
+    cocos2d::Vector<cocos2d::Sprite*> snapSpriteList;
     
     BandView* curBandView; //当前橡皮筋
 };

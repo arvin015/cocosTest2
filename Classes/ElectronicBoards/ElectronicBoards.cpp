@@ -81,6 +81,7 @@ void ElectronicBoards::setBoard(int row, int col) {
             Sprite* snapSprite = createSnagSprite("snap.png", Vec2(x, y));
             snapSprite->setName(StringUtils::format("%d-%d", row, col));
             this->addChild(snapSprite, 999);
+            snapSpriteList.pushBack(snapSprite);
         }
     }
 }
@@ -91,7 +92,7 @@ void ElectronicBoards::addBand(const Color4F &color) {
     
     curBandView = BandView::create();
     curBandView->initData(startPoint, endPoint, color);
-    curBandView->setTag(getChildrenCount() + 1);
+    curBandView->setTag((int)getChildrenCount() + 1);
     curBandView->setOnBandTouchEndedListener([this](BandView* bandView, float x, float y, bool isHangBand){
 
         float rx = x - START_X - padding;
@@ -123,10 +124,12 @@ void ElectronicBoards::addBand(const Color4F &color) {
             bandView->update(Vec2(colXMap.at(rCol), rowYMap.at(rRow)));
         } else {
             vector<Vec2> pointList;
-            pointList.push_back(Vec2(colXMap.at(minCol), rowYMap.at(minRow)));
-            pointList.push_back(Vec2(colXMap.at(minCol), rowYMap.at(maxRow)));
-            pointList.push_back(Vec2(colXMap.at(maxCol), rowYMap.at(minRow)));
-            pointList.push_back(Vec2(colXMap.at(maxCol), rowYMap.at(maxRow)));
+            
+            for(Sprite* snapSprite : snapSpriteList) {
+                if(bandView->checkIsInTrig(snapSprite->getPosition())) {
+                    pointList.push_back(snapSprite->getPosition());
+                }
+            }
 
             bandView->checkBandIsHanged(pointList);
         }

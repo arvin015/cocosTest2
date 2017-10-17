@@ -36,9 +36,14 @@ public:
 public:
     
     /**
-     * 更新皮筋
+     * 更新
      */
     void update(const cocos2d::Vec2 &curPosition);
+    
+    /**
+     * 更新橡皮筋
+     */
+    void updateBands();
     
     /**
      * 初始化皮筋
@@ -56,6 +61,11 @@ public:
     void setOnBandTouchEndedListener(OnBandTouchEndedCallback callback) {
         this->touchEndedCallback = callback;
     }
+    
+    /**
+     * 检测是否在三角形内
+     */
+    bool checkIsInTrig(const cocos2d::Vec2 &point);
     
 private:
 
@@ -78,13 +88,22 @@ private:
      * 检测是否在线段上
      */
     bool checkIsOnSegment(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
-
+    
     /**
      * 检测是否在三角形内
      */
-    bool checkIsInTrig(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3,
-                       const cocos2d::Vec2 &point);
+    bool checkPointIsInTrig(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3, const cocos2d::Vec2 &point);
     
+    /**
+     * 检测钉子是否满足被挂住条件
+     */
+    std::vector<cocos2d::Vec2> checkBandForHangIsOk(const std::vector<cocos2d::Vec2> &pointList);
+    
+    /**
+     * 点到直线的距离
+     */
+    float getPoint2LineDistance(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
+
     /**
      * 置顶
      */
@@ -100,8 +119,10 @@ private:
     bool enableTouch;
     cocos2d::ui::ImageView* operateSnapImage; //当前操作的钉子
     cocos2d::ui::ImageView* keyImage; //操作依赖的橡皮筋key值钉子
+    cocos2d::ui::ImageView* valueImage; //操作依赖的橡皮筋value值钉子
     OnBandTouchEndedCallback touchEndedCallback;
-    bool isUnfold; //橡皮筋是否展开
+    std::vector<cocos2d::Vec2> trigPoints; //三角形三个点
+    bool isSegment; //是否线段
     bool isHangBand; //是否挂橡皮筋
 };
 
