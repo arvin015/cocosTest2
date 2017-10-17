@@ -131,9 +131,11 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
                 bandLineMap.insert(make_pair(valueImage, keyImage));
                 
                 ImageView* temp = keyImage;
-                valueImage = temp;
                 keyImage = valueImage;
+                valueImage = temp;
             }
+
+            log("------------------------ key.x = %d, key.y = %d, value.x = %d, value.y = %d", (int)keyImage->getPositionX(), (int)keyImage->getPositionY(), (int)valueImage->getPositionX(), (int)valueImage->getPositionY());
             
             isHangBand = true; //挂橡皮筋
         }
@@ -156,11 +158,13 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
         
         if(isHangBand) {
             trigPoints.clear();
-            trigPoints.push_back(operateSnapImage->getPosition());
+            trigPoints.push_back(Vec2(x, y));
             trigPoints.push_back(keyImage->getPosition());
             trigPoints.push_back(valueImage->getPosition());
         }
-        
+
+        log("------------------- x = %d, y = %d", (int)x, (int)y);
+
         if(touchEndedCallback) {
             this->touchEndedCallback(this, x, y, isHangBand);
         }
@@ -200,21 +204,21 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
         }
         
         //添加橡皮筋
-        ImageView* prevImage = isSegment ? valueImage : keyImage;
-        ImageView* nextImage = nullptr;
+        ImageView* prevImage = nullptr;
+        ImageView* nextImage = valueImage;
         
         for(int j = 0; j < hangPointList.size(); j++) {
             
             ImageView* newImage = tempImageList.at(j);
             
             if(j == hangPointList.size() - 1) {
-                nextImage = isSegment ? keyImage : valueImage;
+                prevImage = keyImage;
             } else {
-                nextImage = tempImageList.at(j + 1);
+                prevImage = tempImageList.at(j + 1);
             }
             
-            bandLineMap.insert(make_pair(newImage, prevImage));
             bandLineMap.insert(make_pair(nextImage, newImage));
+            bandLineMap.insert(make_pair(newImage, prevImage));
         }
     }
     
@@ -344,7 +348,7 @@ bool BandView::checkPointIsInTrig(const Vec2 &point1, const Vec2 &point2, const 
     bool d2 = (signOfCA * signOfTrig > 0);
     bool d3 = (signOfBC * signOfTrig > 0);
     
-    log("---------- point1.x = %f, point1.y = %f; point2.x = %f, point2.y = %f; point3.x = %f, point3.y = %f; point.x = %f, point.y = %f", point1.x, point1.y, point2.x, point2.y, point3.x, point3.y, point.x, point.y);
+    log("---------- point1.x = %d, point1.y = %d; point2.x = %d, point2.y = %d; point3.x = %d, point3.y = %d; point.x = %d, point.y = %d", (int)point1.x, (int)point1.y, (int)point2.x, (int)point2.y, (int)point3.x, (int)point3.y, (int)point.x, (int)point.y);
     log("---------- d1 = %d, d2 = %d, d2 = %d", d1, d2, d3);
     
     return d1 && d2 && d3;
