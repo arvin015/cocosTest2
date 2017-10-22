@@ -18,7 +18,13 @@ class BandView : public cocos2d::Node {
 public:
     
     typedef std::function<void(BandView*, float, float, bool)> OnBandTouchEndedCallback;
-    
+
+    enum Shape {
+        SEGMENT,
+        TRIG,
+        OTHER
+    };
+
     BandView();
     ~BandView();
     
@@ -122,8 +128,9 @@ private:
     cocos2d::ui::ImageView* valueImage; //操作依赖的橡皮筋value值钉子
     OnBandTouchEndedCallback touchEndedCallback;
     std::vector<cocos2d::Vec2> trigPoints; //三角形三个点
-    bool isSegment; //是否线段
+    Shape shape; //当前形状
     bool isHangBand; //是否挂橡皮筋
+    bool isTouchBand; //是否拉橡皮筋
 };
 
 #endif /* BandView_h */

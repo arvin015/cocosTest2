@@ -24,7 +24,7 @@ BandView::BandView() {
     valueImage = nullptr;
     keyImage = nullptr;
     touchEndedCallback = nullptr;
-    isSegment = true;
+    shape = SEGMENT;
     isHangBand = false;
 }
 
@@ -83,38 +83,42 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
     if(!enableTouch) {
         return false;
     }
-    
+
     operateSnapImage = checkIsSelectSnapImage(touch->getLocation());
+
     if(operateSnapImage) { //touch 在钉子上
-        
+
+        isTouchBand = false;
+
         eventListener->setSwallowTouches(true);
         
         bringToFront(); //置顶
-        
-        isHangBand = !isSegment; //是否挂橡皮筋
-        
-        if(isHangBand) { //挂橡皮筋、需确定keyImage、valueImage
+
+        if(shape > SEGMENT) { //挂橡皮筋、确定keyImage、valueImage
+
+            log("-------------------- 111111111111111111 -------------------------");
+
+            isHangBand = true;
+
             keyImage = bandLineMap.at(operateSnapImage);
-            
-            map<ImageView*, ImageView*>::iterator it;
-            for(it = bandLineMap.begin(); it != bandLineMap.end(); it++) {
-                ImageView* value = it->second;
-                if(operateSnapImage == value) {
-                    valueImage = it->first;
-                    break;
-                }
-            }
+
+            log("-------------------- 22222222222222222222 -------------------------");
+
+            valueImage = bandLineMap.at(keyImage);
+
+            log("-------------------- 3333333333333333333333333 -------------------------");
         }
         
     } else { //touch不在钉子上，判断是否在橡皮筋上
         keyImage = checkIsOnBand(touch->getLocation());
         if(keyImage) { //touch在橡皮筋上
-            
+
+            isTouchBand = true;
+
             valueImage = bandLineMap.at(keyImage);
             
             ImageView* newImage = createSnapImage("select.png", touch->getLocation());
             this->addChild(newImage);
-            snapImageList.pushBack(newImage);
 
             operateSnapImage = newImage;
             
@@ -127,7 +131,7 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
             bandLineMap.insert(make_pair(keyImage, newImage));
             bandLineMap.insert(make_pair(newImage, valueImage));
             
-            if(isSegment) { //一条线段时，先加一条线段
+            if(shape == SEGMENT) { //线段时，先加一条线段
                 bandLineMap.insert(make_pair(valueImage, keyImage));
                 
                 ImageView* temp = keyImage;
@@ -135,8 +139,6 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
                 valueImage = temp;
             }
 
-            log("------------------------ key.x = %d, key.y = %d, value.x = %d, value.y = %d", (int)keyImage->getPositionX(), (int)keyImage->getPositionY(), (int)valueImage->getPositionX(), (int)valueImage->getPositionY());
-            
             isHangBand = true; //挂橡皮筋
         }
     }
@@ -161,15 +163,17 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
             trigPoints.push_back(Vec2(x, y));
             trigPoints.push_back(keyImage->getPosition());
             trigPoints.push_back(valueImage->getPosition());
-        }
 
-        log("------------------- x = %d, y = %d", (int)x, (int)y);
+            log("-------------------- 444444444444444444444444 -------------------------");
+        }
 
         if(touchEndedCallback) {
             this->touchEndedCallback(this, x, y, isHangBand);
         }
     }
-    
+
+    log("-------------------- 9999999999999999999999999999999999999 -------------------------");
+
     operateSnapImage = nullptr;
     keyImage = nullptr;
     valueImage = nullptr;
@@ -178,7 +182,15 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
 }
 
 void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
-    
+
+    log("------------------------- %d ------------------ ", bandLineMap.size());
+    map<ImageView*, ImageView*>::iterator i;
+    for(i = bandLineMap.begin(); i != bandLineMap.end(); i++) {
+        log("------------------------ x = %f, x1 = %f", i->first->getPositionX(), i->second->getPositionY());
+    }
+
+    snapImageList.eraseObject(operateSnapImage, false);
+    log("-------------------- 5555555555555555555555555 -------------------------%f", valueImage->getPositionX());
     operateSnapImage->removeFromParent();
     
     //去掉与当前操作钉子相关联的两条线段
@@ -186,14 +198,19 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
     if(it1 != bandLineMap.end()) {
         bandLineMap.erase(it1);
     }
+    log("-------------------- 6666666666666666666666666666 -------------------------");
     map<ImageView*, ImageView*>::iterator it2 = bandLineMap.find(operateSnapImage);
     if(it2 != bandLineMap.end()) {
         bandLineMap.erase(it2);
     }
-    
+
+    log("-------------------- 777777777777777777777777 -------------------------");
+
     vector<Vec2> hangPointList = checkBandForHangIsOk(pointList);
     
-    if(hangPointList.size() > 0) {
+    if(hangPointList.size() > 0) { //有挂点
+
+        log("-------------------- 8888888888888888888888888888888 -------------------------");
 
         //添加钉子
         Vector<ImageView*> tempImageList;
@@ -201,6 +218,13 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
         for(int i = 0; i < hangPointList.size(); i++) {
             ImageView* newImage = createSnapImage("select.png", hangPointList.at(i));
             tempImageList.pushBack(newImage);
+            snapImageList.pushBack(newImage);
+        }
+
+        if((shape == TRIG && !isTouchBand) || shape == SEGMENT) { //三角形切拉钉子时，转换key、value
+            ImageView* temp = keyImage;
+            keyImage = valueImage;
+            valueImage = temp;
         }
         
         //添加橡皮筋
@@ -208,23 +232,38 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
         ImageView* nextImage = valueImage;
         
         for(int j = 0; j < hangPointList.size(); j++) {
-            
-            ImageView* newImage = tempImageList.at(j);
-            
-            if(j == hangPointList.size() - 1) {
+
+            ImageView *newImage = tempImageList.at(j);
+
+            if (j == hangPointList.size() - 1) {
                 prevImage = keyImage;
             } else {
                 prevImage = tempImageList.at(j + 1);
             }
-            
+
             bandLineMap.insert(make_pair(nextImage, newImage));
             bandLineMap.insert(make_pair(newImage, prevImage));
+        }
+
+        if(shape == SEGMENT) {
+            shape = TRIG;
+        } else if(shape == TRIG) {
+            shape = OTHER;
+        }
+
+    } else { //没有挂点
+        if(shape == OTHER) { //非线段及三角形
+            bandLineMap.insert(make_pair(keyImage, valueImage));
+        }
+
+        if(shape == TRIG) {
+            shape = SEGMENT;
+        } else if(bandLineMap.size() == 3) {
+            shape = TRIG;
         }
     }
     
     updateBands();
-    
-    isSegment = false;
 }
 
 vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
@@ -238,7 +277,6 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
         
         for(Vec2 point : pointList) {
             int dis = getPoint2LineDistance(keyImage->getPosition(), valueImage->getPosition(), point);
-            log("-------- dis = %d", dis);
             distanceList.insert(make_pair(dis, point));
         }
         
@@ -291,7 +329,7 @@ void BandView::updateBands() {
 }
 
 ImageView* BandView::checkIsSelectSnapImage(const Vec2 &point) {
-    
+
     for(ImageView* snapImage : snapImageList) {
         if(snapImage->getBoundingBox().containsPoint(point)) {
             return snapImage;
@@ -321,7 +359,7 @@ bool BandView::checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Ve
     float BC = point.distance(point2);
     float AB = point1.distance(point2);
 
-    if(fabs(AC + BC - AB) <= 1.0f) {
+    if(fabs(AC + BC - AB) <= 4.0f) {
         return true;
     }
 
@@ -347,9 +385,6 @@ bool BandView::checkPointIsInTrig(const Vec2 &point1, const Vec2 &point2, const 
     bool d1 = (signOfAB * signOfTrig > 0);
     bool d2 = (signOfCA * signOfTrig > 0);
     bool d3 = (signOfBC * signOfTrig > 0);
-    
-    log("---------- point1.x = %d, point1.y = %d; point2.x = %d, point2.y = %d; point3.x = %d, point3.y = %d; point.x = %d, point.y = %d", (int)point1.x, (int)point1.y, (int)point2.x, (int)point2.y, (int)point3.x, (int)point3.y, (int)point.x, (int)point.y);
-    log("---------- d1 = %d, d2 = %d, d2 = %d", d1, d2, d3);
     
     return d1 && d2 && d3;
 }
