@@ -73,6 +73,7 @@
 		A22931221F5577480089B2AE /* two_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931181F5577480089B2AE /* two_d.png */; };
 		A22931231F5577480089B2AE /* zero_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931191F5577480089B2AE /* zero_d.png */; };
 		A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */; };
+		A259F3211FB94EA600D773BB /* SnapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A259F31F1FB94EA600D773BB /* SnapView.cpp */; };
 		A28AF3211F7C997000FDD70F /* child_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A28AF3151F7C997000FDD70F /* child_1.png */; };
 		A28AF3221F7C997000FDD70F /* child_2.png in Resources */ = {isa = PBXBuildFile; fileRef = A28AF3161F7C997000FDD70F /* child_2.png */; };
 		A28AF3231F7C997000FDD70F /* child_3.png in Resources */ = {isa = PBXBuildFile; fileRef = A28AF3171F7C997000FDD70F /* child_3.png */; };
@@ -269,6 +270,8 @@
 		A22931191F5577480089B2AE /* zero_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zero_d.png; sourceTree = "<group>"; };
 		A24BD64E1F43EC4300A32ABF /* UIDrawView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawView.cpp; sourceTree = "<group>"; };
 		A24BD64F1F43EC4300A32ABF /* UIDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawView.h; sourceTree = "<group>"; };
+		A259F31F1FB94EA600D773BB /* SnapView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SnapView.cpp; sourceTree = "<group>"; };
+		A259F3201FB94EA600D773BB /* SnapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapView.h; sourceTree = "<group>"; };
 		A28AF3151F7C997000FDD70F /* child_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = child_1.png; sourceTree = "<group>"; };
 		A28AF3161F7C997000FDD70F /* child_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = child_2.png; sourceTree = "<group>"; };
 		A28AF3171F7C997000FDD70F /* child_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = child_3.png; sourceTree = "<group>"; };
@@ -673,6 +676,8 @@
 				A21C39921F9050A8009644E8 /* ElectronicBoards.h */,
 				A21C399B1F905852009644E8 /* BandView.cpp */,
 				A21C399C1F905852009644E8 /* BandView.h */,
+				A259F31F1FB94EA600D773BB /* SnapView.cpp */,
+				A259F3201FB94EA600D773BB /* SnapView.h */,
 			);
 			path = ElectronicBoards;
 			sourceTree = "<group>";
@@ -1003,6 +1008,7 @@
 				A21C399D1F905852009644E8 /* BandView.cpp in Sources */,
 				A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */,
 				A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */,
+				A259F3211FB94EA600D773BB /* SnapView.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
 				A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */,

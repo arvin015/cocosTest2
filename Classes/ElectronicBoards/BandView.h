@@ -12,18 +12,13 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "ui/UIImageView.h"
+#include "SnapView.h"
 
 class BandView : public cocos2d::Node {
 
 public:
     
     typedef std::function<void(BandView*, float, float, bool)> OnBandTouchEndedCallback;
-
-    enum Shape {
-        SEGMENT,
-        TRIG,
-        OTHER
-    };
 
     BandView();
     ~BandView();
@@ -42,10 +37,10 @@ public:
 public:
     
     /**
-     * 更新
+     * 拖拽点放手后更新
      */
-    void update(const cocos2d::Vec2 &curPosition);
-    
+    void updateAfterTouchEnd(const cocos2d::Vec2 &point);
+
     /**
      * 更新橡皮筋
      */
@@ -78,17 +73,12 @@ private:
     /**
      * 创建首尾连接钉子
      */
-    cocos2d::ui::ImageView* createSnapImage(const std::string &imageName, const cocos2d::Vec2 &position);
-    
-    /**
-     * 检测是否选中钉子
-     */
-    cocos2d::ui::ImageView* checkIsSelectSnapImage(const cocos2d::Vec2 &point);
+    SnapView* createSnapView(const std::string &imageName, const cocos2d::Vec2 &position);
 
     /**
      * 检测触摸点是否在橡皮筋上
      */
-    cocos2d::ui::ImageView* checkIsOnBand(const cocos2d::Vec2 &point);
+    SnapView* checkIsOnBand(const cocos2d::Vec2 &point);
 
     /**
      * 检测是否在线段上
@@ -111,26 +101,24 @@ private:
     float getPoint2LineDistance(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
 
     /**
-     * 置顶
-     */
-    void bringToFront();
+    * 置顶
+    */
+    void bringToFront() {
+        cocos2d::Vector<cocos2d::Node*> childNodes = getParent()->getChildren();
+        int localZOrder = childNodes.at(childNodes.size() - 1)->getTag();
+        getParent()->reorderChild(this, localZOrder + 1);
+    }
     
 private:
     
     cocos2d::EventListenerTouchOneByOne* eventListener;
     cocos2d::DrawNode* lineDraw;
     cocos2d::Color4F lineColor;
-    cocos2d::Vector<cocos2d::ui::ImageView*> snapImageList;
-    std::map<cocos2d::ui::ImageView*, cocos2d::ui::ImageView*> bandLineMap; //每段皮筋Map集合
     bool enableTouch;
-    cocos2d::ui::ImageView* operateSnapImage; //当前操作的钉子
-    cocos2d::ui::ImageView* keyImage; //操作依赖的橡皮筋key值钉子
-    cocos2d::ui::ImageView* valueImage; //操作依赖的橡皮筋value值钉子
+    SnapView* operateSnapView; //当前操作的钉子
     OnBandTouchEndedCallback touchEndedCallback;
     std::vector<cocos2d::Vec2> trigPoints; //三角形三个点
-    Shape shape; //当前形状
-    bool isHangBand; //是否挂橡皮筋
-    bool isTouchBand; //是否拉橡皮筋
+    SnapView* firstSnapView;
 };
 
 #endif /* BandView_h */

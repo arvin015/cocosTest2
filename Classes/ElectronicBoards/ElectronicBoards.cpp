@@ -121,7 +121,7 @@ void ElectronicBoards::addBand(const Color4F &color) {
             int rRow = abs(y - rowYMap.at(minRow)) > abs(y - rowYMap.at(maxRow)) ? maxRow : minRow;
             int rCol = abs(x - colXMap.at(minCol)) > abs(x - colXMap.at(maxCol)) ? maxCol : minCol;
         
-            bandView->update(Vec2(colXMap.at(rCol), rowYMap.at(rRow)));
+            bandView->updateAfterTouchEnd(Vec2(colXMap.at(rCol), rowYMap.at(rRow)));
         } else {
             vector<Vec2> pointList;
             

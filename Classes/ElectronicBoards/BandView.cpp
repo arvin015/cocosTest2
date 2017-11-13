@@ -19,13 +19,9 @@ BandView::BandView() {
     lineDraw = nullptr;
     lineColor = Color4F::YELLOW;
     enableTouch = true;
-    operateSnapImage = nullptr;
-    keyImage = nullptr;
-    valueImage = nullptr;
-    keyImage = nullptr;
+    operateSnapView = nullptr;
     touchEndedCallback = nullptr;
-    shape = SEGMENT;
-    isHangBand = false;
+    firstSnapView = nullptr;
 }
 
 BandView::~BandView() {
@@ -68,78 +64,40 @@ void BandView::initData(const Vec2 &startPoint, const Vec2 &endPoint, const Colo
     lineDraw->clear();
     lineDraw->drawSegment(startPoint, endPoint, BAND_WIDTH, lineColor);
     
-    ImageView* startSnapImage = createSnapImage("select.png", startPoint);
-    this->addChild(startSnapImage, 2);
-    snapImageList.pushBack(startSnapImage);
-    
-    ImageView* endSnapImage = createSnapImage("select.png", endPoint);
-    this->addChild(endSnapImage, 2);
-    snapImageList.pushBack(endSnapImage);
-    
-    bandLineMap.insert(make_pair(startSnapImage, endSnapImage));
+    SnapView* startSnapView = createSnapView("select.png", startPoint);
+    this->addChild(startSnapView, 2);
+
+    SnapView* endSnapView = createSnapView("select.png", endPoint);
+    this->addChild(endSnapView, 2);
+
+    firstSnapView = startSnapView;
+    firstSnapView->nextSnapView = endSnapView;
 }
 
 bool BandView::onTouchBegan(Touch* touch, Event* event) {
-    if(!enableTouch) {
+    if (!enableTouch) {
         return false;
     }
 
-    operateSnapImage = checkIsSelectSnapImage(touch->getLocation());
-
-    if(operateSnapImage) { //touch 在钉子上
-
-        isTouchBand = false;
-
+    //判断touch点是否在橡皮筋上
+    SnapView* snapView = checkIsOnBand(touch->getLocation());
+    if (snapView) { //touch在橡皮筋上
+        
+        bringToFront();
         eventListener->setSwallowTouches(true);
+
+        SnapView* newSnapView = createSnapView("select.png", touch->getLocation());
+        this->addChild(newSnapView);
+
+        operateSnapView = newSnapView;
+
+        newSnapView->preSnapView = snapView;
+        newSnapView->nextSnapView = snapView->nextSnapView;
+        snapView->nextSnapView->preSnapView = newSnapView;
+        snapView->nextSnapView = newSnapView;
         
-        bringToFront(); //置顶
-
-        if(shape > SEGMENT) { //挂橡皮筋、确定keyImage、valueImage
-
-            log("-------------------- 111111111111111111 -------------------------");
-
-            isHangBand = true;
-
-            keyImage = bandLineMap.at(operateSnapImage);
-
-            log("-------------------- 22222222222222222222 -------------------------");
-
-            valueImage = bandLineMap.at(keyImage);
-
-            log("-------------------- 3333333333333333333333333 -------------------------");
-        }
-        
-    } else { //touch不在钉子上，判断是否在橡皮筋上
-        keyImage = checkIsOnBand(touch->getLocation());
-        if(keyImage) { //touch在橡皮筋上
-
-            isTouchBand = true;
-
-            valueImage = bandLineMap.at(keyImage);
-            
-            ImageView* newImage = createSnapImage("select.png", touch->getLocation());
-            this->addChild(newImage);
-
-            operateSnapImage = newImage;
-            
-            //先删线段
-            map<ImageView*, ImageView*>::iterator it = bandLineMap.find(keyImage);
-            if(it != bandLineMap.end()) {
-                bandLineMap.erase(it);
-            }
-            
-            bandLineMap.insert(make_pair(keyImage, newImage));
-            bandLineMap.insert(make_pair(newImage, valueImage));
-            
-            if(shape == SEGMENT) { //线段时，先加一条线段
-                bandLineMap.insert(make_pair(valueImage, keyImage));
-                
-                ImageView* temp = keyImage;
-                keyImage = valueImage;
-                valueImage = temp;
-            }
-
-            isHangBand = true; //挂橡皮筋
+        if (newSnapView->nextSnapView->nextSnapView == nullptr) { //线段时，要形成环路
+            newSnapView->nextSnapView->nextSnapView = snapView;
         }
     }
 
@@ -147,119 +105,65 @@ bool BandView::onTouchBegan(Touch* touch, Event* event) {
 }
 
 void BandView::onTouchMoved(Touch* touch, Event* event) {
-    if(operateSnapImage) {
-        update(touch->getLocation());
+    if(operateSnapView) {
+        operateSnapView->setPosition(touch->getLocation());
+        updateBands();
     }
 }
 
 void BandView::onTouchEnded(Touch* touch, Event* event) {
     
-    if(operateSnapImage) {
+    if(operateSnapView) {
         float x = touch->getLocation().x;
         float y = touch->getLocation().y;
-        
-        if(isHangBand) {
-            trigPoints.clear();
-            trigPoints.push_back(Vec2(x, y));
-            trigPoints.push_back(keyImage->getPosition());
-            trigPoints.push_back(valueImage->getPosition());
 
-            log("-------------------- 444444444444444444444444 -------------------------");
-        }
+        trigPoints.clear();
+        trigPoints.push_back(Vec2(x, y));
+        trigPoints.push_back(operateSnapView->preSnapView->getPosition());
+        trigPoints.push_back(operateSnapView->nextSnapView->getPosition());
 
         if(touchEndedCallback) {
-            this->touchEndedCallback(this, x, y, isHangBand);
+            this->touchEndedCallback(this, x, y, true);
         }
     }
 
-    log("-------------------- 9999999999999999999999999999999999999 -------------------------");
-
-    operateSnapImage = nullptr;
-    keyImage = nullptr;
-    valueImage = nullptr;
+    operateSnapView = nullptr;
 
     eventListener->setSwallowTouches(false);
 }
 
 void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
 
-    log("------------------------- %d ------------------ ", bandLineMap.size());
-    map<ImageView*, ImageView*>::iterator i;
-    for(i = bandLineMap.begin(); i != bandLineMap.end(); i++) {
-        log("------------------------ x = %f, x1 = %f", i->first->getPositionX(), i->second->getPositionY());
-    }
+    operateSnapView->removeFromParent();
 
-    snapImageList.eraseObject(operateSnapImage, false);
-    log("-------------------- 5555555555555555555555555 -------------------------%f", valueImage->getPositionX());
-    operateSnapImage->removeFromParent();
-    
-    //去掉与当前操作钉子相关联的两条线段
-    map<ImageView*, ImageView*>::iterator it1 = bandLineMap.find(valueImage);
-    if(it1 != bandLineMap.end()) {
-        bandLineMap.erase(it1);
-    }
-    log("-------------------- 6666666666666666666666666666 -------------------------");
-    map<ImageView*, ImageView*>::iterator it2 = bandLineMap.find(operateSnapImage);
-    if(it2 != bandLineMap.end()) {
-        bandLineMap.erase(it2);
-    }
-
-    log("-------------------- 777777777777777777777777 -------------------------");
+    operateSnapView->preSnapView->nextSnapView = operateSnapView->nextSnapView;
+    operateSnapView->nextSnapView->preSnapView = operateSnapView->preSnapView;
 
     vector<Vec2> hangPointList = checkBandForHangIsOk(pointList);
     
     if(hangPointList.size() > 0) { //有挂点
 
-        log("-------------------- 8888888888888888888888888888888 -------------------------");
+        SnapView* preSnapView = operateSnapView->preSnapView;
 
-        //添加钉子
-        Vector<ImageView*> tempImageList;
-        
-        for(int i = 0; i < hangPointList.size(); i++) {
-            ImageView* newImage = createSnapImage("select.png", hangPointList.at(i));
-            tempImageList.pushBack(newImage);
-            snapImageList.pushBack(newImage);
-        }
+        for (int i = 0; i < hangPointList.size(); i++) {
+            SnapView* newSnapView = createSnapView("select.png", hangPointList.at(i));
+            this->addChild(newSnapView);
 
-        if((shape == TRIG && !isTouchBand) || shape == SEGMENT) { //三角形切拉钉子时，转换key、value
-            ImageView* temp = keyImage;
-            keyImage = valueImage;
-            valueImage = temp;
-        }
-        
-        //添加橡皮筋
-        ImageView* prevImage = nullptr;
-        ImageView* nextImage = valueImage;
-        
-        for(int j = 0; j < hangPointList.size(); j++) {
+            newSnapView->preSnapView = preSnapView;
+            newSnapView->nextSnapView = preSnapView->nextSnapView;
+            preSnapView->nextSnapView->preSnapView = newSnapView;
+            preSnapView->nextSnapView = newSnapView;
 
-            ImageView *newImage = tempImageList.at(j);
-
-            if (j == hangPointList.size() - 1) {
-                prevImage = keyImage;
-            } else {
-                prevImage = tempImageList.at(j + 1);
+            if (newSnapView->nextSnapView->nextSnapView == nullptr) { //线段时，要形成环路
+                newSnapView->nextSnapView->nextSnapView = preSnapView;
             }
-
-            bandLineMap.insert(make_pair(nextImage, newImage));
-            bandLineMap.insert(make_pair(newImage, prevImage));
-        }
-
-        if(shape == SEGMENT) {
-            shape = TRIG;
-        } else if(shape == TRIG) {
-            shape = OTHER;
+            
+            preSnapView = newSnapView;
         }
 
     } else { //没有挂点
-        if(shape == OTHER) { //非线段及三角形
-            bandLineMap.insert(make_pair(keyImage, valueImage));
-        }
-
-        if(shape == TRIG) {
-            shape = SEGMENT;
-        } else if(bandLineMap.size() == 3) {
-            shape = TRIG;
+        if (operateSnapView == firstSnapView) {
+            firstSnapView = operateSnapView->nextSnapView;
         }
     }
     
@@ -276,7 +180,7 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
         map<int, Vec2> distanceList;
         
         for(Vec2 point : pointList) {
-            int dis = getPoint2LineDistance(keyImage->getPosition(), valueImage->getPosition(), point);
+            int dis = getPoint2LineDistance(operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point);
             distanceList.insert(make_pair(dis, point));
         }
         
@@ -294,7 +198,7 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
         for(Vec2 point : pointList) {
             
             if(point != p) {
-                if(checkPointIsInTrig(p, keyImage->getPosition(), valueImage->getPosition(), point)) {
+                if(checkPointIsInTrig(p, operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point)) {
                     resultPointList.push_back(point);
                 }
             }
@@ -304,52 +208,40 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
     return resultPointList;
 }
 
-void BandView::update(const Vec2 &curPosition) {
-
-    //更新位置
-    if(operateSnapImage) {
-        operateSnapImage->setPosition(curPosition);
+void BandView::updateAfterTouchEnd(const Vec2 &point) {
+    if (operateSnapView) {
+        operateSnapView->setPosition(point);
     }
-    
-    //更新橡皮筋
     updateBands();
 }
 
 void BandView::updateBands() {
     
     lineDraw->clear();
-    if(bandLineMap.size() > 0) {
-        map<ImageView*, ImageView*>::iterator it;
-        for(it = bandLineMap.begin(); it != bandLineMap.end(); it++) {
-            ImageView* image1 = it->first;
-            ImageView* image2 = it->second;
-            lineDraw->drawSegment(image1->getPosition(), image2->getPosition(), BAND_WIDTH, lineColor);
-        }
-    }
+
+    SnapView* curSnapView = firstSnapView;
+
+    do {
+
+        lineDraw->drawSegment(curSnapView->getPosition(), curSnapView->nextSnapView->getPosition(), BAND_WIDTH, lineColor);
+        curSnapView = curSnapView->nextSnapView;
+
+    } while (curSnapView->nextSnapView != nullptr && curSnapView != firstSnapView);
 }
 
-ImageView* BandView::checkIsSelectSnapImage(const Vec2 &point) {
+SnapView* BandView::checkIsOnBand(const cocos2d::Vec2 &point) {
 
-    for(ImageView* snapImage : snapImageList) {
-        if(snapImage->getBoundingBox().containsPoint(point)) {
-            return snapImage;
+    SnapView* curSnapView = firstSnapView;
+
+    do {
+
+        if (checkIsOnSegment(curSnapView->getPosition(), curSnapView->nextSnapView->getPosition(), point)) {
+            return curSnapView;
         }
-    }
-    
-    return nullptr;
-}
 
-ImageView* BandView::checkIsOnBand(const cocos2d::Vec2 &point) {
+        curSnapView = curSnapView->nextSnapView;
 
-    map<ImageView*, ImageView*>::iterator it;
-    for(it = bandLineMap.begin(); it != bandLineMap.end(); it++) {
-        ImageView* image1 = it->first;
-        ImageView* image2 = it->second;
-
-        if(checkIsOnSegment(image1->getPosition(), image2->getPosition(), point)) {
-            return image1;
-        }
-    }
+    } while (curSnapView->nextSnapView != nullptr && curSnapView != firstSnapView);
 
     return nullptr;
 }
@@ -487,14 +379,31 @@ float BandView::getPoint2LineDistance(const Vec2 &point1, const Vec2 &point2, co
     }
 }
 
-ImageView* BandView::createSnapImage(const string &imageName, const Vec2 &position) {
-    ImageView* imageView = ImageView::create(imageName);
-    imageView->setPosition(position);
-    return imageView;
-}
-
-void BandView::bringToFront() {
-    Vector<Node*> childNodes = getParent()->getChildren();
-    int localZOrder = childNodes.at(childNodes.size() - 1)->getTag();
-    getParent()->reorderChild(this, localZOrder + 1);
+SnapView* BandView::createSnapView(const string &imageName, const Vec2 &position) {
+    SnapView* snapView = SnapView::create(imageName);
+    snapView->setPosition(position);
+    snapView->setOnTouchDown([this, snapView]() {
+        this->operateSnapView = snapView;
+        bringToFront();
+    });
+    snapView->setOnTouchMove([this]() {
+        updateBands();
+    });
+    snapView->setOnTouchEnd([this, snapView](float x, float y) {
+        if (touchEndedCallback) {
+            bool isHangBand = false;
+            if (snapView->nextSnapView != nullptr && snapView->preSnapView != nullptr) {
+                isHangBand = true;
+            }
+            if (isHangBand) {
+                trigPoints.clear();
+                trigPoints.push_back(Vec2(x, y));
+                trigPoints.push_back(operateSnapView->preSnapView->getPosition());
+                trigPoints.push_back(operateSnapView->nextSnapView->getPosition());
+            }
+            this->touchEndedCallback(this, x, y, isHangBand);
+        }
+        this->operateSnapView = nullptr;
+    });
+    return snapView;
 }
