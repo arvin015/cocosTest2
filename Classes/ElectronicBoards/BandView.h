@@ -86,9 +86,14 @@ private:
     bool checkIsOnSegment(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point);
     
     /**
-     * 检测是否在三角形内
+     * 检测是否在三角形内-不包含边
      */
     bool checkPointIsInTrig(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3, const cocos2d::Vec2 &point);
+    
+    /**
+     * 检测是否在三角形内-包含边
+     */
+    bool checkPointIsInTrig1(const cocos2d::Vec2 &point1, const cocos2d::Vec2 &point2, const cocos2d::Vec2 &point3, const cocos2d::Vec2 &point);
     
     /**
      * 检测钉子是否满足被挂住条件

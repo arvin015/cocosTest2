@@ -135,7 +135,14 @@ void BandView::onTouchEnded(Touch* touch, Event* event) {
 void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
 
     operateSnapView->removeFromParent();
+    
+    //拉拽前是否线段
+    bool isSegment = false;
+    if (operateSnapView->preSnapView == operateSnapView->nextSnapView->nextSnapView) {
+        isSegment = true;
+    }
 
+    //去掉拖拽点依赖
     operateSnapView->preSnapView->nextSnapView = operateSnapView->nextSnapView;
     operateSnapView->nextSnapView->preSnapView = operateSnapView->preSnapView;
 
@@ -143,25 +150,38 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
     
     if(hangPointList.size() > 0) { //有挂点
 
-        SnapView* preSnapView = operateSnapView->preSnapView;
+        SnapView* operatePreSnapView = operateSnapView->preSnapView;
+        SnapView* operateNextSnapView = operateSnapView->nextSnapView;
 
         for (int i = 0; i < hangPointList.size(); i++) {
             SnapView* newSnapView = createSnapView("select.png", hangPointList.at(i));
             this->addChild(newSnapView);
 
-            newSnapView->preSnapView = preSnapView;
-            newSnapView->nextSnapView = preSnapView->nextSnapView;
-            preSnapView->nextSnapView->preSnapView = newSnapView;
-            preSnapView->nextSnapView = newSnapView;
-
-            if (newSnapView->nextSnapView->nextSnapView == nullptr) { //线段时，要形成环路
-                newSnapView->nextSnapView->nextSnapView = preSnapView;
-            }
+            newSnapView->preSnapView = operatePreSnapView;
+            newSnapView->nextSnapView = operateNextSnapView;
+            operatePreSnapView->nextSnapView = newSnapView;
+            operateNextSnapView->preSnapView = newSnapView;
             
-            preSnapView = newSnapView;
+            if (isSegment) { //一开始是线段
+                operateNextSnapView->nextSnapView = operatePreSnapView;
+                
+                operatePreSnapView = newSnapView;
+                operateNextSnapView = newSnapView->nextSnapView;
+                
+                isSegment = false;
+            } else {
+                operatePreSnapView = newSnapView->preSnapView;
+                operateNextSnapView = newSnapView;
+            }
         }
 
     } else { //没有挂点
+        if (isSegment) {
+            operateSnapView->preSnapView->preSnapView = nullptr;
+            operateSnapView->nextSnapView->preSnapView = nullptr;
+            operateSnapView->nextSnapView->nextSnapView = nullptr;
+        }
+        
         if (operateSnapView == firstSnapView) {
             firstSnapView = operateSnapView->nextSnapView;
         }
@@ -194,11 +214,12 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
         }
         
         Vec2 p = distanceList.at(max);
+        resultPointList.push_back(p); //加入最远的那个点
         
         for(Vec2 point : pointList) {
             
             if(point != p) {
-                if(checkPointIsInTrig(p, operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point)) {
+                if(!checkPointIsInTrig1(p, operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point)) { //不在最远点组成的三角形内需加入
                     resultPointList.push_back(point);
                 }
             }
@@ -277,6 +298,20 @@ bool BandView::checkPointIsInTrig(const Vec2 &point1, const Vec2 &point2, const 
     bool d1 = (signOfAB * signOfTrig > 0);
     bool d2 = (signOfCA * signOfTrig > 0);
     bool d3 = (signOfBC * signOfTrig > 0);
+    
+    return d1 && d2 && d3;
+}
+
+bool BandView::checkPointIsInTrig1(const Vec2 &point1, const Vec2 &point2, const Vec2 &point3, const Vec2 &point) {
+    
+    float signOfTrig = (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
+    float signOfAB = (point2.x - point1.x) * (point.y - point1.y) - (point2.y - point1.y) * (point.x - point1.x);
+    float signOfCA = (point1.x - point3.x) * (point.y - point3.y) - (point1.y - point3.y) * (point.x - point3.x);
+    float signOfBC = (point3.x - point2.x) * (point.y - point3.y) - (point3.y - point2.y) * (point.x - point3.x);
+    
+    bool d1 = (signOfAB * signOfTrig >= 0);
+    bool d2 = (signOfCA * signOfTrig >= 0);
+    bool d3 = (signOfBC * signOfTrig >= 0);
     
     return d1 && d2 && d3;
 }
