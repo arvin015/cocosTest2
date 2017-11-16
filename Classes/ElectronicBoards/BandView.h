@@ -14,6 +14,16 @@
 #include "ui/UIImageView.h"
 #include "SnapView.h"
 
+struct P {
+    cocos2d::Vec2 point;
+    float dis;
+
+    P(cocos2d::Vec2 point, float dis) {
+        this->point = point;
+        this->dis = dis;
+    }
+};
+
 class BandView : public cocos2d::Node {
 
 public:
@@ -98,7 +108,7 @@ private:
     /**
      * 检测钉子是否满足被挂住条件
      */
-    std::vector<cocos2d::Vec2> checkBandForHangIsOk(const std::vector<cocos2d::Vec2> &pointList);
+    std::vector<P> checkBandForHangIsOk(const std::vector<cocos2d::Vec2> &pointList);
     
     /**
      * 点到直线的距离

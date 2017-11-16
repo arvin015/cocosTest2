@@ -146,7 +146,7 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
     operateSnapView->preSnapView->nextSnapView = operateSnapView->nextSnapView;
     operateSnapView->nextSnapView->preSnapView = operateSnapView->preSnapView;
 
-    vector<Vec2> hangPointList = checkBandForHangIsOk(pointList);
+    vector<P> hangPointList = checkBandForHangIsOk(pointList);
     
     if(hangPointList.size() > 0) { //有挂点
 
@@ -154,7 +154,7 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
         SnapView* operateNextSnapView = operateSnapView->nextSnapView;
 
         for (int i = 0; i < hangPointList.size(); i++) {
-            SnapView* newSnapView = createSnapView("select.png", hangPointList.at(i));
+            SnapView* newSnapView = createSnapView("select.png", Vec2(hangPointList.at(i).point));
             this->addChild(newSnapView);
 
             newSnapView->preSnapView = operatePreSnapView;
@@ -164,15 +164,11 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
             
             if (isSegment) { //一开始是线段
                 operateNextSnapView->nextSnapView = operatePreSnapView;
-                
-                operatePreSnapView = newSnapView;
-                operateNextSnapView = newSnapView->nextSnapView;
-                
                 isSegment = false;
-            } else {
-                operatePreSnapView = newSnapView->preSnapView;
-                operateNextSnapView = newSnapView;
             }
+            
+            operatePreSnapView = newSnapView;
+            operateNextSnapView = newSnapView->nextSnapView;
         }
 
     } else { //没有挂点
@@ -190,12 +186,17 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
     updateBands();
 }
 
-vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
+bool compa(const P &p1, const P &p2) {
+    return p1.dis < p2.dis;
+}
+
+vector<P> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
     
-    vector<Vec2> resultPointList;
-    
-    if(pointList.size() <= 1) {
-        resultPointList = pointList;
+    vector<P> resultPList;
+    if (pointList.size() == 0) {
+        return resultPList;
+    } else if (pointList.size() <= 1) {
+        resultPList.push_back(P(pointList.at(0), 0));
     } else {
         map<int, Vec2> distanceList;
         
@@ -212,21 +213,28 @@ vector<Vec2> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
                 max = dis;
             }
         }
-        
+
+        Vec2 targetP = operateSnapView->preSnapView->getPosition();
+
         Vec2 p = distanceList.at(max);
-        resultPointList.push_back(p); //加入最远的那个点
+        resultPList.push_back(P(p, p.distance(targetP))); //加入最远的那个点
         
         for(Vec2 point : pointList) {
             
             if(point != p) {
                 if(!checkPointIsInTrig1(p, operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point)) { //不在最远点组成的三角形内需加入
-                    resultPointList.push_back(point);
+                    resultPList.push_back(P(point, point.distance(targetP)));
                 }
             }
         }
     }
     
-    return resultPointList;
+    //根据靠近prePoint点排序
+    if (resultPList.size() > 1) {
+        sort(resultPList.begin(), resultPList.end(), compa);
+    }
+    
+    return resultPList;
 }
 
 void BandView::updateAfterTouchEnd(const Vec2 &point) {
