@@ -14,6 +14,163 @@ using namespace std;
 
 const float BAND_WIDTH = 4;
 
+bool checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Vec2 &point) {
+    float AC = point.distance(point1);
+    float BC = point.distance(point2);
+    float AB = point1.distance(point2);
+
+    if(fabs(AC + BC - AB) <= 4.0f) {
+        return true;
+    }
+
+    return false;
+}
+
+bool checkPointIsInTrig(const Vec2 &point1, const Vec2 &point2, const Vec2 &point3, const Vec2 &point) {
+
+    float signOfTrig = (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
+    float signOfAB = (point2.x - point1.x) * (point.y - point1.y) - (point2.y - point1.y) * (point.x - point1.x);
+    float signOfCA = (point1.x - point3.x) * (point.y - point3.y) - (point1.y - point3.y) * (point.x - point3.x);
+    float signOfBC = (point3.x - point2.x) * (point.y - point3.y) - (point3.y - point2.y) * (point.x - point3.x);
+
+    bool d1 = (signOfAB * signOfTrig > 0);
+    bool d2 = (signOfCA * signOfTrig > 0);
+    bool d3 = (signOfBC * signOfTrig > 0);
+
+    return d1 && d2 && d3;
+}
+
+bool checkPointIsInTrig1(const Vec2 &point1, const Vec2 &point2, const Vec2 &point3, const Vec2 &point) {
+
+    float signOfTrig = (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
+    float signOfAB = (point2.x - point1.x) * (point.y - point1.y) - (point2.y - point1.y) * (point.x - point1.x);
+    float signOfCA = (point1.x - point3.x) * (point.y - point3.y) - (point1.y - point3.y) * (point.x - point3.x);
+    float signOfBC = (point3.x - point2.x) * (point.y - point3.y) - (point3.y - point2.y) * (point.x - point3.x);
+
+    bool d1 = (signOfAB * signOfTrig >= 0);
+    bool d2 = (signOfCA * signOfTrig >= 0);
+    bool d3 = (signOfBC * signOfTrig >= 0);
+
+    return d1 && d2 && d3;
+}
+
+float getPoint2LineDistance(const Vec2 &point1, const Vec2 &point2, const Vec2 &point) {
+
+    float xx = point.x;
+    float yy = point.y;
+    float x1 = point1.x;
+    float y1 = point1.y;
+    float x2 = point2.x;
+    float y2 = point2.y;
+
+    double a, b, c, ang1, ang2, ang, m;
+    double result = 0;
+
+    //分别计算三条边的长度
+    a = sqrt((x1 - xx) * (x1 - xx) + (y1 - yy) * (y1 - yy));
+
+    if (a == 0)
+        return -1;
+    b = sqrt((x2 - xx) * (x2 - xx) + (y2 - yy) * (y2 - yy));
+    if (b == 0)
+        return -1;
+    c = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    //如果线段是一个点则退出函数并返回距离
+    if (c == 0)
+    {
+        result = a;
+        return result;
+    }
+    //如果点(xx,yy到点x1,y1)这条边短
+    if (a < b)
+    {
+        //如果直线段AB是水平线。得到直线段AB的弧度
+        if (y1 == y2)
+        {
+            if (x1 < x2)
+                ang1 = 0;
+            else
+                ang1 = M_PI;
+        }
+        else
+        {
+            m = (x2 - x1) / c;
+            if (m - 1 > 0.00001)
+                m = 1;
+            ang1 = acos(m);
+            if (y1 >y2)
+                ang1 = M_PI*2  - ang1;//直线(x1,y1)-(x2,y2)与折X轴正向夹角的弧度
+        }
+        m = (xx - x1) / a;
+        if (m - 1 > 0.00001)
+            m = 1;
+        ang2 = acos(m);
+        if (y1 > yy)
+            ang2 = M_PI * 2 - ang2;//直线(x1,y1)-(xx,yy)与折X轴正向夹角的弧度
+
+        ang = ang2 - ang1;
+        if (ang < 0) ang = -ang;
+
+        if (ang > M_PI) ang = M_PI * 2 - ang;
+        //如果是钝角则直接返回距离
+        if (ang > M_PI / 2)
+            return a;
+        else
+            return a * sin(ang);
+    }
+    else//如果(xx,yy)到点(x2,y2)这条边较短
+    {
+        //如果两个点的纵坐标相同，则直接得到直线斜率的弧度
+        if (y1 == y2)
+            if (x1 < x2)
+                ang1 = M_PI;
+            else
+                ang1 = 0;
+        else
+        {
+            m = (x1 - x2) / c;
+            if (m - 1 > 0.00001)
+                m = 1;
+            ang1 = acos(m);
+            if (y2 > y1)
+                ang1 = M_PI * 2 - ang1;
+        }
+        m = (xx - x2) / b;
+        if (m - 1 > 0.00001)
+            m = 1;
+        ang2 = acos(m);//直线(x2-x1)-(xx,yy)斜率的弧度
+        if (y2 > yy)
+            ang2 = M_PI * 2 - ang2;
+        ang = ang2 - ang1;
+        if (ang < 0) ang = -ang;
+        if (ang > M_PI) ang = M_PI * 2 - ang;//交角的大小
+        //如果是对角则直接返回距离
+        if (ang > M_PI / 2)
+            return b;
+        else
+            return b * sin(ang);//如果是锐角，返回计算得到的距离
+    }
+}
+
+vector<Vec2> getLine2Point(const cocos2d::Vec2 &preP, const cocos2d::Vec2 &nextP) {
+    vector<Vec2> rsPointList;
+    rsPointList.push_back(preP);
+    if (preP.y == nextP.y) {
+        rsPointList.push_back(Vec2(preP.x, 0));
+        return rsPointList;
+    }
+
+    float k = (-1) / ((nextP.y - preP.y) / (nextP.x - preP.x));
+    float x = preP.x - preP.y / k;
+    rsPointList.push_back(Vec2(x, 0));
+
+    return rsPointList;
+}
+
+bool compa(const P &p1, const P &p2) {
+    return p1.dis < p2.dis;
+}
+
 BandView::BandView() {
     eventListener = nullptr;
     lineDraw = nullptr;
@@ -186,18 +343,16 @@ void BandView::checkBandIsHanged(const vector<Vec2> &pointList) {
     updateBands();
 }
 
-bool compa(const P &p1, const P &p2) {
-    return p1.dis < p2.dis;
-}
-
 vector<P> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
     
     vector<P> resultPList;
     if (pointList.size() == 0) {
         return resultPList;
-    } else if (pointList.size() <= 1) {
+    } else if (pointList.size() == 1) {
         resultPList.push_back(P(pointList.at(0), 0));
+        return resultPList;
     } else {
+
         map<int, Vec2> distanceList;
         
         for(Vec2 point : pointList) {
@@ -214,18 +369,26 @@ vector<P> BandView::checkBandForHangIsOk(const vector<Vec2> &pointList) {
             }
         }
 
-        Vec2 targetP = operateSnapView->preSnapView->getPosition();
-
+        vector<Vec2> pList;
+        if (operateSnapView->preSnapView->getPosition().x !=  operateSnapView->nextSnapView->getPosition().x) {
+            pList = getLine2Point(operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition());
+            log("-------------- x1 = %f, y1 = %f, x2 = %f, y2 = %f", pList[0].x, pList[0].y, pList[1].x, pList[1].y);
+        }
+        
         Vec2 p = distanceList.at(max);
-        resultPList.push_back(P(p, p.distance(targetP))); //加入最远的那个点
+        resultPList.push_back(P(p, pList.size() == 0 ? abs(operateSnapView->preSnapView->getPosition().y - p.y) : getPoint2LineDistance(pList[0], pList[1], p))); //加入最远的那个点
         
         for(Vec2 point : pointList) {
             
             if(point != p) {
                 if(!checkPointIsInTrig1(p, operateSnapView->preSnapView->getPosition(), operateSnapView->nextSnapView->getPosition(), point)) { //不在最远点组成的三角形内需加入
-                    resultPList.push_back(P(point, point.distance(targetP)));
+                    resultPList.push_back(P(point, pList.size() == 0 ? abs(operateSnapView->preSnapView->getPosition().y - point.y) :getPoint2LineDistance(pList[0], pList[1], point)));
                 }
             }
+        }
+        
+        for (P p : resultPList) {
+            log("---p.dis = %f", p.dis);
         }
     }
     
@@ -275,151 +438,13 @@ SnapView* BandView::checkIsOnBand(const cocos2d::Vec2 &point) {
     return nullptr;
 }
 
-bool BandView::checkIsOnSegment(const Vec2 &point1, const Vec2 &point2, const Vec2 &point) {
-    float AC = point.distance(point1);
-    float BC = point.distance(point2);
-    float AB = point1.distance(point2);
-
-    if(fabs(AC + BC - AB) <= 4.0f) {
-        return true;
-    }
-
-    return false;
-}
-
 bool BandView::checkIsInTrig(const Vec2 &point) {
 
     Vec2 point1 = trigPoints.at(0);
     Vec2 point2 = trigPoints.at(1);
     Vec2 point3 = trigPoints.at(2);
-    
+
     return checkPointIsInTrig(point1, point2, point3, point);
-}
-
-bool BandView::checkPointIsInTrig(const Vec2 &point1, const Vec2 &point2, const Vec2 &point3, const Vec2 &point) {
-    
-    float signOfTrig = (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
-    float signOfAB = (point2.x - point1.x) * (point.y - point1.y) - (point2.y - point1.y) * (point.x - point1.x);
-    float signOfCA = (point1.x - point3.x) * (point.y - point3.y) - (point1.y - point3.y) * (point.x - point3.x);
-    float signOfBC = (point3.x - point2.x) * (point.y - point3.y) - (point3.y - point2.y) * (point.x - point3.x);
-    
-    bool d1 = (signOfAB * signOfTrig > 0);
-    bool d2 = (signOfCA * signOfTrig > 0);
-    bool d3 = (signOfBC * signOfTrig > 0);
-    
-    return d1 && d2 && d3;
-}
-
-bool BandView::checkPointIsInTrig1(const Vec2 &point1, const Vec2 &point2, const Vec2 &point3, const Vec2 &point) {
-    
-    float signOfTrig = (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
-    float signOfAB = (point2.x - point1.x) * (point.y - point1.y) - (point2.y - point1.y) * (point.x - point1.x);
-    float signOfCA = (point1.x - point3.x) * (point.y - point3.y) - (point1.y - point3.y) * (point.x - point3.x);
-    float signOfBC = (point3.x - point2.x) * (point.y - point3.y) - (point3.y - point2.y) * (point.x - point3.x);
-    
-    bool d1 = (signOfAB * signOfTrig >= 0);
-    bool d2 = (signOfCA * signOfTrig >= 0);
-    bool d3 = (signOfBC * signOfTrig >= 0);
-    
-    return d1 && d2 && d3;
-}
-
-float BandView::getPoint2LineDistance(const Vec2 &point1, const Vec2 &point2, const Vec2 &point) {
-    
-    float xx = point.x;
-    float yy = point.y;
-    float x1 = point1.x;
-    float y1 = point1.y;
-    float x2 = point2.x;
-    float y2 = point2.y;
-    
-    double a, b, c, ang1, ang2, ang, m;
-    double result = 0;
-    
-    //分别计算三条边的长度
-    a = sqrt((x1 - xx) * (x1 - xx) + (y1 - yy) * (y1 - yy));
-    
-    if (a == 0)
-        return -1;
-    b = sqrt((x2 - xx) * (x2 - xx) + (y2 - yy) * (y2 - yy));
-    if (b == 0)
-        return -1;
-    c = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-    //如果线段是一个点则退出函数并返回距离
-    if (c == 0)
-    {
-        result = a;
-        return result;
-    }
-    //如果点(xx,yy到点x1,y1)这条边短
-    if (a < b)
-    {
-        //如果直线段AB是水平线。得到直线段AB的弧度
-        if (y1 == y2)
-        {
-            if (x1 < x2)
-                ang1 = 0;
-            else
-                ang1 = M_PI;
-        }
-        else
-        {
-            m = (x2 - x1) / c;
-            if (m - 1 > 0.00001)
-                m = 1;
-            ang1 = acos(m);
-            if (y1 >y2)
-                ang1 = M_PI*2  - ang1;//直线(x1,y1)-(x2,y2)与折X轴正向夹角的弧度
-        }
-        m = (xx - x1) / a;
-        if (m - 1 > 0.00001)
-            m = 1;
-        ang2 = acos(m);
-        if (y1 > yy)
-            ang2 = M_PI * 2 - ang2;//直线(x1,y1)-(xx,yy)与折X轴正向夹角的弧度
-        
-        ang = ang2 - ang1;
-        if (ang < 0) ang = -ang;
-        
-        if (ang > M_PI) ang = M_PI * 2 - ang;
-        //如果是钝角则直接返回距离
-        if (ang > M_PI / 2)
-            return a;
-        else
-            return a * sin(ang);
-    }
-    else//如果(xx,yy)到点(x2,y2)这条边较短
-    {
-        //如果两个点的纵坐标相同，则直接得到直线斜率的弧度
-        if (y1 == y2)
-            if (x1 < x2)
-                ang1 = M_PI;
-            else
-                ang1 = 0;
-            else
-            {
-                m = (x1 - x2) / c;
-                if (m - 1 > 0.00001)
-                    m = 1;
-                ang1 = acos(m);
-                if (y2 > y1)
-                    ang1 = M_PI * 2 - ang1;
-            }
-        m = (xx - x2) / b;
-        if (m - 1 > 0.00001)
-            m = 1;
-        ang2 = acos(m);//直线(x2-x1)-(xx,yy)斜率的弧度
-        if (y2 > yy)
-            ang2 = M_PI * 2 - ang2;
-        ang = ang2 - ang1;
-        if (ang < 0) ang = -ang;
-        if (ang > M_PI) ang = M_PI * 2 - ang;//交角的大小
-        //如果是对角则直接返回距离
-        if (ang > M_PI / 2)
-            return b;
-        else
-            return b * sin(ang);//如果是锐角，返回计算得到的距离
-    }
 }
 
 SnapView* BandView::createSnapView(const string &imageName, const Vec2 &position) {
