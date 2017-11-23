@@ -25,6 +25,7 @@
 #include "SimpleAudioEngine.h"
 #include "LoadDialog.h"
 #include "ElectronicBoardsLayer.h"
+#include "CommonTest.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -35,7 +36,7 @@ using namespace spine;
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -67,7 +68,7 @@ bool MainLayer::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 10; i++) {
+    for(int i = 0; i < 11; i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(150, 54));
@@ -176,6 +177,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 9: {
                 ElectronicBoardsLayer* boardsLayer = ElectronicBoardsLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(boardsLayer);
+                break;
+            }
+            case 10: {
+                CommonTest* commonTest = CommonTest::create();
+                getMainScene()->getRootLayer()->controller->pushView(commonTest);
                 break;
             }
                 
