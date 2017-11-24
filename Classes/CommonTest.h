@@ -23,7 +23,7 @@ public:
     CREATE_FUNC(CommonTest);
     
 private:
-    
+
 };
 
 #endif /* CommonTest_h */

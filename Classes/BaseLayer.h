@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "ui/UIButton.h"
+#include "ui/CocosGUI.h"
 
 class HelloWorld;
 

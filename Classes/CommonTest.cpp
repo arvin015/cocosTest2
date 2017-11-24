@@ -7,6 +7,7 @@
 
 #include "CommonTest.h"
 #include "UINumberAddSubtract.h"
+#include "UINumberSelector.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -48,6 +49,27 @@ bool CommonTest::init() {
     addSubtract->setTextColor(Color4B::RED);
     addSubtract->setTextBorderColor(Color4F::BLUE);
     this->addChild(addSubtract);
+
+    NumberSelector* numberSelector = NumberSelector::create();
+    numberSelector->setContentSize(Size(80, 130));
+    numberSelector->setPosition(Vec2(400, 200));
+    numberSelector->setValues(valueList);
+    numberSelector->setBgColor(Color3B::GRAY);
+    numberSelector->setBgOpacity(125);
+    numberSelector->setSelectItem(5);
+    numberSelector->setOnSelectCallback([this](int index, string result){
+        log("当前选中了 %s", result.c_str());
+    });
+    this->addChild(numberSelector);
+
+    Layout* showLayout = Layout::create();
+    showLayout->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    showLayout->setContentSize(Size(numberSelector->getContentSize().width, numberSelector->getContentSize().height / 5 + 10));
+    showLayout->setBackGroundColor(Color3B::GRAY);
+    showLayout->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
+    showLayout->setBackGroundColorOpacity(100);
+    showLayout->setPosition(Vec2(numberSelector->getContentSize() / 2));
+    numberSelector->addChild(showLayout);
 
     return true;
 }
