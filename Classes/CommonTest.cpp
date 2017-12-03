@@ -8,6 +8,7 @@
 #include "CommonTest.h"
 #include "UINumberAddSubtract.h"
 #include "UINumberSelector.h"
+#include "UICircleNode.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -70,6 +71,29 @@ bool CommonTest::init() {
     showLayout->setBackGroundColorOpacity(100);
     showLayout->setPosition(Vec2(numberSelector->getContentSize() / 2));
     numberSelector->addChild(showLayout);
+
+    CircleNode* circleNode = CircleNode::create();
+    circleNode->setContentSize(Size(180, 180));
+    circleNode->setPosition(Vec2(400, 400));
+    circleNode->setValue(6, 2, "circle_image.png");
+    this->addChild(circleNode);
+
+    Button* randBtn = Button::create();
+    randBtn->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    randBtn->setPosition(Vec2(circleNode->getContentSize().width + 10, 0));
+    randBtn->setTitleColor(Color3B::BLACK);
+    randBtn->setTitleText("随机");
+    randBtn->setTitleFontSize(24);
+    randBtn->addClickEventListener([this, circleNode](Ref* pSender){
+        int divideNum, resultNum;
+        do {
+            divideNum = rand() % 10 + 1;
+            resultNum = rand() % 9 + 1;
+        } while (divideNum <= resultNum);
+
+        circleNode->setValue(divideNum, resultNum, "circle_image.png");
+    });
+    circleNode->addChild(randBtn);
 
     return true;
 }
