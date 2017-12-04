@@ -26,7 +26,28 @@ public:
     /**
      * 设置值
      */
-    void setValue(int divideNum, int resultNum, const std::string &circleImage);
+    void setValue(int divideNum, int resultNum);
+
+    /**
+     * 设置边框颜色
+     */
+    void setBorderColor(const cocos2d::Color4F &borderColor) {
+        this->borderColor = borderColor;
+    }
+
+    /**
+     * 设置分割线颜色
+     */
+    void setDivideLineColor(const cocos2d::Color3B &divideLineColor) {
+        this->divideLineColor = divideLineColor;
+    }
+
+    /**
+     * 设置结果块颜色
+     */
+    void setResultColor(const cocos2d::Color4F &resultColor) {
+        this->resultColor = resultColor;
+    }
 
 private:
 
@@ -45,37 +66,19 @@ private:
      */
     void getPolyPoints(std::vector<cocos2d::Vec2> &pointList);
 
-    /**
-     * 集合转数组
-     */
-    void vectorToArray(const std::vector<cocos2d::Vec2> &pointList, cocos2d::Vec2* points);
-
-    /**
-     * 已知角求斜率
-     */
-    float getSlope(float angle);
-
-    /**
-     * 求相交点
-     */
-    void getCrossPoint(float slope, const cocos2d::Vec2 &point, float x, float &y);
-
-    /**
-     * 求相交点
-     */
-    void getCrossPoint1(float slope, const cocos2d::Vec2 &point, float &x, float y);
-
 private:
+
+    cocos2d::DrawNode* borderNode; //圆边框
+    cocos2d::Node* contentNode;
 
     int divideNum;
     int resultNum;
-    std::string circleImage;
 
     std::vector<cocos2d::Vec2> peakList; //顶点集合
     float perAngle; //每份角度
     float resultAngle; //结果角度
-
-    cocos2d::Node* contentNode;
+    cocos2d::Color3B divideLineColor; //分割块颜色
+    cocos2d::Color4F borderColor, resultColor; //边框颜色、结果块颜色
 };
 
 

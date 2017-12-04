@@ -8,8 +8,32 @@ USING_NS_CC;
 using namespace ui;
 using namespace std;
 
+//集合转数组
+template <class T>
+void vectorToArray(const vector<T> &pointList, T* points) {
+    for (int i = 0; i < pointList.size(); i++) {
+        points[i] = pointList.at(i);
+    }
+}
+
+inline float getSlope(float angle) {
+    return tan(angle * 3.14 / 180);
+}
+
+inline void getCrossPointX(float slope, const Vec2 &point, float &x, float y) {
+    x = (y - point.y) * 1.0 / slope + point.x;
+}
+
+inline void getCrossPointY(float slope, const Vec2 &point, float x, float &y) {
+    y = slope * (x - point.x) + point.y;
+}
+
 CircleNode::CircleNode()
-: contentNode(nullptr) {
+: contentNode(nullptr)
+, borderNode(nullptr)
+, borderColor(Color4F(67.0 / 255, 114.0 / 255, 156.0 / 255, 1))
+, divideLineColor(Color3B(131.0, 179.0, 223.0))
+, resultColor(Color4F::YELLOW){
 
 }
 
@@ -41,10 +65,10 @@ void CircleNode::onEnter() {
     //绘制主要内容
     onDraw();
 
-    //创建圆圈
-    ImageView* circleImageView = ImageView::create(circleImage);
-    circleImageView->setPosition(getContentSize() / 2);
-    this->addChild(circleImageView);
+    //绘制圆圈
+    borderNode = DrawNode::create(6);
+    borderNode->drawCircle(getContentSize() / 2, getContentSize().width / 2, 4, 120, false, borderColor);
+    this->addChild(borderNode);
 }
 
 void CircleNode::onExit() {
@@ -58,15 +82,12 @@ bool CircleNode::init() {
     return true;
 }
 
-void CircleNode::setValue(int divideNum, int resultNum, const string &circleImage) {
+void CircleNode::setValue(int divideNum, int resultNum) {
     this->divideNum = divideNum;
     this->resultNum = resultNum;
-    this->circleImage = circleImage;
 
     this->perAngle = 360.0 / divideNum;
     resultAngle = resultNum * perAngle;
-
-    log("------------ divideNum = %d, resultNum = %d, resultAngle = %f", divideNum, resultNum, resultAngle);
 
     if (contentNode) {
         onDraw();
@@ -98,13 +119,13 @@ void CircleNode::onDraw() {
     //绘制结果份数
     vector<Vec2> pointList;
     getPolyPoints(pointList);
-    Vec2* points = new Vec2;
+    Vec2* points = new Vec2[pointList.size()];
     vectorToArray(pointList, points);
     DrawNode* resultDraw = DrawNode::create();
     resultDraw->setContentSize(getContentSize());
-    resultDraw->drawSolidPoly(points, pointList.size(), Color4F::RED);
+    resultDraw->drawSolidPoly(points, (int)pointList.size(), resultColor);
     contentNode->addChild(resultDraw);
-//    delete points;
+    delete [] points;
 
     //创建内容分割线
     float angle = 0; //旋转角度
@@ -114,7 +135,7 @@ void CircleNode::onDraw() {
         lineLayout->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
         lineLayout->setPosition(getContentSize() / 2);
         lineLayout->setRotation(angle);
-        lineLayout->setBackGroundColor(Color3B::BLACK);
+        lineLayout->setBackGroundColor(divideLineColor);
         lineLayout->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         contentNode->addChild(lineLayout);
 
@@ -137,11 +158,9 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
     }
     Vec2 p = peakList[0];
 
-    log("---------------- ang = %f, k = %f", ang, k);
-
     if (resultAngle < 45) {
         y = height;
-        getCrossPoint(k, p, x, y);
+        getCrossPointX(k, p, x, y);
         pointList.push_back(Vec2(x, y));
     } else if (resultAngle == 45) {
         pointList.push_back(peakList[2]);
@@ -149,11 +168,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[2]);
 
         x = width;
-        getCrossPoint(k, p, x, y);
+        getCrossPointY(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------45-90 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 90) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[3]);
@@ -161,11 +177,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[2]);
 
         x = width;
-        getCrossPoint(k, p, x, y);
+        getCrossPointY(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------90-135 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 135) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[4]);
@@ -174,11 +187,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[4]);
 
         y = 0;
-        getCrossPoint1(k, p, x, y);
+        getCrossPointX(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------135-180 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 180) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[4]);
@@ -188,11 +198,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[4]);
 
         y = 0;
-        getCrossPoint1(k, p, x, y);
+        getCrossPointX(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------180-225 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 225) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[4]);
@@ -203,11 +210,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[6]);
 
         x = 0;
-        getCrossPoint(k, p, x, y);
+        getCrossPointY(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------225-270 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 270) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[4]);
@@ -219,11 +223,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[6]);
 
         x = 0;
-        getCrossPoint(k, p, x, y);
+        getCrossPointY(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------270-315 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 315) {
         pointList.push_back(peakList[2]);
         pointList.push_back(peakList[4]);
@@ -236,11 +237,8 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[8]);
 
         y = height;
-        getCrossPoint1(k, p, x, y);
+        getCrossPointX(k, p, x, y);
         pointList.push_back(Vec2(x, y));
-
-        log("------------------315-360 x = %f, y = %f", x, y);
-
     } else if (resultAngle == 360) {
         pointList.clear();
         pointList.push_back(peakList[2]);
@@ -248,24 +246,4 @@ void CircleNode::getPolyPoints(vector<Vec2> &pointList) {
         pointList.push_back(peakList[6]);
         pointList.push_back(peakList[8]);
     }
-}
-
-void CircleNode::vectorToArray(const vector<Vec2> &pointList, Vec2* points) {
-    for (int i = 0; i < pointList.size(); i++) {
-        points[i] = pointList.at(i);
-    }
-}
-
-float CircleNode::getSlope(float angle) {
-    return tan(angle * 3.14 / 180);
-}
-
-void CircleNode::getCrossPoint(float slope, const Vec2 &point, float x, float &y) {
-     log("slope = %f, x = %f", slope, x);
-     y = slope * (x - point.x) + point.y;
-}
-
-void CircleNode::getCrossPoint1(float slope, const Vec2 &point, float &x, float y) {
-    log("slope = %f, y = %f", slope, y);
-    x = (y - point.y) * 1.0 / slope + point.x;
 }

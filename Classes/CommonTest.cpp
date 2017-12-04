@@ -9,6 +9,7 @@
 #include "UINumberAddSubtract.h"
 #include "UINumberSelector.h"
 #include "UICircleNode.h"
+#include "UISquareNode.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -75,7 +76,8 @@ bool CommonTest::init() {
     CircleNode* circleNode = CircleNode::create();
     circleNode->setContentSize(Size(180, 180));
     circleNode->setPosition(Vec2(400, 400));
-    circleNode->setValue(6, 2, "circle_image.png");
+    circleNode->setValue(6, 2);
+    circleNode->setResultColor(Color4F::YELLOW);
     this->addChild(circleNode);
 
     Button* randBtn = Button::create();
@@ -91,9 +93,32 @@ bool CommonTest::init() {
             resultNum = rand() % 9 + 1;
         } while (divideNum <= resultNum);
 
-        circleNode->setValue(divideNum, resultNum, "circle_image.png");
+        circleNode->setValue(divideNum, resultNum);
     });
     circleNode->addChild(randBtn);
+
+    SquareNode* squareNode = SquareNode::create();
+    squareNode->setContentSize(Size(180, 80));
+    squareNode->setPosition(Vec2(700, 400));
+    squareNode->setValue(6, 2);
+    this->addChild(squareNode);
+
+    Button* randBtn1 = Button::create();
+    randBtn1->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    randBtn1->setPosition(Vec2(squareNode->getContentSize().width + 10, 0));
+    randBtn1->setTitleColor(Color3B::BLACK);
+    randBtn1->setTitleText("随机");
+    randBtn1->setTitleFontSize(24);
+    randBtn1->addClickEventListener([this, squareNode](Ref* pSender){
+        int divideNum, resultNum;
+        do {
+            divideNum = rand() % 10 + 1;
+            resultNum = rand() % 9 + 1;
+        } while (divideNum <= resultNum);
+
+        squareNode->setValue(divideNum, resultNum);
+    });
+    squareNode->addChild(randBtn1);
 
     return true;
 }
