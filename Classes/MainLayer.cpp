@@ -26,6 +26,7 @@
 #include "LoadDialog.h"
 #include "ElectronicBoardsLayer.h"
 #include "CommonTest.h"
+#include "AddAndSubtractLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -33,10 +34,15 @@ using namespace std;
 using namespace CocosDenshion;
 using namespace spine;
 
+template <class T>
+int getArrLen(T &array) {
+    return (sizeof(array) / sizeof(array[0]));
+}
+
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -68,7 +74,7 @@ bool MainLayer::init() {
     float startX = (V_WIDTH - column * width - (column - 1) * paddingLeft) / 2;
     float startY = V_HEIGHT - 50;
     
-    for(int i = 0; i < 11; i++) {
+    for(int i = 0; i < getArrLen(names); i++) {
         Button* btn = Button::create("mian_button_01_125x54.png");
         btn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         btn->setContentSize(Size(150, 54));
@@ -182,6 +188,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 10: {
                 CommonTest* commonTest = CommonTest::create();
                 getMainScene()->getRootLayer()->controller->pushView(commonTest);
+                break;
+            }
+            case 11: {
+                AddAndSubtractLayer* addAndSubtractLayer = AddAndSubtractLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(addAndSubtractLayer);
                 break;
             }
                 
