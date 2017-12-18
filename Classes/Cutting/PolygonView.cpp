@@ -51,6 +51,7 @@ bool PolygonView::onTouchBegan(Touch* touch, Event* event) {
         if (checkIsInPolygon(touch->getLocation())) {
             isSelect = true;
             eventListener->setSwallowTouches(true);
+            bringToFront();
         }
     }
 
@@ -126,7 +127,7 @@ void PolygonView::onDrawPolygon() {
         points[i] = Vec2(pointList[i].x, pointList[i].y);
     }
 
-    polygonDrawNode->drawPolygon(points, (int)pointList.size(), Color4F::YELLOW, 2, Color4F::BLACK);
+    polygonDrawNode->drawPolygon(points, (int)pointList.size(), Color4F::YELLOW, 1, Color4F::BLACK);
     delete [] points;
 }
 
@@ -158,8 +159,7 @@ map<PolygonPoint, PolygonPoint> PolygonView::checkIntersectPoints(const Vec2 &p1
         PolygonPoint p;
         float x, y;
         if (segment.checkIsIntersect(p1.x, p1.y, p2.x, p2.y, p, x, y)) {
-            Vec2 v = convertToNodeSpace(Vec2(x, y));
-            PolygonPoint crossPoint = PolygonPoint(v.x, v.y);
+            PolygonPoint crossPoint = PolygonPoint(x, y); //保留分割点为世界坐标
             crossPoint.isBreakPoint = true;
             pointMap.insert(make_pair(p, crossPoint));
         }
@@ -176,7 +176,7 @@ void PolygonView::addCrossPoints(map<PolygonPoint, PolygonPoint> pointMap) {
         
         int index = -1;
         for (int i = 0; i < pointList.size(); i++) {
-            if (p == polygonDrawNode->convertToWorldSpace(pointList[i])) {
+            if (p == pointList[i]) {
                 index = i;
                 break;
             }
@@ -192,10 +192,13 @@ void PolygonView::addCrossPoints(map<PolygonPoint, PolygonPoint> pointMap) {
 
 void PolygonView::cutPolygon() {
 
+    //将除分割点外的点，转换成世界坐标
     for (PolygonPoint &point : pointList) {
-        Vec2 p = polygonDrawNode->convertToWorldSpace(point);
-        point.x = p.x;
-        point.y = p.y;
+        if (!point.isBreakPoint) {
+            Vec2 p = polygonDrawNode->convertToWorldSpace(point);
+            point.x = p.x;
+            point.y = p.y;
+        }
     }
 
     vector<PolygonPoint> pointList1;
@@ -228,6 +231,12 @@ void PolygonView::cutPolygon() {
     }
 
     removeFromParent();
+}
+
+void PolygonView::bringToFront() {
+    Vector<Node*> nodeList = getParent()->getChildren();
+    Node* node = nodeList.at(getParent()->getChildrenCount() - 1); //获取最上面的那个Node
+    this->getParent()->reorderChild(this, node->getLocalZOrder() + 1);
 }
 
 

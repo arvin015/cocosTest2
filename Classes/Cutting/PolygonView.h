@@ -96,6 +96,11 @@ private:
      */
     void cutPolygon();
 
+    /**
+     * 置顶
+     */
+    void bringToFront();
+
 private:
 
     cocos2d::EventListenerTouchOneByOne* eventListener;

@@ -28,9 +28,6 @@ bool PolygonSegment::checkIsIntersect(float x1, float y1, float x2, float y2, Po
     Point c = Point(x1, y1);
     Point d = Point(x2, y2);
 
-    prePoint.x = preP.x;
-    prePoint.y = preP.y;
-
     Point crossPoint;
 
     if (intersection(preP, nextP, c, d, crossPoint) == 1) {
