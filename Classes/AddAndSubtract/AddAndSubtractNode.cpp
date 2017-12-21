@@ -138,8 +138,8 @@ void AddAndSubtractNode::fromJson(const rapidjson::Value &json) {
         if (json["isDanced"].GetBool()) {
             LittleAnimTime = 0.001f;
             BigAnimTime = 0.001f;
-            DelayTimeLong = 0.001f;
-            DelayTimeShort = 0.001f;
+            DelayTimeLong = 0;
+            DelayTimeShort = 0;
             dance();
         }
     }

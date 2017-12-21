@@ -77,7 +77,17 @@ bool HelloWorld::init()
     
     rootLayer = RootLayer::create();
     this->addChild(rootLayer);
-    
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    auto eventKeyboard = EventListenerKeyboard::create();
+    eventKeyboard->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event){
+        if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
+            Director::getInstance()->end();
+        }
+    };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboard, this);
+#endif
+
     return true;
 }
 

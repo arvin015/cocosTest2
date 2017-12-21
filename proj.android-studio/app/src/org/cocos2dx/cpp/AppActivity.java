@@ -23,7 +23,19 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.cpp;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 public class AppActivity extends Cocos2dxActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        String test = JniHelper.test("hello");
+        Log.d("print", test);
+    }
 }
