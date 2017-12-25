@@ -216,6 +216,14 @@ DrawNode* AddAndSubtractNode::createArrow(const Size &contentSize, bool isAdd) {
     Vec2 control = Vec2(contentSize.width / 2, contentSize.height / 2);
     Vec2 destination = Vec2(contentSize.width, 0);
     drawNode->drawQuadBezier(origin, control, destination, 100, Color4F::BLUE);
+    int n = contentSize.width / lineNumbers->getBlockSize();
+    if (isAdd) {
+        drawNode->drawLine(destination, destination + Vec2(n == 1 ? -3 : -3 + 1.0 / n * 12 , n == 1 ? 6 : 6 - 1.0 / n * 6), Color4F::BLUE);
+        drawNode->drawLine(destination, destination + Vec2(-6, 2), Color4F::BLUE);
+    } else {
+        drawNode->drawLine(origin, Vec2(n == 1 ? 3 : 3 - 1.0 / n * 12 , n == 1 ? 6 : 6 + 1.0 / n * 6), Color4F::BLUE);
+        drawNode->drawLine(origin, Vec2(6, 2), Color4F::BLUE);
+    }
     return drawNode;
 }
 
