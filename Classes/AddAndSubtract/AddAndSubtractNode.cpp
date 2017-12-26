@@ -259,7 +259,7 @@ void AddAndSubtractNode::responseBlockClick(int num) {
             lineNumbers->isSelectBlock(resultNum);
             if (num == resultNum) { //弹回
                 catSprite->setPositionX(lineNumbers->getXByNum(catSprite->getTag()));
-                lineNumbers->setDrawCursorVisible(false); //隐藏光标
+                lineNumbers->setDrawCursorPosition(catSprite->getPositionX()); //光标移回初始数字
                 return;
             }
 
