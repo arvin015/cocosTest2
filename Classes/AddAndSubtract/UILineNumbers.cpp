@@ -116,10 +116,11 @@ void LineNumbers::setBlockColor(const Color3B &normalColor, const Color3B &selec
 
 void LineNumbers::setBlockSelected(bool isSelect, int num) {
     updateBlockColor(isSelect, num);
-    Button* btn = static_cast<Button*>(getChildByTag(num));
-    if (btn) {
-        btn->setColor(isSelect ? selectColor : normalColor);
-        lastSelectNumBtn = btn;
+    if (isSelect) {
+        Button* btn = static_cast<Button*>(getChildByTag(num));
+        if (btn) {
+            lastSelectNumBtn = btn;
+        }
     }
 }
 
@@ -166,6 +167,18 @@ void LineNumbers::setDrawCursorPosition(float x) {
     if (drawCursor) {
         drawCursor->setPositionX(rx);
     }
+}
+
+void LineNumbers::reset() {
+
+    setDrawCursorVisible(false);
+    setNumBtnEnabled(true);
+
+    for (int i = minValue; i < totalNum; i++) {
+        updateBlockColor(false, i);
+    }
+
+    lastSelectNumBtn = nullptr;
 }
 
 float LineNumbers::getXByNum(int num) {

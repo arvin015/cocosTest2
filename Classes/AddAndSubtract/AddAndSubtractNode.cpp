@@ -332,12 +332,8 @@ void AddAndSubtractNode::reset() {
 
     removeAllChildrenWithCleanup(true);
 
-    if (catSprite) {
-        catSprite = nullptr;
-    }
-    if (calText) {
-        calText = nullptr;
-    }
+    catSprite = nullptr;
+    calText = nullptr;
 
     beginNum = -1;
     resultNum = -1;

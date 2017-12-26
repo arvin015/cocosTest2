@@ -76,6 +76,11 @@ public:
     void setDrawCursorPosition(float x);
 
     /**
+     * 重置
+     */
+    void reset();
+
+    /**
      * 根据编号获取X坐标
      */
     float getXByNum(int num);
