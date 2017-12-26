@@ -75,6 +75,10 @@ bool CatSprite::onTouchBegan(Touch* touch, Event* event) {
     if (getBoundingBox().containsPoint(getParent()->convertToNodeSpace(touch->getLocation()))) {
         isSelect = true;
         eventListener->setSwallowTouches(true);
+
+        if (touchDownCallback) {
+            this->touchDownCallback(getParent()->convertToNodeSpace(touch->getLocation()).x);
+        }
     }
 
     return true;
@@ -86,6 +90,10 @@ void CatSprite::onTouchMoved(Touch* touch, Event* event) {
         if (x < 0) x = 1;
         if (x > getParent()->getContentSize().width) x = getParent()->getContentSize().width;
         setPositionX(x);
+
+        if (touchMoveCallback) {
+            this->touchMoveCallback(x);
+        }
     }
 }
 

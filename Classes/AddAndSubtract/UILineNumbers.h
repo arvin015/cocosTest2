@@ -66,6 +66,16 @@ public:
     }
 
     /**
+     * 设置光标显示隐藏
+     */
+    void setDrawCursorVisible(bool visible);
+
+    /**
+     * 设置光标的位置
+     */
+    void setDrawCursorPosition(float x);
+
+    /**
      * 根据编号获取X坐标
      */
     float getXByNum(int num);
@@ -90,6 +100,8 @@ private:
     cocos2d::Color3B selectColor;
     bool enabled; //数字块是否可点击
     float blockSize; //块大小
+
+    cocos2d::DrawNode* drawCursor; //绘制光标
 
     cocos2d::ui::Button* lastSelectNumBtn; //上一个被选中的数字按钮
 

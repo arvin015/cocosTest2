@@ -14,7 +14,9 @@
 class CatSprite : public cocos2d::Sprite {
     
 public:
-    
+
+    typedef std::function<void(float)> OnTouchDownCallback;
+    typedef std::function<void(float)> OnTouchMoveCallback;
     typedef std::function<void(float)> OnTouchUpCallback;
     
     CatSprite();
@@ -43,7 +45,21 @@ public:
     void playAnim(float toX);
 
     /**
-     * 设置Touch结束回调
+     * 设置TouchDown回调
+     */
+    void setOnTouchDownCallback(OnTouchDownCallback touchDownCallback) {
+        this->touchDownCallback = touchDownCallback;
+    }
+
+    /**
+     * 设置TouchMove回调
+     */
+    void setOnTouchMoveCallback(OnTouchMoveCallback touchMoveCallback) {
+        this->touchMoveCallback = touchMoveCallback;
+    }
+
+    /**
+     * 设置TouchUp回调
      */
     void setOnTouchUpCallback(OnTouchUpCallback touchUpCallback) {
         this->touchUpCallback = touchUpCallback;
@@ -62,6 +78,8 @@ private:
     bool isTouchEnabled; //是否可Touch
     bool isSelect; //是否选中
 
+    OnTouchDownCallback touchDownCallback;
+    OnTouchMoveCallback touchMoveCallback;
     OnTouchUpCallback touchUpCallback;
 };
 

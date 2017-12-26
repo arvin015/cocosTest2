@@ -15,7 +15,8 @@ LineNumbers::LineNumbers()
 : lastSelectNumBtn(nullptr)
 , normalColor(Color3B(153, 204, 255))
 , selectColor(Color3B(255, 204, 204))
-, enabled(true) {
+, enabled(true)
+, drawCursor(nullptr) {
 
 }
 
@@ -74,6 +75,20 @@ void LineNumbers::onEnter() {
     };
     frameDraw->drawPolygon(verts, 4, Color4F(0.0f, 0.0f, 0.0f, 0.0f), 1, Color4F::BLACK);
     this->addChild(frameDraw);
+
+    //绘制光标
+    drawCursor = DrawNode::create();
+    drawCursor->setContentSize(Size(blockSize, blockSize));
+    drawCursor->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    Vec2 ps[4] = {
+            Vec2::ZERO,
+            Vec2(0, drawCursor->getContentSize().height),
+            Vec2(drawCursor->getContentSize().width, drawCursor->getContentSize().height),
+            Vec2(drawCursor->getContentSize().width, 0)
+    };
+    drawCursor->drawSolidPoly(ps, 4, Color4F(255.0 / 255, 204.0 / 255, 204.0 / 255, 0.6f));
+    drawCursor->setVisible(false);
+    this->addChild(drawCursor);
 }
 
 void LineNumbers::onExit() {
@@ -137,6 +152,20 @@ bool LineNumbers::isSelectBlock(int &num) {
     num = lastSelectNumBtn->getTag();
 
     return true;
+}
+
+void LineNumbers::setDrawCursorVisible(bool visible) {
+    if (drawCursor) {
+        drawCursor->setVisible(visible);
+    }
+}
+
+void LineNumbers::setDrawCursorPosition(float x) {
+    int num = getNumByX(x);
+    float rx = getXByNum(num);
+    if (drawCursor) {
+        drawCursor->setPositionX(rx);
+    }
 }
 
 float LineNumbers::getXByNum(int num) {

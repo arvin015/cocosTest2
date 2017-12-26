@@ -47,7 +47,6 @@ private:
 
     AddAndSubtractNode* addAndSubtractNode;
     cocos2d::ui::Button* restoreBtn;
-    bool isDanced;
 };
 
 #endif /* AddAndSubtractLayer_h */

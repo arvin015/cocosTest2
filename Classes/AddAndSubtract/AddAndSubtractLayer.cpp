@@ -17,8 +17,7 @@ using namespace std;
 const string SaveFileName = "AddAndSubtract.txt";
 
 AddAndSubtractLayer::AddAndSubtractLayer()
-: addAndSubtractNode(nullptr)
-, isDanced(false) {
+: addAndSubtractNode(nullptr) {
 
 }
 
@@ -52,15 +51,8 @@ bool AddAndSubtractLayer::init() {
     danceBtn->setTitleFontSize(22);
     danceBtn->setTitleColor(Color3B::BLACK);
     danceBtn->addClickEventListener([this](Ref* pSender) {
-        if (isDanced) {
-            PacToast::makeText("該對象已舞動");
-            return;
-        }
         if (addAndSubtractNode->checkCanDance()) {
-            isDanced = true;
             addAndSubtractNode->dance();
-            restoreBtn->setVisible(false);
-
         }
     });
     this->addChild(danceBtn);
@@ -75,8 +67,6 @@ bool AddAndSubtractLayer::init() {
         rapidjson::Document doc;
         doc.Parse(result.c_str());
         fromJson(doc);
-
-        restoreBtn->setVisible(false);
     });
     this->addChild(restoreBtn);
 
@@ -93,7 +83,6 @@ void AddAndSubtractLayer::onBackHandle() {
 void AddAndSubtractLayer::fromJson(const rapidjson::Value &json) {
     
     if (!json.IsObject()) return;
-    isDanced = json.HasMember("isDanced") ? json["isDanced"].GetBool() : false;
 
     if (addAndSubtractNode) {
         addAndSubtractNode->fromJson(json);
@@ -102,8 +91,6 @@ void AddAndSubtractLayer::fromJson(const rapidjson::Value &json) {
 
 void AddAndSubtractLayer::toJson(rapidjson::Document &json) {
     json.SetObject();
-
-    json.AddMember("isDanced", isDanced, json.GetAllocator());
 
     if (addAndSubtractNode) {
         addAndSubtractNode->toJson(json);
