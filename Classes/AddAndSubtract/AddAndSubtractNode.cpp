@@ -255,9 +255,17 @@ void AddAndSubtractNode::responseBlockClick(int num) {
             int num = lineNumbers->getNumByX(x);
             float rx = lineNumbers->getXByNum(num);
 
-            int resultNum;
-            lineNumbers->isSelectBlock(resultNum);
-            if (num == resultNum) { //弹回
+            if (num == catSprite->getTag()) { //拖拽初始位置跟当前位置一致，仅隐藏光标
+                if (num == beginNum) { //拖拽初始位置就是起点位置，隐藏光标
+                    lineNumbers->setDrawCursorVisible(false);
+                }
+                catSprite->setPositionX(rx);
+                return;
+            }
+            
+            int lastNum;
+            lineNumbers->isSelectBlock(lastNum);
+            if (num == lastNum) { //拖拽位置与起点位置一致，弹回
                 catSprite->setPositionX(lineNumbers->getXByNum(catSprite->getTag()));
                 lineNumbers->setDrawCursorPosition(catSprite->getPositionX()); //光标移回初始数字
                 return;
@@ -265,6 +273,7 @@ void AddAndSubtractNode::responseBlockClick(int num) {
 
             catSprite->setPositionX(rx);
             catSprite->setTag(num);
+            lineNumbers->setDrawCursorPosition(catSprite->getPositionX());
         });
         this->addChild(catSprite);
     } else {
@@ -278,13 +287,15 @@ bool AddAndSubtractNode::isSetResult(int &num) {
         return false;
     }
 
-    num = catSprite->getTag();
+    int temp = catSprite->getTag();
 
     int resultNum;
     lineNumbers->isSelectBlock(resultNum);
-    if (num == resultNum) {
+    if (temp == resultNum) {
         return false;
     }
+
+    num = temp;
 
     return true;
 }
