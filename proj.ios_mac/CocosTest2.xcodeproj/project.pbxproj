@@ -83,6 +83,9 @@
 		A256973E1FE108F300AB1827 /* PolygonView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A256973C1FE108F300AB1827 /* PolygonView.cpp */; };
 		A25697441FE12BBE00AB1827 /* PolygonSegment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A25697421FE12BBE00AB1827 /* PolygonSegment.cpp */; };
 		A259F3211FB94EA600D773BB /* SnapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A259F31F1FB94EA600D773BB /* SnapView.cpp */; };
+		A275D2BB217872C400560D1A /* FoldPaperLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A275D2B9217872C400560D1A /* FoldPaperLayer.cpp */; };
+		A275D2BE2178748900560D1A /* Polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A275D2BC2178748900560D1A /* Polygon.cpp */; };
+		A275D2C12178771000560D1A /* PolygonView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A275D2BF2178771000560D1A /* PolygonView.cpp */; };
 		A2784E281FD51AB300D400EF /* UICircleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2784E251FD51AB300D400EF /* UICircleNode.cpp */; };
 		A2784E2A1FD51AF600D400EF /* circle_image.png in Resources */ = {isa = PBXBuildFile; fileRef = A2784E291FD51AF500D400EF /* circle_image.png */; };
 		A2784E341FD52E0600D400EF /* UISquareNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2784E321FD52E0600D400EF /* UISquareNode.cpp */; };
@@ -305,6 +308,12 @@
 		A25697431FE12BBE00AB1827 /* PolygonSegment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolygonSegment.h; sourceTree = "<group>"; };
 		A259F31F1FB94EA600D773BB /* SnapView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SnapView.cpp; sourceTree = "<group>"; };
 		A259F3201FB94EA600D773BB /* SnapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapView.h; sourceTree = "<group>"; };
+		A275D2B9217872C400560D1A /* FoldPaperLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FoldPaperLayer.cpp; sourceTree = "<group>"; };
+		A275D2BA217872C400560D1A /* FoldPaperLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FoldPaperLayer.h; sourceTree = "<group>"; };
+		A275D2BC2178748900560D1A /* Polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Polygon.cpp; sourceTree = "<group>"; };
+		A275D2BD2178748900560D1A /* Polygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polygon.h; sourceTree = "<group>"; };
+		A275D2BF2178771000560D1A /* PolygonView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PolygonView.cpp; sourceTree = "<group>"; };
+		A275D2C02178771000560D1A /* PolygonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolygonView.h; sourceTree = "<group>"; };
 		A2784E251FD51AB300D400EF /* UICircleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICircleNode.cpp; sourceTree = "<group>"; };
 		A2784E271FD51AB300D400EF /* UICircleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICircleNode.h; sourceTree = "<group>"; };
 		A2784E291FD51AF500D400EF /* circle_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_image.png; sourceTree = "<group>"; };
@@ -637,6 +646,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A275D2B72178725900560D1A /* FoldPaper */,
 				A25697371FE1081B00AB1827 /* Cutting */,
 				A279F40A1FD6520100D7C091 /* AddAndSubtract */,
 				A21C39901F9050A8009644E8 /* ElectronicBoards */,
@@ -748,6 +758,19 @@
 				A25697431FE12BBE00AB1827 /* PolygonSegment.h */,
 			);
 			path = Cutting;
+			sourceTree = "<group>";
+		};
+		A275D2B72178725900560D1A /* FoldPaper */ = {
+			isa = PBXGroup;
+			children = (
+				A275D2B9217872C400560D1A /* FoldPaperLayer.cpp */,
+				A275D2BA217872C400560D1A /* FoldPaperLayer.h */,
+				A275D2BC2178748900560D1A /* Polygon.cpp */,
+				A275D2BD2178748900560D1A /* Polygon.h */,
+				A275D2BF2178771000560D1A /* PolygonView.cpp */,
+				A275D2C02178771000560D1A /* PolygonView.h */,
+			);
+			path = FoldPaper;
 			sourceTree = "<group>";
 		};
 		A279F40A1FD6520100D7C091 /* AddAndSubtract */ = {
@@ -1110,15 +1133,18 @@
 				A28F63121F53C3BD008ADA49 /* BaseLayer.cpp in Sources */,
 				A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */,
 				A24E602D1FC576BD001912E7 /* UINumberAddSubtract.cpp in Sources */,
+				A275D2BE2178748900560D1A /* Polygon.cpp in Sources */,
 				A279F4111FD6520200D7C091 /* UILineNumbers.cpp in Sources */,
 				A21C399D1F905852009644E8 /* BandView.cpp in Sources */,
 				A2784E341FD52E0600D400EF /* UISquareNode.cpp in Sources */,
 				A297C6861F579ED700F4BAAD /* FlyView.cpp in Sources */,
 				A297C6821F579AEF00F4BAAD /* NumberInTenFlyLayer.cpp in Sources */,
+				A275D2C12178771000560D1A /* PolygonView.cpp in Sources */,
 				A259F3211FB94EA600D773BB /* SnapView.cpp in Sources */,
 				A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */,
 				A2B85BE81F46D3920049DEED /* UIDatasetTableView.cpp in Sources */,
 				A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */,
+				A275D2BB217872C400560D1A /* FoldPaperLayer.cpp in Sources */,
 				A21C39961F9050A8009644E8 /* ElectronicBoardsLayer.cpp in Sources */,
 				A293B5991F4AE129009CF915 /* TableViewTest.cpp in Sources */,
 				A2784E281FD51AB300D400EF /* UICircleNode.cpp in Sources */,

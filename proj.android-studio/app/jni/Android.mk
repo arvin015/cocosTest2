@@ -38,6 +38,7 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTwent
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/ElectronicBoards/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/AddAndSubtract/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Cutting/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/FoldPaper/*.cpp)
 
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
@@ -52,6 +53,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/NumberInTen/NumberInTwentyFor
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/ElectronicBoards
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/AddAndSubtract
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Cutting
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/FoldPaper
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
