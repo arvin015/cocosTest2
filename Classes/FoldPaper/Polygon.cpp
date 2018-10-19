@@ -16,9 +16,10 @@ namespace FoldPaper {
 
     }
 
-    Polygon::Polygon(vector<Vec2> vertexList) {
+    Polygon::Polygon(vector<Vec2> vertexList, const Vec2 &centerPoint) {
         this->vertexList = vertexList;
-        productEdges();
+        this->centerPoint = centerPoint;
+        boundBox = getBoundBox();
     }
 
     Polygon::~Polygon() {
@@ -29,7 +30,7 @@ namespace FoldPaper {
         int intersect = 0;
         for (Edge edge : edgeList) {
             Vec2 crossPoint;
-            if (edge.checkIsIntersect(Vec2(0, point.y), point, crossPoint)) {
+            if (edge.checkIsIntersect(Vec2(-10, point.y), point, crossPoint)) {
                 intersect++;
             }
         }
@@ -39,6 +40,17 @@ namespace FoldPaper {
         } else {
             return false;
         }
+    }
+
+    void Polygon::changePointsToNode(Node* targetNode) {
+        vector<Vec2> list;
+        for (Vec2 vertex : vertexList) {
+            Vec2 p = targetNode->convertToNodeSpace(vertex);
+            list.push_back(p);
+        }
+        vertexList = list;
+        boundBox = getBoundBox();
+        productEdges();
     }
 
     void Polygon::productEdges() {
@@ -52,5 +64,29 @@ namespace FoldPaper {
                 edgeList.push_back(Edge(vertexList[i], vertexList[i + 1]));
             }
         }
+    }
+
+    Rect Polygon::getBoundBox() {
+        Rect rect;
+        float minX = vertexList[0].x, minY = vertexList[0].y;
+        float maxX = vertexList[0].x, maxY = vertexList[0].y;
+
+        for (int i = 1; i < vertexList.size(); i++) {
+            Vec2 vertex = vertexList[i];
+            if (vertex.x < minX) {
+                minX = vertex.x;
+            } else if (vertex.x > maxX) {
+                maxX = vertex.x;
+            }
+            if (vertex.y < minY) {
+                minY = vertex.y;
+            } else if (vertex.y > maxY) {
+                maxY = vertex.y;
+            }
+        }
+
+        rect.setRect(minX, minY, maxX - minX, maxY - minY);
+
+        return rect;
     }
 }

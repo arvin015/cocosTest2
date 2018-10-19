@@ -41,8 +41,8 @@ namespace FoldPaper {
          * @param intersect
          * @return
          */
-        bool checkIsIntersect(const Point &p1, const Point &p2, Point &intersect) {
-            if (intersection(prePoint, nextPoint, p1, p2, intersect) == 1) {
+        bool checkIsIntersect(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, cocos2d::Vec2 &intersect) {
+            if (intersection(prePoint, nextPoint, p1, p2, intersect) > 0) {
                 return true;
             }
             return false;
@@ -54,7 +54,7 @@ namespace FoldPaper {
     public:
         Polygon();
 
-        Polygon(std::vector<cocos2d::Vec2> vertexList);
+        Polygon(std::vector<cocos2d::Vec2> vertexList, const cocos2d::Vec2 &centerPoint);
 
         ~Polygon();
 
@@ -67,8 +67,21 @@ namespace FoldPaper {
          * 获取顶点个数
          */
         int getVertexNum() {
-            return vertexList.size();
+            return (int)vertexList.size();
         }
+        
+        /**
+         * 获取顶点坐标
+         */
+        cocos2d::Vec2 getVertexPos(int i) {
+            return vertexList.at(i);
+        }
+
+        /**
+         * 将世界坐标转成Node坐标
+         * @param targetNode
+         */
+        void changePointsToNode(cocos2d::Node* targetNode);
 
     private:
 
@@ -77,7 +90,15 @@ namespace FoldPaper {
          */
         void productEdges();
 
+        /**
+         * 获取多边形边框
+         * @return
+         */
+        Rect getBoundBox();
+
     public:
+        Rect boundBox; //边框
+        cocos2d::Vec2 centerPoint; //中心点
         std::vector<cocos2d::Vec2> vertexList; //点集合
         std::vector<Edge> edgeList; //边集合
     };

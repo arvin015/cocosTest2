@@ -28,6 +28,7 @@
 #include "CommonTest.h"
 #include "AddAndSubtractLayer.h"
 #include "CuttingLayer.h"
+#include "FoldPaperLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -43,7 +44,7 @@ int getArrLen(T &array) {
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract", "Cutting"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract", "Cutting", "FoldPaper"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -200,6 +201,10 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 CuttingLayer* cuttingLayer = CuttingLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(cuttingLayer);
                 break;
+            }
+            case 13: {
+                auto foldPaperLayer = FoldPaper::FoldPaperLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(foldPaperLayer);
             }
                 
             default:

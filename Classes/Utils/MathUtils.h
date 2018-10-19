@@ -14,6 +14,13 @@
 USING_NS_CC;
 using namespace std;
 
+#define PI 3.1415926
+
+//根据触摸点获取旋转角度
+inline float getDegreeByPoints(const Vec2 &touchPoint, const Vec2 &objPoint) {
+    return atan2(touchPoint.x - objPoint.x, touchPoint.y - objPoint.y) * 180 / PI;
+}
+
 //叉积
 inline double mult(Point a, Point b, Point c) {
     return (a.x-c.x)*(b.y-c.y)-(b.x-c.x)*(a.y-c.y);

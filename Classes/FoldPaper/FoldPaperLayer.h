@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "BaseLayer.h"
 
+class PolygonView;
+
 namespace FoldPaper {
     
     class FoldPaperLayer : public BaseLayer {
@@ -26,6 +28,9 @@ namespace FoldPaper {
         virtual bool init();
         
         CREATE_FUNC(FoldPaperLayer);
+
+    private:
+//        cocos2d::Vector<PolygonView*> polygonViewList;
     };
 }
 
