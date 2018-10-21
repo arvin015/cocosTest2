@@ -16,9 +16,14 @@ using namespace std;
 
 #define PI 3.1415926
 
-//根据触摸点获取旋转角度
-inline float getDegreeByPoints(const Vec2 &touchPoint, const Vec2 &objPoint) {
-    return atan2(touchPoint.x - objPoint.x, touchPoint.y - objPoint.y) * 180 / PI;
+//两点确定y = kx + b
+inline void getLineFormula(const Point &point1, const Point &point2, float &k, float &b) {
+    if (abs(point1.x - point2.x) < FLT_EPSILON) {
+        k = 10000.0;
+    } else {
+        k = (point2.y - point1.y) / (point2.x - point1.x);
+        b = point1.y - k * point1.x;
+    }
 }
 
 //叉积

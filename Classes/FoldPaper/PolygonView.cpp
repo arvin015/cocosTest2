@@ -23,7 +23,8 @@ namespace FoldPaper {
     fillColor(Color4F(76 / 255.0, 198 / 255.0, 198 / 255.0, 1)),
     isTouchEnabled(true),
     isSelected(false),
-    touchType(NONE) {
+    touchType(NONE),
+    touchEndCallback(nullptr) {
         
     }
 
@@ -140,13 +141,18 @@ namespace FoldPaper {
                 deltaAngle = -deltaAngle;
             
             float degree = CC_RADIANS_TO_DEGREES(deltaAngle);
-            polygonDrawNode->setRotation(polygonDrawNode->getRotation() - degree);
+            rotatePolygon(-degree);
         } else if (touchType == MOVE) { //平移
-            polygonDrawNode->setPosition(polygonDrawNode->getPosition() + touch->getDelta());
+            movePolygon(touch->getDelta());
         }
     }
     
     void PolygonView::onTouchEnded(Touch* touch, Event* event) {
+        if (touchType != NONE) { //检测吸附
+            if (touchEndCallback != nullptr) {
+                this->touchEndCallback();
+            }
+        }
         touchType = NONE;
         touchListener->setSwallowTouches(false);
     }
@@ -223,6 +229,18 @@ namespace FoldPaper {
         onDraw();
     }
 
+    void PolygonView::movePolygon(const Vec2 &deltaPos) {
+        if (polygonDrawNode != nullptr) {
+            polygonDrawNode->setPosition(polygonDrawNode->getPosition() + deltaPos);
+        }
+    }
+
+    void PolygonView::rotatePolygon(float deltaDegree) {
+        if (polygonDrawNode != nullptr) {
+            polygonDrawNode->setRotation(fmodf(polygonDrawNode->getRotation(), 360) + deltaDegree);
+        }
+    }
+
     void PolygonView::setPolygonSelectedState(bool isSelected) {
         this->isSelected = isSelected;
 
@@ -230,6 +248,14 @@ namespace FoldPaper {
         for (Sprite* rotateSprite : rotateSpriteList) {
             rotateSprite->setVisible(isSelected);
         }
+    }
+
+    Vec2 PolygonView::getPolygonViewWorldPoint(const Vec2 &nodePoint) {
+        return polygonDrawNode->convertToWorldSpace(nodePoint);
+    }
+
+    Vec2 PolygonView::getPolygonViewNodePoint(const Vec2 &worldPoint) {
+        return polygonDrawNode->convertToNodeSpace(worldPoint);
     }
     
     void PolygonView::bringToFront() {

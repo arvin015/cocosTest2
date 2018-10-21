@@ -11,10 +11,10 @@
 #include <stdio.h>
 #include "BaseLayer.h"
 
-class PolygonView;
-
 namespace FoldPaper {
-    
+
+    class PolygonView;
+
     class FoldPaperLayer : public BaseLayer {
         
     public:
@@ -23,14 +23,22 @@ namespace FoldPaper {
         ~FoldPaperLayer();
         
         virtual void onEnter();
-        virtual void onExit();
+        virtual void onExit();
         
         virtual bool init();
         
         CREATE_FUNC(FoldPaperLayer);
 
     private:
-//        cocos2d::Vector<PolygonView*> polygonViewList;
+
+        /**
+         * 检测吸附
+         */
+        void attachPolygons(PolygonView* polygonView);
+
+    private:
+        cocos2d::Vector<PolygonView*> polygonViewList;
+        int ids;
     };
 }
 

@@ -23,6 +23,9 @@ namespace FoldPaper {
     class PolygonView : public cocos2d::Node {
 
     public:
+
+        typedef std::function<void()> OnTouchEndCallback;
+
         PolygonView();
         ~PolygonView();
 
@@ -72,6 +75,33 @@ namespace FoldPaper {
          */
         void setPolygonSelectedState(bool isSelected);
 
+        /**
+         * 平移多边形，实际平移PolygonDrawNode
+         */
+        void movePolygon(const cocos2d::Vec2 &deltaPos);
+
+        /**
+         * 旋转多边形，实际旋转PolygonDrawNode
+         */
+        void rotatePolygon(float deltaDegree);
+
+        /**
+         * 获取世界坐标
+         */
+        cocos2d::Vec2 getPolygonViewWorldPoint(const cocos2d::Vec2 &nodePoint);
+
+        /**
+         * 获取多边形内坐标
+         */
+        cocos2d::Vec2 getPolygonViewNodePoint(const cocos2d::Vec2 &worldPoint);
+
+        /**
+         * 设置TouchEnd回调
+         */
+        void setOnTouchEndCallback(OnTouchEndCallback touchEndCallback) {
+            this->touchEndCallback = touchEndCallback;
+        }
+
     private:
 
         bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
@@ -94,12 +124,17 @@ namespace FoldPaper {
          * 置顶
          */
         void bringToFront();
-        
-    private:
-        cocos2d::EventListenerTouchOneByOne* touchListener;
-        
+
+    public:
+
         cocos2d::DrawNode* polygonDrawNode;
         Polygon polygon;
+
+    private:
+        cocos2d::EventListenerTouchOneByOne* touchListener;
+
+        OnTouchEndCallback touchEndCallback;
+
         cocos2d::Vector<cocos2d::Sprite*> rotateSpriteList; //顶点旋转Sprite
         cocos2d::Color4F fillColor; //多边形填充色
 
