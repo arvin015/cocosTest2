@@ -13,6 +13,11 @@
 
 namespace FoldPaper {
 
+    enum PolygonType {
+        SQUARE,
+        POLYGON
+    };
+
     class PolygonView;
 
     class FoldPaperLayer : public BaseLayer {
@@ -32,12 +37,37 @@ namespace FoldPaper {
     private:
 
         /**
+         * 创建多边形
+         * @param polygonType
+         * @param centerPoint
+         * @param edge
+         * @param width
+         * @param height
+         */
+        void createPolygonView(PolygonType polygonType, const cocos2d::Vec2 &centerPoint, int edge, float width, float height);
+
+        /**
          * 检测吸附
          */
         void attachPolygons(PolygonView* polygonView);
 
+        /**
+         * 检测是否可折叠
+         */
+        bool checkCanFold();
+
+        /**
+         * 获取最大的order
+         * @return
+         */
+        int getMaxOrder();
+
     private:
+        cocos2d::EventListenerTouchOneByOne* touchListener;
         cocos2d::Vector<PolygonView*> polygonViewList;
+        cocos2d::Node* doContainerNode;
+        PolygonView* selectedPolygonView; //当前选中的多边形
+        cocos2d::ui::CheckBox* foldBtn;
         int ids;
     };
 }

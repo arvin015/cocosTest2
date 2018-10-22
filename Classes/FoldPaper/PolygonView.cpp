@@ -23,8 +23,10 @@ namespace FoldPaper {
     fillColor(Color4F(76 / 255.0, 198 / 255.0, 198 / 255.0, 1)),
     isTouchEnabled(true),
     isSelected(false),
+    isMove(false),
     touchType(NONE),
-    touchEndCallback(nullptr) {
+    touchEndCallback(nullptr),
+    parentPolygonView(nullptr) {
         
     }
 
@@ -89,6 +91,8 @@ namespace FoldPaper {
 
             rotateDegree += perDegree;
         }
+
+        setPolygonSelectedState(true);
     }
     
     bool PolygonView::onTouchBegan(Touch* touch, Event* event) {
@@ -124,6 +128,9 @@ namespace FoldPaper {
     }
     
     void PolygonView::onTouchMoved(Touch* touch, Event* event) {
+
+        isMove = true;
+
         if (touchType == RORATE) { //旋转
             Vec2 prePoint = touch->getPreviousLocation();
             Vec2 location = touch->getLocation();
@@ -148,11 +155,12 @@ namespace FoldPaper {
     }
     
     void PolygonView::onTouchEnded(Touch* touch, Event* event) {
-        if (touchType != NONE) { //检测吸附
+        if (touchType != NONE && isMove) { //检测吸附
             if (touchEndCallback != nullptr) {
                 this->touchEndCallback();
             }
         }
+        isMove = false;
         touchType = NONE;
         touchListener->setSwallowTouches(false);
     }
@@ -248,6 +256,12 @@ namespace FoldPaper {
         for (Sprite* rotateSprite : rotateSpriteList) {
             rotateSprite->setVisible(isSelected);
         }
+
+        if (isSelected) {
+            if (selectCallback != nullptr) {
+                this->selectCallback();
+            }
+        }
     }
 
     Vec2 PolygonView::getPolygonViewWorldPoint(const Vec2 &nodePoint) {
@@ -256,6 +270,36 @@ namespace FoldPaper {
 
     Vec2 PolygonView::getPolygonViewNodePoint(const Vec2 &worldPoint) {
         return polygonDrawNode->convertToNodeSpace(worldPoint);
+    }
+
+    void PolygonView::setParentPolygonView(PolygonView* polygonView) {
+        this->parentPolygonView = polygonView;
+    }
+
+    void PolygonView::addChildPolygonView(PolygonView* polygonView) {
+        if (isExistChildPolygonView(polygonView)) {
+            removeChildPolygonView(polygonView);
+        }
+        childPolygonViewList.pushBack(polygonView);
+    }
+
+    void PolygonView::removeChildPolygonView(PolygonView* polygonView) {
+        if (isExistChildPolygonView(polygonView)) {
+            childPolygonViewList.eraseObject(polygonView);
+        }
+    }
+
+    void PolygonView::removeAllChildPolygonView() {
+        childPolygonViewList.clear();
+    }
+
+    bool PolygonView::isExistChildPolygonView(PolygonView* polygonView) {
+        for (PolygonView* view : childPolygonViewList) {
+            if (view->getTag() == polygonView->getTag()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     void PolygonView::bringToFront() {

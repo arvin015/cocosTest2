@@ -24,6 +24,7 @@ namespace FoldPaper {
 
     public:
 
+        typedef std::function<void()> OnSelectCallback;
         typedef std::function<void()> OnTouchEndCallback;
 
         PolygonView();
@@ -96,11 +97,54 @@ namespace FoldPaper {
         cocos2d::Vec2 getPolygonViewNodePoint(const cocos2d::Vec2 &worldPoint);
 
         /**
+         * 设置父多边形
+         * @param polygonView
+         */
+        void setParentPolygonView(PolygonView* polygonView);
+
+        /**
+         * 加入子多边形
+         * @param polygonView
+         */
+        void addChildPolygonView(PolygonView* polygonView);
+
+        /**
+         * 清除指定子多边形
+         * @param polygonView
+         */
+        void removeChildPolygonView(PolygonView* polygonView);
+
+        /**
+         * 清除所有的子多边形
+         */
+        void removeAllChildPolygonView();
+
+        /**
+         * 是否存在指定的子多边形
+         * @param polygonView
+         * @return
+         */
+        bool isExistChildPolygonView(PolygonView* polygonView);
+
+        /**
+         * 设置选中回调
+         * @param selectCallback
+         */
+        void setOnSelectCallback(OnSelectCallback selectCallback) {
+            this->selectCallback = selectCallback;
+        }
+
+        /**
          * 设置TouchEnd回调
          */
         void setOnTouchEndCallback(OnTouchEndCallback touchEndCallback) {
             this->touchEndCallback = touchEndCallback;
         }
+
+        /**
+         * 置顶
+         */
+        void bringToFront();
 
     private:
 
@@ -120,19 +164,18 @@ namespace FoldPaper {
          */
         void onDraw();
 
-        /**
-         * 置顶
-         */
-        void bringToFront();
-
     public:
 
         cocos2d::DrawNode* polygonDrawNode;
         Polygon polygon;
 
+        PolygonView* parentPolygonView;
+        cocos2d::Vector<PolygonView*> childPolygonViewList;
+
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
 
+        OnSelectCallback selectCallback;
         OnTouchEndCallback touchEndCallback;
 
         cocos2d::Vector<cocos2d::Sprite*> rotateSpriteList; //顶点旋转Sprite
@@ -140,6 +183,7 @@ namespace FoldPaper {
 
         bool isTouchEnabled;
         bool isSelected; //多边形是否选中
+        bool isMove; //是否移动了
         TouchType touchType; //Touch操作类型
     };
 }

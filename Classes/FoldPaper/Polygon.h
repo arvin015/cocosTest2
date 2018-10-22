@@ -14,8 +14,6 @@
 
 namespace FoldPaper {
 
-#define PI 3.14159
-
     class Edge : public cocos2d::Ref {
 
     public:
@@ -50,7 +48,7 @@ namespace FoldPaper {
          * 比较两条边是否相等
          */
         bool isEqual(const Edge &otherEdge) {
-            return abs(getLength() - otherEdge.getLength()) < FLT_EPSILON;;
+            return fabsf(getLength() - otherEdge.getLength()) < 0.5;
         }
 
         /**
@@ -73,7 +71,7 @@ namespace FoldPaper {
         inline static float crossDegree(const cocos2d::Vec2 &pA, const cocos2d::Vec2 &pB,
                                         const cocos2d::Vec2 &pC, const cocos2d::Vec2 &pD) {
 
-            if (abs(pA.x - pB.x) < FLT_EPSILON || abs(pC.x - pD.x) < FLT_EPSILON) {
+            if (fabsf(pA.x - pB.x) < FLT_EPSILON || fabsf(pC.x - pD.x) < FLT_EPSILON) {
                 float r = getDifferDegree(pA, pB, pC, pD);
                 return abs(r);
             }
@@ -87,14 +85,14 @@ namespace FoldPaper {
         }
 
         /**
-         * 计算两条边的相差角度
+         * 计算两条边的相差角度---最小角度
          */
         inline static float getDifferDegree(const cocos2d::Vec2 &referPA, const cocos2d::Vec2 &referPB,
                                         const cocos2d::Vec2 &pC, const cocos2d::Vec2 &pD) {
 
             float referDegree, degree;
 
-            if (abs(referPA.x - referPB.x) < FLT_EPSILON) {
+            if (fabsf(referPA.x - referPB.x) < FLT_EPSILON) {
                 referDegree = 90;
             } else {
                 float k1, b1;
@@ -103,7 +101,7 @@ namespace FoldPaper {
                 if (referDegree < 0) referDegree = 180 + referDegree;
             }
 
-            if (abs(pC.x - pD.x) < FLT_EPSILON) {
+            if (fabsf(pC.x - pD.x) < FLT_EPSILON) {
                 degree = 90;
             } else {
                 float k2, b2;
