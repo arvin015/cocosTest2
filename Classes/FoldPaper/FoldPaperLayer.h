@@ -57,7 +57,17 @@ namespace FoldPaper {
         bool checkCanFold();
 
         /**
-         * 获取树顶多边形---只有子多边形，没有父多边形
+         * 初始化图表
+         */
+        void initGraph();
+
+        /**
+         * 构建图表
+         */
+        void buildGraph();
+
+        /**
+         * 获取根多边形---相交多边形最多的
          * @return
          */
         PolygonView* getRootPolygonView();
@@ -78,8 +88,10 @@ namespace FoldPaper {
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
         cocos2d::Vector<PolygonView*> polygonViewList;
+        std::map<PolygonView*, cocos2d::Vector<PolygonView*>> graph;
         cocos2d::Node* doContainerNode;
         PolygonView* selectedPolygonView; //当前选中的多边形
+        PolygonView* rootPolygonView; //根多边形
         cocos2d::ui::CheckBox* foldBtn;
         int ids;
     };

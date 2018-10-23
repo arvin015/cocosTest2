@@ -87,37 +87,32 @@ namespace FoldPaper {
         void rotatePolygon(float deltaDegree);
 
         /**
-         * 获取世界坐标
+         * 检测两个多边形是否需要吸附
+         * @param otherPolygon
+         * @param minDistance
+         * @param needAttach
+         * @return
          */
-        cocos2d::Vec2 getPolygonViewWorldPoint(const cocos2d::Vec2 &nodePoint);
+        bool checkIsCloseEnough(PolygonView* otherPolygon, float minDistance, bool needAttach = false);
 
         /**
-         * 获取多边形内坐标
-         */
-        cocos2d::Vec2 getPolygonViewNodePoint(const cocos2d::Vec2 &worldPoint);
-
-        /**
-         * 设置父多边形
-         * @param polygonView
-         */
-        void setParentPolygonView(PolygonView* polygonView);
-
-        /**
-         * 加入子多边形
+         * 添加子多边形
          * @param polygonView
          */
         void addChildPolygonView(PolygonView* polygonView);
 
         /**
-         * 清除指定子多边形
+         * 设置父多边形
          * @param polygonView
          */
-        void removeChildPolygonView(PolygonView* polygonView);
+        void setParentPolygonView(PolygonView* polygonView) {
+            this->parentPolygonView = polygonView;
+        }
 
         /**
-         * 清除所有的子多边形
+         * 清除所有子多边形
          */
-        void removeAllChildPolygonView();
+        void removeAllChildPolygon();
 
         /**
          * 加入依赖
@@ -126,40 +121,19 @@ namespace FoldPaper {
         void attach(PolygonView* parent);
 
         /**
-         * 解除该多边形所有的依赖关系
+         * 解除依赖
          */
         void detach();
 
         /**
-         * 是否存在指定的子多边形
-         * @param polygonView
-         * @return
+         * 获取世界坐标
          */
-        bool isExistChildPolygonView(PolygonView* polygonView);
+        cocos2d::Vec2 getPolygonViewWorldPoint(const cocos2d::Vec2 &nodePoint);
 
         /**
-         * 是否是一个树顶多边形---没有父、只有子
-         * @return
+         * 获取多边形内坐标
          */
-        bool isRoot() {
-            return !isExistParent() && getChildNum() > 0;
-        }
-
-        /**
-         * 是否存在父多边形
-         * @return
-         */
-        bool isExistParent() {
-            return parentPolygonView != nullptr;
-        }
-
-        /**
-         * 子多边形数量
-         * @return
-         */
-        int getChildNum() {
-            return childPolygonViewList.size();
-        }
+        cocos2d::Vec2 getPolygonViewNodePoint(const cocos2d::Vec2 &worldPoint);
 
         /**
          * 设置选中回调

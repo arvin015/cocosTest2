@@ -15,7 +15,8 @@ using namespace std;
 namespace FoldPaper {
 
 #define PI 3.14
-#define R_SCALE 0.3
+#define R_SCALE 0.6
+#define MaxDegree 10
 
     PolygonView::PolygonView() :
     touchListener(nullptr),
@@ -80,11 +81,10 @@ namespace FoldPaper {
         float perDegree = 360.0 / polygon.getVertexNum();
         float rotateDegree = 180;
         for (int i = 0; i < polygon.getVertexNum(); i++) {
-            auto sprite = Sprite::create("icon_rotate.png");
+            auto sprite = Sprite::create("quadrangle_btn_line_rotate2.png");
             sprite->setPosition(polygon.getVertexPos(i));
             sprite->setScale(R_SCALE);
             sprite->setRotation(rotateDegree);
-            sprite->setColor(Color3B::BLACK);
             sprite->setVisible(false);
             polygonDrawNode->addChild(sprite);
             rotateSpriteList.pushBack(sprite);
@@ -249,6 +249,57 @@ namespace FoldPaper {
         }
     }
 
+    void PolygonView::addChildPolygonView(PolygonView* polygonView) {
+        childPolygonViewList.pushBack(polygonView);
+    }
+
+    void PolygonView::removeAllChildPolygon() {
+        childPolygonViewList.clear();
+    }
+
+    void PolygonView::attach(PolygonView* parent) {
+        setParentPolygonView(parent);
+        parent->addChildPolygonView(this);
+    }
+
+    void PolygonView::detach() {
+        setParentPolygonView(nullptr);
+        removeAllChildPolygon();
+    }
+
+    bool PolygonView::checkIsCloseEnough(PolygonView* otherPolygon, float minDistance, bool needAttach) {
+
+        for (Edge edge : polygon.edgeList) {
+            Vec2 preWorldPoint = getPolygonViewWorldPoint(edge.prePoint);
+            Vec2 nextWorldPoint = getPolygonViewWorldPoint(edge.nextPoint);
+            Vec2 midPoint = getPolygonViewWorldPoint(edge.getMidPoint());
+
+            for (Edge e : otherPolygon->polygon.edgeList) {
+                Vec2 point1 = otherPolygon->getPolygonViewWorldPoint(e.prePoint);
+                Vec2 point2 = otherPolygon->getPolygonViewWorldPoint(e.nextPoint);
+                Vec2 midPoint1 = otherPolygon->getPolygonViewWorldPoint(e.getMidPoint());
+
+                float midDistance = midPoint.distance(midPoint1);
+                float crossDegree = Edge::crossDegree(point1, point2, preWorldPoint, nextWorldPoint);
+
+                if (edge.isEqual(e) && midDistance < minDistance && crossDegree < MaxDegree) { //满足吸附条件
+                    if (needAttach) {
+                        //旋转至与参照多边形相同角度
+                        float differDegree = Edge::getDifferDegree(point1, point2, preWorldPoint, nextWorldPoint);
+                        rotatePolygon(differDegree);
+
+                        //平移至与参照多边形贴合
+                        Vec2 newMidPoint = getPolygonViewWorldPoint(edge.getMidPoint());
+                        movePolygon(Vec2(midPoint1.x - newMidPoint.x, midPoint1.y - newMidPoint.y));
+                    }
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     void PolygonView::setPolygonSelectedState(bool isSelected) {
         this->isSelected = isSelected;
 
@@ -270,54 +321,6 @@ namespace FoldPaper {
 
     Vec2 PolygonView::getPolygonViewNodePoint(const Vec2 &worldPoint) {
         return polygonDrawNode->convertToNodeSpace(worldPoint);
-    }
-
-    void PolygonView::setParentPolygonView(PolygonView* polygonView) {
-        this->parentPolygonView = polygonView;
-    }
-
-    void PolygonView::addChildPolygonView(PolygonView* polygonView) {
-        if (isExistChildPolygonView(polygonView)) {
-            removeChildPolygonView(polygonView);
-        }
-        childPolygonViewList.pushBack(polygonView);
-    }
-
-    void PolygonView::removeChildPolygonView(PolygonView* polygonView) {
-        if (isExistChildPolygonView(polygonView)) {
-            childPolygonViewList.eraseObject(polygonView);
-        }
-    }
-
-    void PolygonView::removeAllChildPolygonView() {
-        childPolygonViewList.clear();
-    }
-
-    void PolygonView::attach(PolygonView* parent) {
-        if (parent != nullptr) {
-            parent->addChildPolygonView(this);
-            parentPolygonView = parent;
-        }
-    }
-
-    void PolygonView::detach() {
-        if (isExistParent()) { //存在父，清除父
-            parentPolygonView->removeChildPolygonView(this); //父清它这个子
-            parentPolygonView = nullptr; //它这个子清父
-        }
-        for (PolygonView* child : childPolygonViewList) { //所有的子清除以它为父的父
-            child->setParentPolygonView(nullptr);
-        }
-        removeAllChildPolygonView();
-    }
-
-    bool PolygonView::isExistChildPolygonView(PolygonView* polygonView) {
-        for (PolygonView* view : childPolygonViewList) {
-            if (view->getTag() == polygonView->getTag()) {
-                return true;
-            }
-        }
-        return false;
     }
     
     void PolygonView::bringToFront() {

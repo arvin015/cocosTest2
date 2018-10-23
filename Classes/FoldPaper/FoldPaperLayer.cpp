@@ -15,9 +15,6 @@ using namespace std;
 
 namespace FoldPaper {
 
-#define RangeDegree 15
-#define RangeDistance 20
-
     const string types[] = {
             "三角形",
             "正方形",
@@ -38,6 +35,7 @@ namespace FoldPaper {
     FoldPaperLayer::FoldPaperLayer():
             ids(1),
             selectedPolygonView(nullptr),
+            rootPolygonView(nullptr),
             doContainerNode(nullptr),
             foldBtn(nullptr) {
 
@@ -85,6 +83,8 @@ namespace FoldPaper {
             polygon->setScale9Enabled(true);
             polygon->setTag(i);
             polygon->addClickEventListener([this](Ref* pSender) {
+
+                foldBtn->setVisible(false);
 
                 auto b = dynamic_cast<Button*>(pSender);
                 int tag = b->getTag();
@@ -166,80 +166,92 @@ namespace FoldPaper {
 
     void FoldPaperLayer::attachPolygons(PolygonView* polygonView) {
 
-        for (Edge edge : polygonView->polygon.edgeList) {
-
-            Vec2 preWorldPoint = polygonView->getPolygonViewWorldPoint(edge.prePoint);
-            Vec2 nextWorldPoint = polygonView->getPolygonViewWorldPoint(edge.nextPoint);
-            Vec2 midPoint = polygonView->getPolygonViewWorldPoint(edge.getMidPoint());
-
-            for (PolygonView* referPolygonView : polygonViewList) {
-                if (referPolygonView->getTag() != polygonView->getTag()) {
-
-                    for (Edge e : referPolygonView->polygon.edgeList) {
-                        Vec2 point1 = referPolygonView->getPolygonViewWorldPoint(e.prePoint);
-                        Vec2 point2 = referPolygonView->getPolygonViewWorldPoint(e.nextPoint);
-                        Vec2 midPoint1 = referPolygonView->getPolygonViewWorldPoint(e.getMidPoint());
-
-                        float midDistance = midPoint.distance(midPoint1);
-                        float crossDegree = Edge::crossDegree(point1, point2, preWorldPoint, nextWorldPoint);
-
-                        if (edge.isEqual(e) && midDistance < RangeDistance && crossDegree < RangeDegree) { //满足吸附条件
-
-                            //旋转至与参照多边形相同角度
-                            float differDegree = Edge::getDifferDegree(point1, point2, preWorldPoint, nextWorldPoint);
-                            polygonView->rotatePolygon(differDegree);
-
-                            //平移至与参照多边形贴合
-                            Vec2 newMidPoint = polygonView->getPolygonViewWorldPoint(edge.getMidPoint());
-                            polygonView->movePolygon(Vec2(midPoint1.x - newMidPoint.x, midPoint1.y - newMidPoint.y));
-
-                            //处理是否可折叠
-                            {
-                                //解除依赖
-                                polygonView->detach();
-                                //加入依赖
-                                polygonView->attach(referPolygonView);
-
-                                foldBtn->setVisible(checkCanFold());
-                            }
-                            return;
-                        }
-                    }
-                }
+        for (PolygonView* referPolygonView : polygonViewList) {
+            if (referPolygonView == polygonView) {
+                continue;
+            }
+            if (polygonView->checkIsCloseEnough(referPolygonView, 15.0f, true)) {
+                foldBtn->setVisible(checkCanFold());
+                return;
             }
         }
 
-        //未发生吸附---解除依赖
-        polygonView->detach();
+        //未发生吸附
         foldBtn->setVisible(false);
     }
 
     bool FoldPaperLayer::checkCanFold() {
-        PolygonView* root = getRootPolygonView();
-        if (root == nullptr) {
-            return false;
+        initGraph();
+        buildGraph();
+
+        if (rootPolygonView == nullptr) return false;
+
+        return getTreeNum(rootPolygonView) == polygonViewList.size();
+    }
+
+    void FoldPaperLayer::initGraph() {
+        graph.clear();
+        for (PolygonView* polygonView : polygonViewList) {
+            graph.insert(make_pair(polygonView, Vector<PolygonView*>()));
         }
 
-        int treeNum = getTreeNum(root);
+        for (int i = 0; i < polygonViewList.size(); i++) {
+            PolygonView* view = polygonViewList.at(i);
+            for (int j = 0; j < i + 1; j++) {
+                PolygonView* v = polygonViewList.at(j);
+                if (view->checkIsCloseEnough(v, 1.0f)) {
+                    graph[view].pushBack(v);
+                    graph[v].pushBack(view);
+                }
+            }
+        }
+    }
 
-        return treeNum == polygonViewList.size();
+    void FoldPaperLayer::buildGraph() {
+        rootPolygonView = getRootPolygonView();
+        if (rootPolygonView == nullptr) return;
+
+        map<PolygonView*, bool> visited;
+
+        visited[rootPolygonView] = true;
+
+        queue<PolygonView*> polygonQueue;
+        polygonQueue.push(rootPolygonView);
+
+        //清除所有多边形的依赖关系
+        for (PolygonView* v : polygonViewList) {
+            v->detach();
+        }
+
+        while (!polygonQueue.empty()) {
+
+            PolygonView* pv = polygonQueue.front();
+            polygonQueue.pop();
+
+            Vector<PolygonView*> childPolygonList = graph[pv];
+            for (PolygonView* p : childPolygonList) {
+                map<PolygonView*, bool>::iterator it = visited.find(p);
+                if (it == visited.end()) {
+                    p->attach(pv);
+                    visited.insert(make_pair(p, true));
+
+                    polygonQueue.push(p);
+                }
+            }
+        }
     }
 
     PolygonView* FoldPaperLayer::getRootPolygonView() {
-        int rootNum = 0;
-        PolygonView* rs = nullptr;
-        for (PolygonView* polygonView : polygonViewList) {
-            bool isRoot = polygonView->isRoot();
-            if (isRoot) {
-                rs = polygonView;
-                rootNum++;
+        PolygonView* polygonView = nullptr;
+        int maxCount = 0;
+        map<PolygonView*, Vector<PolygonView*>>::iterator it;
+        for (it = graph.begin(); it != graph.end(); it++) {
+            if (it->second.size() > maxCount) {
+                polygonView = it->first;
+                maxCount = it->second.size();
             }
         }
-        if (rootNum == 1) {
-            return rs;
-        } else {
-            return nullptr;
-        }
+        return polygonView;
     }
 
     int FoldPaperLayer::getTreeNum(PolygonView* rootPolygon) {
