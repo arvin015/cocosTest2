@@ -57,6 +57,19 @@ namespace FoldPaper {
         bool checkCanFold();
 
         /**
+         * 获取树顶多边形---只有子多边形，没有父多边形
+         * @return
+         */
+        PolygonView* getRootPolygonView();
+
+        /**
+         * 获取树长度
+         * @param rootPolygon
+         * @return
+         */
+        int getTreeNum(PolygonView* rootPolygon);
+
+        /**
          * 获取最大的order
          * @return
          */

@@ -99,7 +99,7 @@ namespace FoldPaper {
         if (!isTouchEnabled) {
             return false;
         }
-        
+
         Vec2 location = polygonDrawNode->convertToNodeSpace(touch->getLocation());
 
         //未选中多边形
@@ -291,6 +291,24 @@ namespace FoldPaper {
 
     void PolygonView::removeAllChildPolygonView() {
         childPolygonViewList.clear();
+    }
+
+    void PolygonView::attach(PolygonView* parent) {
+        if (parent != nullptr) {
+            parent->addChildPolygonView(this);
+            parentPolygonView = parent;
+        }
+    }
+
+    void PolygonView::detach() {
+        if (isExistParent()) { //存在父，清除父
+            parentPolygonView->removeChildPolygonView(this); //父清它这个子
+            parentPolygonView = nullptr; //它这个子清父
+        }
+        for (PolygonView* child : childPolygonViewList) { //所有的子清除以它为父的父
+            child->setParentPolygonView(nullptr);
+        }
+        removeAllChildPolygonView();
     }
 
     bool PolygonView::isExistChildPolygonView(PolygonView* polygonView) {

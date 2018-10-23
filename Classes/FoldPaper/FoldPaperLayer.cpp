@@ -194,13 +194,14 @@ namespace FoldPaper {
                             polygonView->movePolygon(Vec2(midPoint1.x - newMidPoint.x, midPoint1.y - newMidPoint.y));
 
                             //处理是否可折叠
-                            if (polygonView->parentPolygonView != nullptr) { //先让其之前的父多边形将其移除
-                                polygonView->parentPolygonView->removeChildPolygonView(polygonView);
-                            }
-                            polygonView->setParentPolygonView(referPolygonView);
-                            referPolygonView->addChildPolygonView(polygonView);
-                            foldBtn->setVisible(checkCanFold(polygonView));
+                            {
+                                //解除依赖
+                                polygonView->detach();
+                                //加入依赖
+                                polygonView->attach(referPolygonView);
 
+                                foldBtn->setVisible(checkCanFold());
+                            }
                             return;
                         }
                     }
@@ -208,25 +209,45 @@ namespace FoldPaper {
             }
         }
 
-        //未发生吸附---移除与该多边形相关的父多边形、子多边形
-        if (polygonView->parentPolygonView != nullptr) {
-            polygonView->parentPolygonView->removeChildPolygonView(polygonView);
-            polygonView->setParentPolygonView(nullptr);
-        }
-        polygonView->removeAllChildPolygonView();
+        //未发生吸附---解除依赖
+        polygonView->detach();
         foldBtn->setVisible(false);
     }
 
     bool FoldPaperLayer::checkCanFold() {
-
-        int count = 0;
-
-        for (PolygonView* view : polygonViewList) {
-            count += view->childPolygonViewList.size();
+        PolygonView* root = getRootPolygonView();
+        if (root == nullptr) {
+            return false;
         }
 
-        log("-----------count = %d, (int)polygonViewList.size() = %d", count, (int)polygonViewList.size());
-        return count == (int)polygonViewList.size() && (int)polygonViewList.size() > 1;
+        int treeNum = getTreeNum(root);
+
+        return treeNum == polygonViewList.size();
+    }
+
+    PolygonView* FoldPaperLayer::getRootPolygonView() {
+        int rootNum = 0;
+        PolygonView* rs = nullptr;
+        for (PolygonView* polygonView : polygonViewList) {
+            bool isRoot = polygonView->isRoot();
+            if (isRoot) {
+                rs = polygonView;
+                rootNum++;
+            }
+        }
+        if (rootNum == 1) {
+            return rs;
+        } else {
+            return nullptr;
+        }
+    }
+
+    int FoldPaperLayer::getTreeNum(PolygonView* rootPolygon) {
+        int count = 0;
+        for (PolygonView* child : rootPolygon->childPolygonViewList) {
+            count += getTreeNum(child);
+        }
+        return count + 1;
     }
 
     int FoldPaperLayer::getMaxOrder() {

@@ -120,11 +120,46 @@ namespace FoldPaper {
         void removeAllChildPolygonView();
 
         /**
+         * 加入依赖
+         * @param parent
+         */
+        void attach(PolygonView* parent);
+
+        /**
+         * 解除该多边形所有的依赖关系
+         */
+        void detach();
+
+        /**
          * 是否存在指定的子多边形
          * @param polygonView
          * @return
          */
         bool isExistChildPolygonView(PolygonView* polygonView);
+
+        /**
+         * 是否是一个树顶多边形---没有父、只有子
+         * @return
+         */
+        bool isRoot() {
+            return !isExistParent() && getChildNum() > 0;
+        }
+
+        /**
+         * 是否存在父多边形
+         * @return
+         */
+        bool isExistParent() {
+            return parentPolygonView != nullptr;
+        }
+
+        /**
+         * 子多边形数量
+         * @return
+         */
+        int getChildNum() {
+            return childPolygonViewList.size();
+        }
 
         /**
          * 设置选中回调
