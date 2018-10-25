@@ -116,6 +116,36 @@ namespace FoldPaper {
 
             return result;
         }
+
+        /**
+         * 两条边是否满足吸附
+         * @param edgePP1
+         * @param edgeNP1
+         * @param edgePP2
+         * @param edgeNP2
+         * @param minDegree
+         * @param minDis
+         * @return
+         */
+        inline static bool isCloseEnough(const cocos2d::Vec2 &edgePP1, const cocos2d::Vec2 &edgeNP1,
+                                         const cocos2d::Vec2 &edgePP2, const cocos2d::Vec2 &edgeNP2,
+                                         float minDegree, float minDis) {
+
+            Vec2 midPoint1 = edgePP1.getMidpoint(edgeNP1);
+            Vec2 midPoint2 = edgePP2.getMidpoint(edgeNP2);
+
+            float length1 = edgePP1.distance(edgeNP1);
+            float length2 = edgePP2.distance(edgeNP2);
+
+            float midDistance = midPoint1.distance(midPoint2);
+            float crossDegree = Edge::crossDegree(edgePP1, edgeNP1, edgePP2, edgeNP2);
+
+            if (fabsf(length1 - length2) < 0.5f && midDistance <= minDis && crossDegree <= minDegree) { //满足吸附条件
+                return true;
+            }
+
+            return false;
+        }
     };
 
     class Polygon : public cocos2d::Ref {

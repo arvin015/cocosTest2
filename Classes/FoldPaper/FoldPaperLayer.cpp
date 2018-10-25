@@ -49,10 +49,9 @@ namespace FoldPaper {
         BaseLayer::onEnter();
 
         touchListener = EventListenerTouchOneByOne::create();
-        touchListener->onTouchBegan = [this](Touch* touch, Event* event) {
-            selectedPolygonView = nullptr;
-            return false;
-        };
+        touchListener->onTouchBegan = CC_CALLBACK_2(FoldPaperLayer::onTouchBegan, this);
+        touchListener->onTouchMoved = CC_CALLBACK_2(FoldPaperLayer::onTouchMoved, this);
+        touchListener->onTouchEnded = CC_CALLBACK_2(FoldPaperLayer::onTouchEnded, this);
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
     }
 
@@ -78,7 +77,7 @@ namespace FoldPaper {
             polygon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
             polygon->setPosition(Vec2(20, 650 - i * 60));
             polygon->setTitleText(types[i]);
-            polygon->setTitleColor(Color3B::BLACK);
+            polygon->setTitleColor(Color3B::WHITE);
             polygon->setTitleFontSize(22);
             polygon->setScale9Enabled(true);
             polygon->setTag(i);
@@ -131,7 +130,37 @@ namespace FoldPaper {
         foldBtn->setVisible(false);
         addChild(foldBtn);
 
+        delBtn = Button::create("mian_button_01_125x54.png");
+        delBtn->setAnchorPoint(Vec2::ZERO);
+        delBtn->setPosition(Vec2(20, 20));
+        delBtn->setScale9Enabled(true);
+        delBtn->setTitleFontSize(22);
+        delBtn->setTitleText("删除");
+        delBtn->setTitleColor(Color3B::WHITE);
+        delBtn->addClickEventListener([this](Ref* pSender) {
+            if (selectedPolygonView != nullptr) {
+                selectedPolygonView->removeFromParent();
+                polygonViewList.eraseObject(selectedPolygonView);
+                selectedPolygonView = nullptr;
+
+                foldBtn->setVisible(checkCanFold());
+            }
+        });
+        addChild(delBtn);
         return true;
+    }
+
+    bool FoldPaperLayer::onTouchBegan(Touch* touch, Event* event) {
+        selectedPolygonView = nullptr;
+        return true;
+    }
+
+    void FoldPaperLayer::onTouchMoved(Touch* touch, Event* event) {
+        updateAllPolygonsPosition(touch->getDelta());
+    }
+
+    void FoldPaperLayer::onTouchEnded(Touch* touch, Event* event) {
+
     }
 
     void FoldPaperLayer::createPolygonView(PolygonType polygonType, const Vec2 &centerPoint, int edge, float width, float height) {
@@ -164,6 +193,12 @@ namespace FoldPaper {
         ids++;
     }
 
+    void FoldPaperLayer::updateAllPolygonsPosition(const cocos2d::Vec2 &delta) {
+        for (PolygonView* p : polygonViewList) {
+            p->movePolygon(delta);
+        }
+    }
+
     void FoldPaperLayer::attachPolygons(PolygonView* polygonView) {
 
         for (PolygonView* referPolygonView : polygonViewList) {
@@ -181,12 +216,28 @@ namespace FoldPaper {
     }
 
     bool FoldPaperLayer::checkCanFold() {
+
+        if (isExitOverlap()) return false;
+
         initGraph();
         buildGraph();
 
         if (rootPolygonView == nullptr) return false;
 
         return getTreeNum(rootPolygonView) == polygonViewList.size();
+    }
+
+    bool FoldPaperLayer::isExitOverlap() {
+        for (int i = 0; i < polygonViewList.size(); i++) {
+            PolygonView* polygonView = polygonViewList.at(i);
+            for (int j = i + 1; j < polygonViewList.size(); j++) {
+                PolygonView* p = polygonViewList.at(j);
+                if (polygonView->checkIsOverlap(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     void FoldPaperLayer::initGraph() {
@@ -197,7 +248,7 @@ namespace FoldPaper {
 
         for (int i = 0; i < polygonViewList.size(); i++) {
             PolygonView* view = polygonViewList.at(i);
-            for (int j = 0; j < i + 1; j++) {
+            for (int j = i + 1; j < polygonViewList.size(); j++) {
                 PolygonView* v = polygonViewList.at(j);
                 if (view->checkIsCloseEnough(v, 1.0f)) {
                     graph[view].pushBack(v);

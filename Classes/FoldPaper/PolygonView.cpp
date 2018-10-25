@@ -16,7 +16,7 @@ namespace FoldPaper {
 
 #define PI 3.14
 #define R_SCALE 0.6
-#define MaxDegree 10
+#define MaxDegree 15
 
     PolygonView::PolygonView() :
     touchListener(nullptr),
@@ -100,7 +100,7 @@ namespace FoldPaper {
             return false;
         }
 
-        Vec2 location = polygonDrawNode->convertToNodeSpace(touch->getLocation());
+        Vec2 location = getPolygonViewNodePoint(touch->getLocation());
 
         //未选中多边形
         if (!isSelected) {
@@ -134,21 +134,12 @@ namespace FoldPaper {
         if (touchType == RORATE) { //旋转
             Vec2 prePoint = touch->getPreviousLocation();
             Vec2 location = touch->getLocation();
-            
-            Vec2 dir0 = (prePoint - polygonDrawNode->getPosition()).getNormalized();
-            Vec2 dir1 = (location - polygonDrawNode->getPosition()).getNormalized();
-            
-            float dot = dir0.dot(dir1);
-            
-            dot = dot < -1.0f ? -1.0f : dot;
-            dot = dot > 1.0f ? 1.0f : dot;
-            
-            float deltaAngle = acos(dot);
-            if (dir0.cross(dir1) < 0.0f)
-                deltaAngle = -deltaAngle;
-            
+
+            Vec2 d1 = prePoint - polygonDrawNode->getPosition();
+            Vec2 d2 = location - polygonDrawNode->getPosition();
+            float deltaAngle = atan2f(d2.x, d2.y) - atan2f(d1.x, d1.y);
             float degree = CC_RADIANS_TO_DEGREES(deltaAngle);
-            rotatePolygon(-degree);
+            rotatePolygon(degree);
         } else if (touchType == MOVE) { //平移
             movePolygon(touch->getDelta());
         }
@@ -245,7 +236,7 @@ namespace FoldPaper {
 
     void PolygonView::rotatePolygon(float deltaDegree) {
         if (polygonDrawNode != nullptr) {
-            polygonDrawNode->setRotation(fmodf(polygonDrawNode->getRotation(), 360) + deltaDegree);
+            polygonDrawNode->setRotation(fmodf(polygonDrawNode->getRotation() + deltaDegree, 360));
         }
     }
 
@@ -272,17 +263,13 @@ namespace FoldPaper {
         for (Edge edge : polygon.edgeList) {
             Vec2 preWorldPoint = getPolygonViewWorldPoint(edge.prePoint);
             Vec2 nextWorldPoint = getPolygonViewWorldPoint(edge.nextPoint);
-            Vec2 midPoint = getPolygonViewWorldPoint(edge.getMidPoint());
 
             for (Edge e : otherPolygon->polygon.edgeList) {
                 Vec2 point1 = otherPolygon->getPolygonViewWorldPoint(e.prePoint);
                 Vec2 point2 = otherPolygon->getPolygonViewWorldPoint(e.nextPoint);
                 Vec2 midPoint1 = otherPolygon->getPolygonViewWorldPoint(e.getMidPoint());
 
-                float midDistance = midPoint.distance(midPoint1);
-                float crossDegree = Edge::crossDegree(point1, point2, preWorldPoint, nextWorldPoint);
-
-                if (edge.isEqual(e) && midDistance < minDistance && crossDegree < MaxDegree) { //满足吸附条件
+                if (Edge::isCloseEnough(point1, point2, preWorldPoint, nextWorldPoint, MaxDegree, minDistance)) { //满足吸附条件
                     if (needAttach) {
                         //旋转至与参照多边形相同角度
                         float differDegree = Edge::getDifferDegree(point1, point2, preWorldPoint, nextWorldPoint);
@@ -298,6 +285,25 @@ namespace FoldPaper {
         }
 
         return false;
+    }
+
+    bool PolygonView::checkIsOverlap(PolygonView* otherPolygon) {
+        int count = 0;
+        for (Edge edge : polygon.edgeList) {
+            Vec2 preWorldPoint = getPolygonViewWorldPoint(edge.prePoint);
+            Vec2 nextWorldPoint = getPolygonViewWorldPoint(edge.nextPoint);
+
+            for (Edge e : otherPolygon->polygon.edgeList) {
+                Vec2 point1 = otherPolygon->getPolygonViewWorldPoint(e.prePoint);
+                Vec2 point2 = otherPolygon->getPolygonViewWorldPoint(e.nextPoint);
+
+                if (Edge::isCloseEnough(point1, point2, preWorldPoint, nextWorldPoint, 1.0f, 1.0f)) {
+                    count++;
+                }
+            }
+        }
+
+        return count > 1;
     }
 
     void PolygonView::setPolygonSelectedState(bool isSelected) {

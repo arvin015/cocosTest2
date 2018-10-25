@@ -96,6 +96,13 @@ namespace FoldPaper {
         bool checkIsCloseEnough(PolygonView* otherPolygon, float minDistance, bool needAttach = false);
 
         /**
+         * 检测两个多边形是否重叠
+         * @param otherPolygon
+         * @return
+         */
+        bool checkIsOverlap(PolygonView* otherPolygon);
+
+        /**
          * 添加子多边形
          * @param polygonView
          */

@@ -36,6 +36,10 @@ namespace FoldPaper {
 
     private:
 
+        virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+        virtual void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+        virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+
         /**
          * 创建多边形
          * @param polygonType
@@ -47,6 +51,12 @@ namespace FoldPaper {
         void createPolygonView(PolygonType polygonType, const cocos2d::Vec2 &centerPoint, int edge, float width, float height);
 
         /**
+         * 更改所有多边形的位置
+         * @param delta
+         */
+        void updateAllPolygonsPosition(const cocos2d::Vec2 &delta);
+
+        /**
          * 检测吸附
          */
         void attachPolygons(PolygonView* polygonView);
@@ -55,6 +65,12 @@ namespace FoldPaper {
          * 检测是否可折叠
          */
         bool checkCanFold();
+
+        /**
+         * 检测所有多边形是否存在重叠
+         * @return
+         */
+        bool isExitOverlap();
 
         /**
          * 初始化图表
@@ -93,6 +109,7 @@ namespace FoldPaper {
         PolygonView* selectedPolygonView; //当前选中的多边形
         PolygonView* rootPolygonView; //根多边形
         cocos2d::ui::CheckBox* foldBtn;
+        cocos2d::ui::Button* delBtn;
         int ids;
     };
 }
