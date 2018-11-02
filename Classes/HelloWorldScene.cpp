@@ -24,9 +24,6 @@ bool HelloWorld::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
-    LayerColor* bg = LayerColor::create(Color4B::WHITE);
-    addChild(bg);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -37,7 +34,7 @@ bool HelloWorld::init()
                                            "CloseNormal.png",
                                            "CloseSelected.png",
                                            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
+
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
@@ -120,7 +117,7 @@ bool RootLayer::init() {
     if(!Layer::init()) {
         return false;
     }
-    
+
     controller = NavigationController::create();
     addChild(controller);
     

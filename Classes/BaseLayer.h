@@ -32,6 +32,8 @@ public:
     
     virtual void onBackHandle() {};
 
+    virtual bool shouldWhiteBg() {return true;};
+
 public:
     
     HelloWorld* helloworld;

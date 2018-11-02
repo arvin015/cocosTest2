@@ -28,7 +28,12 @@ bool BaseLayer::init() {
     if(!Layer::init()) {
         return false;
     }
-    
+
+    if (shouldWhiteBg()) {
+        LayerColor* bg = LayerColor::create(Color4B::WHITE);
+        addChild(bg);
+    }
+
     getMainScene();
     
     backBtn = Button::create();

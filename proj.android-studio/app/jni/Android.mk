@@ -39,6 +39,9 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/ElectronicBoards/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/AddAndSubtract/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Cutting/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/FoldPaper/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Test3D/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Test3D/cc2d3/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/Test3D/cc3d3/*.cpp)
 
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
@@ -54,6 +57,10 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/ElectronicBoards
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/AddAndSubtract
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Cutting
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/FoldPaper
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Test3D
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Test3D/cc2d3
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/Test3D/cc3d3
+
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END

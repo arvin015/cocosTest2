@@ -29,6 +29,7 @@
 #include "AddAndSubtractLayer.h"
 #include "CuttingLayer.h"
 #include "FoldPaperLayer.h"
+#include "Test3DLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -44,7 +45,9 @@ int getArrLen(T &array) {
 #define V_WIDTH  Director::getInstance()->getVisibleSize().width
 #define V_HEIGHT Director::getInstance()->getVisibleSize().height
 
-const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular", "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract", "Cutting", "FoldPaper"};
+const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
+                        "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
+                        "Cutting", "FoldPaper", "Test3D"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -67,6 +70,9 @@ bool MainLayer::init() {
     if(!Layer::init()) {
         return false;
     }
+
+    LayerColor* bg = LayerColor::create(Color4B::WHITE);
+    addChild(bg);
     
     float paddingLeft = 20;
     float paddingTop = 20;
@@ -205,6 +211,12 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 13: {
                 auto foldPaperLayer = FoldPaper::FoldPaperLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(foldPaperLayer);
+                break;
+            }
+            case 14: {
+                auto test3DLayer = Test3D::Test3DLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(test3DLayer);
+                break;
             }
                 
             default:
