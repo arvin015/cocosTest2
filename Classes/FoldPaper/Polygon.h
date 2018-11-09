@@ -182,6 +182,12 @@ namespace FoldPaper {
          */
         void changePointsToNode(cocos2d::Node* targetNode);
 
+        /**
+         * 获取中心点坐标
+         * @return
+         */
+        cocos2d::Vec2 getCenterPoint();
+
     private:
 
         /**

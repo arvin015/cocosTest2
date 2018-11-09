@@ -16,7 +16,8 @@ namespace FoldPaper {
 
     }
 
-    Polygon::Polygon(vector<Vec2> vertexList, const Vec2 &centerPoint) {
+    Polygon::Polygon(vector<Vec2> vertexList, const Vec2 &centerPoint)
+    : Polygon() {
         this->vertexList = vertexList;
         this->centerPoint = centerPoint;
         boundBox = getBoundBox();
@@ -51,6 +52,15 @@ namespace FoldPaper {
         vertexList = list;
         boundBox = getBoundBox();
         productEdges();
+    }
+
+    Vec2 Polygon::getCenterPoint() {
+        Vec2 center;
+        for (Vec2 vertex : vertexList) {
+            center += vertex;
+        }
+        centerPoint = center / vertexList.size();
+        return centerPoint;
     }
 
     void Polygon::productEdges() {

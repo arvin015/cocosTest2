@@ -6,8 +6,9 @@
 //
 
 #include "FoldPaperLayer.h"
-#include "PolygonView.h"
 #include "ui/UIButton.h"
+#include "FoldPaperMakeLayer.h"
+#include "FoldPaperFoldLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -33,11 +34,10 @@ namespace FoldPaper {
     };
 
     FoldPaperLayer::FoldPaperLayer():
-            ids(1),
-            selectedPolygonView(nullptr),
-            rootPolygonView(nullptr),
-            doContainerNode(nullptr),
-            foldBtn(nullptr) {
+            paperState(PAPER_MAKING),
+            makeLayer(nullptr),
+            foldLayer(nullptr)
+    {
 
     }
 
@@ -47,19 +47,9 @@ namespace FoldPaper {
 
     void FoldPaperLayer::onEnter() {
         BaseLayer::onEnter();
-
-        touchListener = EventListenerTouchOneByOne::create();
-        touchListener->onTouchBegan = CC_CALLBACK_2(FoldPaperLayer::onTouchBegan, this);
-        touchListener->onTouchMoved = CC_CALLBACK_2(FoldPaperLayer::onTouchMoved, this);
-        touchListener->onTouchEnded = CC_CALLBACK_2(FoldPaperLayer::onTouchEnded, this);
-        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
     }
 
     void FoldPaperLayer::onExit() {
-
-        if (touchListener != nullptr) {
-            Director::getInstance()->getEventDispatcher()->removeEventListener(touchListener);
-        }
         BaseLayer::onExit();
     }
 
@@ -68,9 +58,23 @@ namespace FoldPaper {
             return false;
         }
 
-        doContainerNode = Node::create();
-        doContainerNode->setContentSize(Size(V_WIDTH, V_HEIGHT));
-        addChild(doContainerNode);
+        const CameraFlag bgcamflag = CameraFlag::USER2;
+        auto ca = Camera::create();
+        ca->setDepth(-1);
+        ca->setCameraFlag(bgcamflag);
+        addChild(ca);
+
+        auto bg = Sprite::create("white.png");
+        bg->setScaleX(V_WIDTH);
+        bg->setScaleY(V_HEIGHT);
+        bg->setCameraMask((int)bgcamflag);
+        addChild(bg);
+
+        makeLayer = FoldPaperMakeLayer::create();
+        makeLayer->setCheckCanFoldCallback([this](bool isOk) {
+            foldBtn->setVisible(isOk);
+        });
+        addChild(makeLayer);
 
         for (int i = 0; i < 5; i++) {
             auto polygon = Button::create("mian_button_01_125x54.png");
@@ -101,7 +105,7 @@ namespace FoldPaper {
                 } else if (tag != 0) {
                     edge = tag + 2;
                 }
-                createPolygonView(type, Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
+                makeLayer->createPolygonView(type, Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
             });
             addChild(polygon);
         }
@@ -113,8 +117,8 @@ namespace FoldPaper {
             b->setScale9Enabled(true);
             b->setPosition(Vec2(980, 80 + i * 50));
             b->addClickEventListener([this, i](Ref* pSender) {
-                if (selectedPolygonView != nullptr) {
-                    selectedPolygonView->updatePolygonColor(colors[i]);
+                if (paperState == PAPER_MAKING) {
+                    makeLayer->responseColorClick(colors[i]);
                 }
             });
             addChild(b);
@@ -124,8 +128,37 @@ namespace FoldPaper {
         foldBtn->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
         foldBtn->setPosition(Vec2(V_WIDTH / 2, 20));
         foldBtn->setScale(0.5f);
-        foldBtn->addEventListener([this](Ref*, CheckBox::EventType) {
+        foldBtn->addEventListener([this](Ref* pSender, CheckBox::EventType eventType) {
 
+            makeLayer->setVisible(eventType == CheckBox::EventType::SELECTED ? false : true);
+            makeLayer->responseFoldClick(eventType == CheckBox::EventType::SELECTED ? true : false);
+
+            if (foldLayer == nullptr) {
+                foldLayer = FoldPaperFoldLayer::create();
+                foldLayer->setVisible(false);
+                addChild(foldLayer);
+            }
+            foldLayer->setVisible(eventType == CheckBox::EventType::SELECTED ? true : false);
+            foldLayer->responseFoldClick(eventType == CheckBox::EventType::SELECTED ? true : false);
+
+            if (eventType == CheckBox::EventType::SELECTED) {
+                vector<Polygon3D*> polygon3DList;
+                for (PolygonView* p : makeLayer->polygonViewList) {
+                    vector<Vertex> vertexList;
+                    for (Vec2 v : p->polygon.vertexList) {
+                        v = p->getPolygonViewWorldPoint(v); //转成相对于cocos2d的世界坐标
+                        vertexList.push_back(Vertex(Vec3(v.x, v.y, 0), Vec3::ZERO));
+                    }
+                    Polygon3D* polygon3D = new Polygon3D(vertexList, p->faceType, p->getColor());
+                    polygon3DList.push_back(polygon3D);
+                }
+
+                foldLayer->setData(polygon3DList);
+                paperState = PAPER_FOLDING;
+
+            } else if (eventType == CheckBox::EventType::UNSELECTED) {
+                paperState = PAPER_MAKING;
+            }
         });
         foldBtn->setVisible(false);
         addChild(foldBtn);
@@ -138,185 +171,12 @@ namespace FoldPaper {
         delBtn->setTitleText("删除");
         delBtn->setTitleColor(Color3B::WHITE);
         delBtn->addClickEventListener([this](Ref* pSender) {
-            if (selectedPolygonView != nullptr) {
-                selectedPolygonView->removeFromParent();
-                polygonViewList.eraseObject(selectedPolygonView);
-                selectedPolygonView = nullptr;
-
-                foldBtn->setVisible(checkCanFold());
+            if (paperState == PAPER_MAKING) {
+                makeLayer->responseDelClick();
             }
         });
         addChild(delBtn);
+
         return true;
-    }
-
-    bool FoldPaperLayer::onTouchBegan(Touch* touch, Event* event) {
-        selectedPolygonView = nullptr;
-        return true;
-    }
-
-    void FoldPaperLayer::onTouchMoved(Touch* touch, Event* event) {
-        updateAllPolygonsPosition(touch->getDelta());
-    }
-
-    void FoldPaperLayer::onTouchEnded(Touch* touch, Event* event) {
-
-    }
-
-    void FoldPaperLayer::createPolygonView(PolygonType polygonType, const Vec2 &centerPoint, int edge, float width, float height) {
-        PolygonView* polygonView = PolygonView::create();
-        switch (polygonType) {
-            case SQUARE:
-                polygonView->createSquare(centerPoint, width, height);
-                break;
-            case POLYGON:
-                polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, width);
-                break;
-        }
-        polygonView->setTag(ids);
-        polygonView->initView();
-        polygonView->setOnTouchEndCallback([this, polygonView]() {
-            attachPolygons(polygonView);
-        });
-        polygonView->setOnSelectCallback([this, polygonView]() {
-            selectedPolygonView = polygonView;
-        });
-        doContainerNode->addChild(polygonView, getMaxOrder());
-
-        polygonViewList.pushBack(polygonView);
-
-        if (selectedPolygonView != nullptr) {
-            selectedPolygonView->setPolygonSelectedState(false);
-        }
-        selectedPolygonView = polygonView;
-
-        ids++;
-    }
-
-    void FoldPaperLayer::updateAllPolygonsPosition(const cocos2d::Vec2 &delta) {
-        for (PolygonView* p : polygonViewList) {
-            p->movePolygon(delta);
-        }
-    }
-
-    void FoldPaperLayer::attachPolygons(PolygonView* polygonView) {
-
-        for (PolygonView* referPolygonView : polygonViewList) {
-            if (referPolygonView == polygonView) {
-                continue;
-            }
-            if (polygonView->checkIsCloseEnough(referPolygonView, 15.0f, true)) {
-                foldBtn->setVisible(checkCanFold());
-                return;
-            }
-        }
-
-        //未发生吸附
-        foldBtn->setVisible(false);
-    }
-
-    bool FoldPaperLayer::checkCanFold() {
-
-        if (isExitOverlap()) return false;
-
-        initGraph();
-        buildGraph();
-
-        if (rootPolygonView == nullptr) return false;
-
-        return getTreeNum(rootPolygonView) == polygonViewList.size();
-    }
-
-    bool FoldPaperLayer::isExitOverlap() {
-        for (int i = 0; i < polygonViewList.size(); i++) {
-            PolygonView* polygonView = polygonViewList.at(i);
-            for (int j = i + 1; j < polygonViewList.size(); j++) {
-                PolygonView* p = polygonViewList.at(j);
-                if (polygonView->checkIsOverlap(p)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    void FoldPaperLayer::initGraph() {
-        graph.clear();
-        for (PolygonView* polygonView : polygonViewList) {
-            graph.insert(make_pair(polygonView, Vector<PolygonView*>()));
-        }
-
-        for (int i = 0; i < polygonViewList.size(); i++) {
-            PolygonView* view = polygonViewList.at(i);
-            for (int j = i + 1; j < polygonViewList.size(); j++) {
-                PolygonView* v = polygonViewList.at(j);
-                if (view->checkIsCloseEnough(v, 1.0f)) {
-                    graph[view].pushBack(v);
-                    graph[v].pushBack(view);
-                }
-            }
-        }
-    }
-
-    void FoldPaperLayer::buildGraph() {
-        rootPolygonView = getRootPolygonView();
-        if (rootPolygonView == nullptr) return;
-
-        map<PolygonView*, bool> visited;
-
-        visited[rootPolygonView] = true;
-
-        queue<PolygonView*> polygonQueue;
-        polygonQueue.push(rootPolygonView);
-
-        //清除所有多边形的依赖关系
-        for (PolygonView* v : polygonViewList) {
-            v->detach();
-        }
-
-        while (!polygonQueue.empty()) {
-
-            PolygonView* pv = polygonQueue.front();
-            polygonQueue.pop();
-
-            Vector<PolygonView*> childPolygonList = graph[pv];
-            for (PolygonView* p : childPolygonList) {
-                map<PolygonView*, bool>::iterator it = visited.find(p);
-                if (it == visited.end()) {
-                    p->attach(pv);
-                    visited.insert(make_pair(p, true));
-
-                    polygonQueue.push(p);
-                }
-            }
-        }
-    }
-
-    PolygonView* FoldPaperLayer::getRootPolygonView() {
-        PolygonView* polygonView = nullptr;
-        int maxCount = 0;
-        map<PolygonView*, Vector<PolygonView*>>::iterator it;
-        for (it = graph.begin(); it != graph.end(); it++) {
-            if (it->second.size() > maxCount) {
-                polygonView = it->first;
-                maxCount = it->second.size();
-            }
-        }
-        return polygonView;
-    }
-
-    int FoldPaperLayer::getTreeNum(PolygonView* rootPolygon) {
-        int count = 0;
-        for (PolygonView* child : rootPolygon->childPolygonViewList) {
-            count += getTreeNum(child);
-        }
-        return count + 1;
-    }
-
-    int FoldPaperLayer::getMaxOrder() {
-        Vector<Node*> nodeList = doContainerNode->getChildren();
-        if (nodeList.size() == 0) return 0;
-        Node* node = nodeList.at(doContainerNode->getChildrenCount() - 1); //获取最上面的那个Node
-        return node->getLocalZOrder() + 1;
     }
 }

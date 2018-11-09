@@ -8,6 +8,7 @@
 #include "PolygonView.h"
 #include "Polygon.h"
 #include "MathUtils.h"
+#include "BasicData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -27,8 +28,9 @@ namespace FoldPaper {
     isMove(false),
     touchType(NONE),
     touchEndCallback(nullptr),
-    parentPolygonView(nullptr) {
-        
+    parentPolygonView(nullptr),
+    faceType(FaceType::FaceTypeUnknown) {
+
     }
 
     PolygonView::~PolygonView() {
@@ -260,16 +262,19 @@ namespace FoldPaper {
 
     bool PolygonView::checkIsCloseEnough(PolygonView* otherPolygon, float minDistance, bool needAttach) {
 
-        for (Edge edge : polygon.edgeList) {
+        for (int i = 0; i < polygon.edgeList.size(); i++) {
+            Edge edge = polygon.edgeList.at(i);
             Vec2 preWorldPoint = getPolygonViewWorldPoint(edge.prePoint);
             Vec2 nextWorldPoint = getPolygonViewWorldPoint(edge.nextPoint);
 
-            for (Edge e : otherPolygon->polygon.edgeList) {
+            for (int j = 0; j < otherPolygon->polygon.edgeList.size(); j++) {
+                Edge e = otherPolygon->polygon.edgeList.at(j);
                 Vec2 point1 = otherPolygon->getPolygonViewWorldPoint(e.prePoint);
                 Vec2 point2 = otherPolygon->getPolygonViewWorldPoint(e.nextPoint);
                 Vec2 midPoint1 = otherPolygon->getPolygonViewWorldPoint(e.getMidPoint());
 
                 if (Edge::isCloseEnough(point1, point2, preWorldPoint, nextWorldPoint, MaxDegree, minDistance)) { //满足吸附条件
+
                     if (needAttach) {
                         //旋转至与参照多边形相同角度
                         float differDegree = Edge::getDifferDegree(point1, point2, preWorldPoint, nextWorldPoint);

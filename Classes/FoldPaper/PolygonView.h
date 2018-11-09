@@ -87,6 +87,14 @@ namespace FoldPaper {
         void rotatePolygon(float deltaDegree);
 
         /**
+         * 获取旋转角度，实际获取PolygonDrawNode旋转角度
+         * @return
+         */
+        float getPolygonRotate() {
+            return polygonDrawNode->getRotation();
+        }
+
+        /**
          * 检测两个多边形是否需要吸附
          * @param otherPolygon
          * @param minDistance
@@ -131,6 +139,22 @@ namespace FoldPaper {
          * 解除依赖
          */
         void detach();
+
+        /**
+         * 获取填充颜色
+         * @return
+         */
+        Color4F getColor() {
+            return fillColor;
+        }
+
+        /**
+         * 设置是否可Touch
+         * @param isTouchEnabled
+         */
+        void setTouchEnabled(bool isTouchEnabled) {
+            this->isTouchEnabled = isTouchEnabled;
+        }
 
         /**
          * 获取世界坐标
@@ -181,13 +205,13 @@ namespace FoldPaper {
         void onDraw();
 
     public:
+        int faceType;
 
         cocos2d::DrawNode* polygonDrawNode;
         Polygon polygon;
 
         PolygonView* parentPolygonView;
         cocos2d::Vector<PolygonView*> childPolygonViewList;
-
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
 

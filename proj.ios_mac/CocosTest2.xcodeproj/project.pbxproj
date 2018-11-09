@@ -57,11 +57,16 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
+		A206D3812193C51E00169B0D /* Polygon3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A206D37E2193C51D00169B0D /* Polygon3D.cpp */; };
+		A206D3832193C68D00169B0D /* quadrangle_btn_line_rotate2.png in Resources */ = {isa = PBXBuildFile; fileRef = A206D3822193C68C00169B0D /* quadrangle_btn_line_rotate2.png */; };
+		A206D3862193C6E000169B0D /* paper_btn_fold.png in Resources */ = {isa = PBXBuildFile; fileRef = A206D3842193C6DF00169B0D /* paper_btn_fold.png */; };
+		A206D3872193C6E000169B0D /* paper_btn_unfold.png in Resources */ = {isa = PBXBuildFile; fileRef = A206D3852193C6E000169B0D /* paper_btn_unfold.png */; };
 		A21C39951F9050A8009644E8 /* ElectronicBoards.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */; };
 		A21C39961F9050A8009644E8 /* ElectronicBoardsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */; };
 		A21C39991F905217009644E8 /* select.png in Resources */ = {isa = PBXBuildFile; fileRef = A21C39971F905217009644E8 /* select.png */; };
 		A21C399A1F905217009644E8 /* snap.png in Resources */ = {isa = PBXBuildFile; fileRef = A21C39981F905217009644E8 /* snap.png */; };
 		A21C399D1F905852009644E8 /* BandView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C399B1F905852009644E8 /* BandView.cpp */; };
+		A227029521918FC2009659DD /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A227029221918FC1009659DD /* DrawNode3D.cpp */; };
 		A229311A1F5577480089B2AE /* eight_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931101F5577480089B2AE /* eight_d.png */; };
 		A229311B1F5577480089B2AE /* five_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931111F5577480089B2AE /* five_d.png */; };
 		A229311C1F5577480089B2AE /* four_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931121F5577480089B2AE /* four_d.png */; };
@@ -153,6 +158,8 @@
 		A297C6A11F57F68300F4BAAD /* blue_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A01F57F68300F4BAAD /* blue_arrow.png */; };
 		A297C6A41F57FDF700F4BAAD /* end.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A21F57FDF700F4BAAD /* end.png */; };
 		A297C6A51F57FDF700F4BAAD /* head.png in Resources */ = {isa = PBXBuildFile; fileRef = A297C6A31F57FDF700F4BAAD /* head.png */; };
+		A29E9FA3219531CC00B3E1C2 /* FoldPaperFoldLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A29E9F9F219531CB00B3E1C2 /* FoldPaperFoldLayer.cpp */; };
+		A29E9FA4219531CC00B3E1C2 /* FoldPaperMakeLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A29E9FA0219531CB00B3E1C2 /* FoldPaperMakeLayer.cpp */; };
 		A2A086B11F7E4C0000CDA6C8 /* Hello.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A086B01F7E4C0000CDA6C8 /* Hello.png */; };
 		A2A086B31F7E4CA300CDA6C8 /* effect2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A2A086B21F7E4CA300CDA6C8 /* effect2.mp3 */; };
 		A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */; };
@@ -162,7 +169,6 @@
 		A2A0F1B61F5663A100C8D1F9 /* NumberInTenLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B41F5663A100C8D1F9 /* NumberInTenLayer.cpp */; };
 		A2A0F1B91F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1B71F566B0B00C8D1F9 /* NumberInTenSingularLayer.cpp */; };
 		A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */; };
-		A2A683EA2182C95A0007463A /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A683E92182C9590007463A /* LogUtil.cpp */; };
 		A2A6840B218302D90007463A /* square_back.obj in Resources */ = {isa = PBXBuildFile; fileRef = A2A68409218302D80007463A /* square_back.obj */; };
 		A2A6840C218302D90007463A /* square_front.obj in Resources */ = {isa = PBXBuildFile; fileRef = A2A6840A218302D90007463A /* square_front.obj */; };
 		A2A9EFE11F556DC900C9AFA4 /* PacToast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */; };
@@ -288,6 +294,11 @@
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A206D37E2193C51D00169B0D /* Polygon3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Polygon3D.cpp; sourceTree = "<group>"; };
+		A206D3802193C51D00169B0D /* Polygon3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Polygon3D.h; sourceTree = "<group>"; };
+		A206D3822193C68C00169B0D /* quadrangle_btn_line_rotate2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quadrangle_btn_line_rotate2.png; sourceTree = "<group>"; };
+		A206D3842193C6DF00169B0D /* paper_btn_fold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper_btn_fold.png; sourceTree = "<group>"; };
+		A206D3852193C6E000169B0D /* paper_btn_unfold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper_btn_unfold.png; sourceTree = "<group>"; };
 		A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoards.cpp; sourceTree = "<group>"; };
 		A21C39921F9050A8009644E8 /* ElectronicBoards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoards.h; sourceTree = "<group>"; };
 		A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoardsLayer.cpp; sourceTree = "<group>"; };
@@ -296,6 +307,8 @@
 		A21C39981F905217009644E8 /* snap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snap.png; sourceTree = "<group>"; };
 		A21C399B1F905852009644E8 /* BandView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BandView.cpp; sourceTree = "<group>"; };
 		A21C399C1F905852009644E8 /* BandView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BandView.h; sourceTree = "<group>"; };
+		A227029221918FC1009659DD /* DrawNode3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawNode3D.cpp; sourceTree = "<group>"; };
+		A227029421918FC1009659DD /* DrawNode3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawNode3D.h; sourceTree = "<group>"; };
 		A22931101F5577480089B2AE /* eight_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eight_d.png; sourceTree = "<group>"; };
 		A22931111F5577480089B2AE /* five_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = five_d.png; sourceTree = "<group>"; };
 		A22931121F5577480089B2AE /* four_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = four_d.png; sourceTree = "<group>"; };
@@ -435,6 +448,11 @@
 		A297C6A01F57F68300F4BAAD /* blue_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_arrow.png; sourceTree = "<group>"; };
 		A297C6A21F57FDF700F4BAAD /* end.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = end.png; sourceTree = "<group>"; };
 		A297C6A31F57FDF700F4BAAD /* head.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head.png; sourceTree = "<group>"; };
+		A29E9F9D219531CA00B3E1C2 /* FoldPaperMakeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldPaperMakeLayer.h; sourceTree = "<group>"; };
+		A29E9F9F219531CB00B3E1C2 /* FoldPaperFoldLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FoldPaperFoldLayer.cpp; sourceTree = "<group>"; };
+		A29E9FA0219531CB00B3E1C2 /* FoldPaperMakeLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FoldPaperMakeLayer.cpp; sourceTree = "<group>"; };
+		A29E9FA1219531CB00B3E1C2 /* BasicData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicData.h; sourceTree = "<group>"; };
+		A29E9FA2219531CB00B3E1C2 /* FoldPaperFoldLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldPaperFoldLayer.h; sourceTree = "<group>"; };
 		A2A086B01F7E4C0000CDA6C8 /* Hello.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hello.png; sourceTree = "<group>"; };
 		A2A086B21F7E4CA300CDA6C8 /* effect2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = effect2.mp3; sourceTree = "<group>"; };
 		A2A0F1A11F56483B00C8D1F9 /* DragImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragImageView.cpp; sourceTree = "<group>"; };
@@ -451,8 +469,6 @@
 		A2A0F1B81F566B0B00C8D1F9 /* NumberInTenSingularLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenSingularLayer.h; sourceTree = "<group>"; };
 		A2A0F1BA1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NumberInTenCombineLayer.cpp; sourceTree = "<group>"; };
 		A2A0F1BB1F5677F600C8D1F9 /* NumberInTenCombineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberInTenCombineLayer.h; sourceTree = "<group>"; };
-		A2A683E82182C9590007463A /* LogUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogUtil.h; sourceTree = "<group>"; };
-		A2A683E92182C9590007463A /* LogUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtil.cpp; sourceTree = "<group>"; };
 		A2A68409218302D80007463A /* square_back.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = square_back.obj; sourceTree = "<group>"; };
 		A2A6840A218302D90007463A /* square_front.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = square_front.obj; sourceTree = "<group>"; };
 		A2A9EFDF1F556DC900C9AFA4 /* PacToast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacToast.cpp; sourceTree = "<group>"; };
@@ -621,6 +637,9 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A206D3842193C6DF00169B0D /* paper_btn_fold.png */,
+				A206D3852193C6E000169B0D /* paper_btn_unfold.png */,
+				A206D3822193C68C00169B0D /* quadrangle_btn_line_rotate2.png */,
 				A257A2182186D74F004F82E9 /* mappic_empty.png */,
 				A2A68409218302D80007463A /* square_back.obj */,
 				A2A6840A218302D90007463A /* square_front.obj */,
@@ -821,6 +840,15 @@
 		A275D2B72178725900560D1A /* FoldPaper */ = {
 			isa = PBXGroup;
 			children = (
+				A29E9FA1219531CB00B3E1C2 /* BasicData.h */,
+				A29E9F9F219531CB00B3E1C2 /* FoldPaperFoldLayer.cpp */,
+				A29E9FA2219531CB00B3E1C2 /* FoldPaperFoldLayer.h */,
+				A29E9FA0219531CB00B3E1C2 /* FoldPaperMakeLayer.cpp */,
+				A29E9F9D219531CA00B3E1C2 /* FoldPaperMakeLayer.h */,
+				A206D37E2193C51D00169B0D /* Polygon3D.cpp */,
+				A206D3802193C51D00169B0D /* Polygon3D.h */,
+				A227029221918FC1009659DD /* DrawNode3D.cpp */,
+				A227029421918FC1009659DD /* DrawNode3D.h */,
 				A275D2B9217872C400560D1A /* FoldPaperLayer.cpp */,
 				A275D2BA217872C400560D1A /* FoldPaperLayer.h */,
 				A275D2BC2178748900560D1A /* Polygon.cpp */,
@@ -933,8 +961,6 @@
 		A28F633A1F53CC11008ADA49 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A2A683E92182C9590007463A /* LogUtil.cpp */,
-				A2A683E82182C9590007463A /* LogUtil.h */,
 				A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */,
 				A2ADD4C21F7BA380009F1B49 /* LoadDialog.h */,
 				A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */,
@@ -1107,6 +1133,7 @@
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				A297C69D1F57DD9800F4BAAD /* image_end.png in Resources */,
 				A28AF3291F7C997000FDD70F /* child_10.png in Resources */,
+				A206D3862193C6E000169B0D /* paper_btn_fold.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				A25153571FD916B300F808A3 /* cat.png in Resources */,
 				A297C68B1F57B46C00F4BAAD /* bee.png in Resources */,
@@ -1137,6 +1164,7 @@
 				A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				A2ADD4C61F7BAB0F009F1B49 /* loading.png in Resources */,
+				A206D3872193C6E000169B0D /* paper_btn_unfold.png in Resources */,
 				A2A6840B218302D90007463A /* square_back.obj in Resources */,
 				A28AF3211F7C997000FDD70F /* child_1.png in Resources */,
 				A2A9F01B1F556FB500C9AFA4 /* three.png in Resources */,
@@ -1183,6 +1211,7 @@
 				A297C6A11F57F68300F4BAAD /* blue_arrow.png in Resources */,
 				A2A086B31F7E4CA300CDA6C8 /* effect2.mp3 in Resources */,
 				A2B85BF21F46E49C0049DEED /* tbg_pic_01c.png in Resources */,
+				A206D3832193C68D00169B0D /* quadrangle_btn_line_rotate2.png in Resources */,
 				A229311B1F5577480089B2AE /* five_d.png in Resources */,
 				A28AF3261F7C997000FDD70F /* child_6.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
@@ -1217,18 +1246,21 @@
 				A2A0F1B31F56562100C8D1F9 /* NumberInTenCompareLayer.cpp in Sources */,
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
 				A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */,
+				A29E9FA4219531CC00B3E1C2 /* FoldPaperMakeLayer.cpp in Sources */,
 				A279F4191FD6A36100D7C091 /* CatSprite.cpp in Sources */,
 				A27EDA3C2188048D00BE58A4 /* cG3DefModelGenDonut.cpp in Sources */,
 				A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				A2A0F1B61F5663A100C8D1F9 /* NumberInTenLayer.cpp in Sources */,
 				A256973B1FE1083100AB1827 /* CuttingLayer.cpp in Sources */,
+				A29E9FA3219531CC00B3E1C2 /* FoldPaperFoldLayer.cpp in Sources */,
 				A28F63131F53C3BD008ADA49 /* HelloWorldScene.cpp in Sources */,
 				A28F63141F53C3BD008ADA49 /* MainLayer.cpp in Sources */,
 				A279F4161FD6835700D7C091 /* AddAndSubtractNode.cpp in Sources */,
 				A256973E1FE108F300AB1827 /* PolygonView.cpp in Sources */,
 				A28F63111F53C3BD008ADA49 /* AppDelegate.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				A206D3812193C51E00169B0D /* Polygon3D.cpp in Sources */,
 				A2A0F1AD1F56490600C8D1F9 /* BaseNumberInTenDragLayer.cpp in Sources */,
 				A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */,
 				A297C6911F57BC7300F4BAAD /* UIMathNumber.cpp in Sources */,
@@ -1236,7 +1268,6 @@
 				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
 				A255D5201FC6CCBA000D7264 /* UINumberSelector.cpp in Sources */,
 				A27EDA342188048C00BE58A4 /* CC3DHitTest.cpp in Sources */,
-				A2A683EA2182C95A0007463A /* LogUtil.cpp in Sources */,
 				A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */,
 				A279F4121FD6520200D7C091 /* AddAndSubtractLayer.cpp in Sources */,
 				A297C68E1F57BBE100F4BAAD /* UISpinner.cpp in Sources */,
@@ -1258,6 +1289,7 @@
 				A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */,
 				A24E602D1FC576BD001912E7 /* UINumberAddSubtract.cpp in Sources */,
 				A275D2BE2178748900560D1A /* Polygon.cpp in Sources */,
+				A227029521918FC2009659DD /* DrawNode3D.cpp in Sources */,
 				A27EDA412188048D00BE58A4 /* LogUtil.cpp in Sources */,
 				A27EDA3B2188048D00BE58A4 /* cG3DefModelGenSphere.cpp in Sources */,
 				A27EDA3D2188048D00BE58A4 /* CC3DMath.cpp in Sources */,
