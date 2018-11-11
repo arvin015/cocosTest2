@@ -27,13 +27,11 @@ namespace FoldPaper {
       cc3dLayer(nullptr),
       camtarget(0, 0, 0),
       camoffset(0, 0, 8),
-      show3DContainer(nullptr),
       isFolding(false),
       isFoldOver(false),
       rootPolygon3D(nullptr),
       foldingPolygon3D(nullptr),
-      drawPolygon3D(nullptr),
-      drawLine3D(nullptr) {
+      drawPolygon3D(nullptr) {
 
     }
 
@@ -74,18 +72,9 @@ namespace FoldPaper {
         cc3dLayer->_camera->addChild(DirectionLight::create(Vec3(1, -3, -5).getNormalized(), Color3B(100, 100, 100)));
         cc3dLayer->setCamLoc(camtarget, camquat, camoffset);
 
-        show3DContainer = Node::create();
-        show3DContainer->setContentSize(Size(1024, 768));
-        show3DContainer->setCameraMask(cc3dLayer->getCameraMask());
-        cc3dLayer->addChild(show3DContainer);
-
         drawPolygon3D = DrawNode3D::create();
         drawPolygon3D->setCameraMask(cc3dLayer->getCameraMask());
         cc3dLayer->addChild(drawPolygon3D);
-
-        drawLine3D = DrawNode3D::create(4);
-        drawLine3D->setCameraMask(cc3dLayer->getCameraMask());
-        cc3dLayer->addChild(drawLine3D);
 
         return true;
     }
@@ -133,9 +122,10 @@ namespace FoldPaper {
 
     void FoldPaperFoldLayer::draw3D() {
 
-//        show3DContainer->removeAllChildren();
         drawPolygon3D->clear();
-        drawLine3D->clear();
+
+        vector<Polygon3D*> backFaces;
+        vector<Polygon3D*> frontFaces;
 
         for (Polygon3D* polygon3D : polygon3DList) {
 
@@ -144,30 +134,37 @@ namespace FoldPaper {
             viewDir.normalize();
             viewDir = viewDir.getNormalized();
 
-            Color4F color;
             if (n.dot(viewDir) > 0.0f) {
-                color = polygon3D->polygonColor;
+                frontFaces.push_back(polygon3D);
             } else {
-                color = Color4F::GRAY;
+                backFaces.push_back(polygon3D);
             }
+        }
 
-            Vec3* vertexs = new Vec3[polygon3D->vertexList.size()];
-            for (int i = 0; i < polygon3D->vertexList.size(); i++) {
-                vertexs[i] = polygon3D->vertexList[i].position;
+        //先绘制后面
+        for (Polygon3D* backPolygon3D : backFaces) {
+            Vec3* vertexs = new Vec3[backPolygon3D->vertexList.size()];
+            for (int i = 0; i < backPolygon3D->vertexList.size(); i++) {
+                vertexs[i] = backPolygon3D->vertexList[i].position;
             }
+            drawPolygon3D->drawPolygon(vertexs, backPolygon3D->vertexList.size(), Color4F::GRAY);
+            delete[](vertexs);
+        }
 
-            drawPolygon3D->drawPolygon(vertexs, polygon3D->vertexList.size(), color);
-//            auto drawNode3d = DrawNode3D::create();
-//            drawNode3d->drawPolygon(vertexs, polygon3D->vertexList.size(), color);
-//            drawNode3d->setCameraMask(cc3dLayer->getCameraMask());
-//            show3DContainer->addChild(drawNode3d);
+        //再绘制前面
+        for (Polygon3D* frontPolygon3D : frontFaces) {
+            Vec3* vertexs = new Vec3[frontPolygon3D->vertexList.size()];
+            for (int i = 0; i < frontPolygon3D->vertexList.size(); i++) {
+                vertexs[i] = frontPolygon3D->vertexList[i].position;
+            }
+            drawPolygon3D->drawPolygon(vertexs, frontPolygon3D->vertexList.size(), frontPolygon3D->polygonColor);
+            delete[](vertexs);
 
             //绘制分割线
-            if (polygon3D->foldAxisIds.size() > 0) {
-                drawLine3D->drawLine(polygon3D->getVertexById(polygon3D->foldAxisIds[0]).position,
-                                 polygon3D->getVertexById(polygon3D->foldAxisIds[1]).position, Color4F::GRAY);
+            if (frontPolygon3D->foldAxisIds.size() > 0) {
+                drawPolygon3D->drawLine(frontPolygon3D->getVertexById(frontPolygon3D->foldAxisIds[0]).position,
+                                     frontPolygon3D->getVertexById(frontPolygon3D->foldAxisIds[1]).position, Color4F::GRAY);
             }
-            delete[](vertexs);
         }
     }
 
@@ -198,7 +195,7 @@ namespace FoldPaper {
         cc3dLayer->camquat = camquat;
         cc3dLayer->updateCamLoc();
 
-        draw3D(); //移动Camera时需要重新绘制3D来区别正方面，假3
+        draw3D(); //移动Camera时需要重新绘制3D来区别正方面，假3D
     }
 
     void FoldPaperFoldLayer::onTouchEnded(Touch* touch, Event* event) {
@@ -211,8 +208,7 @@ namespace FoldPaper {
             rootPolygon3D = nullptr;
             foldingPolygon3D = nullptr;
 
-            show3DContainer->removeAllChildren();
-            drawLine3D->clear();
+            drawPolygon3D->clear();
         } else { //进入
             //重置摄像头
             camquat = Quaternion();

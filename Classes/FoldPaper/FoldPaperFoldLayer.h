@@ -80,7 +80,6 @@ namespace FoldPaper {
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
         CC3DLayer* cc3dLayer;
-        cocos2d::Node* show3DContainer;
         cocos2d::Vec3 camtarget, camoffset;
         cocos2d::Quaternion camquat;
         cMultiTouch multitouch;
@@ -91,7 +90,6 @@ namespace FoldPaper {
         Polygon3D* rootPolygon3D; //被吸附最多的作为根多边形
         Polygon3D* foldingPolygon3D;
         DrawNode3D* drawPolygon3D;
-        DrawNode3D* drawLine3D;
     };
 }
 
