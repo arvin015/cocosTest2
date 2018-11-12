@@ -12,6 +12,8 @@ using namespace std;
 namespace FoldPaper {
 
     const float FOLD_SPEED = 1.2f;
+    const Color4F BACK_FACE_COLOR = Color4F(0.9f, 0.9f, 0.9f, 1.0f);
+    const Color4F DIVIDE_LINE_COLOR = Color4F(229 / 255.0, 229 / 255.0, 229 / 255.0, 1.0f);
 
     //根据父层数量排序
     class SortNodeByLevel {
@@ -31,7 +33,8 @@ namespace FoldPaper {
       isFoldOver(false),
       rootPolygon3D(nullptr),
       foldingPolygon3D(nullptr),
-      drawPolygon3D(nullptr) {
+      drawPolygon3D(nullptr),
+      textureContainer(nullptr) {
 
     }
 
@@ -75,6 +78,11 @@ namespace FoldPaper {
         drawPolygon3D = DrawNode3D::create();
         drawPolygon3D->setCameraMask(cc3dLayer->getCameraMask());
         cc3dLayer->addChild(drawPolygon3D);
+
+        textureContainer = Node::create();
+        textureContainer->setContentSize(Size(1024, 768));
+        textureContainer->setCameraMask(cc3dLayer->getCameraMask());
+        cc3dLayer->addChild(textureContainer);
 
         return true;
     }
@@ -123,6 +131,7 @@ namespace FoldPaper {
     void FoldPaperFoldLayer::draw3D() {
 
         drawPolygon3D->clear();
+        textureContainer->removeAllChildren();
 
         vector<Polygon3D*> backFaces;
         vector<Polygon3D*> frontFaces;
@@ -147,24 +156,50 @@ namespace FoldPaper {
             for (int i = 0; i < backPolygon3D->vertexList.size(); i++) {
                 vertexs[i] = backPolygon3D->vertexList[i].position;
             }
-            drawPolygon3D->drawPolygon(vertexs, backPolygon3D->vertexList.size(), Color4F::GRAY);
+            drawPolygon3D->drawPolygon(vertexs, backPolygon3D->vertexList.size(), BACK_FACE_COLOR);
             delete[](vertexs);
+
+            //绘制分割线
+//            for (int i = 0; i < backPolygon3D->vertexList.size(); i++) {
+//                Vec3 p0 = backPolygon3D->vertexList[i].position;
+//                Vec3 p1 = backPolygon3D->vertexList[(i + 1) % backPolygon3D->vertexList.size()].position;
+//                drawPolygon3D->drawLine(p0, p1, DIVIDE_LINE_COLOR);
+//            }
         }
+
+        //纹理坐标
+        Vec2 uvs[] = {
+                Vec2(0, 0),
+                Vec2(1, 0),
+                Vec2(1, 1),
+                Vec2(0, 1)
+        };
 
         //再绘制前面
         for (Polygon3D* frontPolygon3D : frontFaces) {
+
+            //绘制颜色面
             Vec3* vertexs = new Vec3[frontPolygon3D->vertexList.size()];
             for (int i = 0; i < frontPolygon3D->vertexList.size(); i++) {
                 vertexs[i] = frontPolygon3D->vertexList[i].position;
             }
             drawPolygon3D->drawPolygon(vertexs, frontPolygon3D->vertexList.size(), frontPolygon3D->polygonColor);
-            delete[](vertexs);
 
             //绘制分割线
-            if (frontPolygon3D->foldAxisIds.size() > 0) {
-                drawPolygon3D->drawLine(frontPolygon3D->getVertexById(frontPolygon3D->foldAxisIds[0]).position,
-                                     frontPolygon3D->getVertexById(frontPolygon3D->foldAxisIds[1]).position, Color4F::GRAY);
+            for (int i = 0; i < frontPolygon3D->vertexList.size(); i++) {
+                Vec3 p0 = frontPolygon3D->vertexList[i].position;
+                Vec3 p1 = frontPolygon3D->vertexList[(i + 1) % frontPolygon3D->vertexList.size()].position;
+                drawPolygon3D->drawLine(p0, p1, DIVIDE_LINE_COLOR);
             }
+
+            //绘制贴图
+            auto draw3D = DrawNode3D::create();
+            draw3D->setCameraMask(cc3dLayer->getCameraMask());
+            draw3D->set3DTextture(Director::getInstance()->getTextureCache()->addImage("paper_img_animal_tortoise.png")->getName());
+            draw3D->drawPolygonForTexture(vertexs, uvs, frontPolygon3D->vertexList.size());
+            textureContainer->addChild(draw3D);
+
+            delete[](vertexs);
         }
     }
 

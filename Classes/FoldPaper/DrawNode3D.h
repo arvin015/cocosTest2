@@ -63,6 +63,14 @@ public:
      * @param fillColor
      */
     void drawPolygon(const cocos2d::Vec3 *verts, int count, const cocos2d::Color4F &fillColor);
+
+    /**
+     * Draw 3D Polygon
+     * @param verts
+     * @param uvs
+     * @param count
+     */
+    void drawPolygonForTexture(const cocos2d::Vec3 *verts, const cocos2d::Vec2 *uvs, int count);
     
     /**
     * Draw 3D cube
@@ -78,6 +86,13 @@ public:
     * @param color
     */
     void drawCube(cocos2d::Vec3* vertices, const Color4F &color);
+
+    /**
+     * set 3d texture
+     */
+    void set3DTextture(unsigned int texture) {
+        this->_texture = texture;
+    }
     
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -102,6 +117,8 @@ public:
     virtual void onDrawGLLine(const cocos2d::Mat4 &transform, uint32_t flags);
 
     virtual void onDrawGLPoint(const cocos2d::Mat4 &transform, uint32_t flags);
+
+    virtual void onDrawGLTexture(const cocos2d::Mat4& transform, uint32_t flags);
     
     // Overrides
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
@@ -121,6 +138,7 @@ protected:
     void ensureCapacity(int count);
     void ensureCapacityGLPoint(int count);
     void ensureCapacityGLLine(int count);
+    void ensureCapacityGLTexture(int count);
 
     GLuint      _vao;
     GLuint      _vbo;
@@ -128,6 +146,8 @@ protected:
     GLuint      _vboGLPoint;
     GLuint      _vaoGLLine;
     GLuint      _vboGLLine;
+    GLuint      _vaoGLTexture;
+    GLuint      _vboGLTexture;
 
     int         _bufferCapacity;
     GLsizei     _bufferCount;
@@ -141,17 +161,25 @@ protected:
     GLsizei     _bufferCountGLLine;
     V3F_C4B_T2F *_bufferGLLine;
 
+    int         _bufferCapacityGLTexture;
+    GLsizei     _bufferCountGLTexture;
+    V3F_C4B_T2F *_bufferGLTexture;
+
     BlendFunc   _blendFunc;
     CustomCommand _customCommand;
     CustomCommand _customCommandGLPoint;
     CustomCommand _customCommandGLLine;
+    CustomCommand _customCommandGLTexture;
 
     bool        _dirty;
     bool        _dirtyGLPoint;
     bool        _dirtyGLLine;
+    bool        _dirtyGLTexture;
 
     GLfloat     _lineWidth;
     GLfloat     _defaultLineWidth;
+
+    unsigned int _texture;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);

@@ -80,6 +80,7 @@ namespace FoldPaper {
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
         CC3DLayer* cc3dLayer;
+        cocos2d::Node* textureContainer;
         cocos2d::Vec3 camtarget, camoffset;
         cocos2d::Quaternion camquat;
         cMultiTouch multitouch;
