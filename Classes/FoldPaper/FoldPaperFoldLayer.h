@@ -77,10 +77,31 @@ namespace FoldPaper {
          */
         void draw3D();
 
+        /**
+         * 指定多边形是否可折叠
+         * @param polygon
+         * @return
+         */
+        bool canFoldThisPolygon(Polygon3D* polygon);
+
+        /**
+         * 获取parent下的所有直接或间接子多边形(包括自身)
+         * @param polygon
+         * @param childs
+         */
+        void collect(Polygon3D* parent, std::vector<Polygon3D*> &childs);
+
+        /**
+         * 绘制3D obj(面、线、纹理)
+         * @param polygon3D
+         * @param isFront
+         */
+        void draw3DObj(Polygon3D* polygon3D, bool isFront);
+
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
         CC3DLayer* cc3dLayer;
-        cocos2d::Node* textureContainer;
+        cocos2d::Node* show3DContainer;
         cocos2d::Vec3 camtarget, camoffset;
         cocos2d::Quaternion camquat;
         cMultiTouch multitouch;
@@ -90,7 +111,6 @@ namespace FoldPaper {
         std::vector<Polygon3D*>::iterator mIter;
         Polygon3D* rootPolygon3D; //被吸附最多的作为根多边形
         Polygon3D* foldingPolygon3D;
-        DrawNode3D* drawPolygon3D;
     };
 }
 

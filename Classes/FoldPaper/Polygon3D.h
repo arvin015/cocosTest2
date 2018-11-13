@@ -22,6 +22,19 @@ namespace FoldPaper {
         cocos2d::Vec3 uv;
     };
 
+    class Rect3D {
+    public:
+        Rect3D() {};
+        Rect3D(const cocos2d::Vec3 &maxPoint, const cocos2d::Vec3 &minPoint) {
+            this->maxPoint = maxPoint;
+            this->minPoint = minPoint;
+        }
+        ~Rect3D() {};
+
+        cocos2d::Vec3 maxPoint;
+        cocos2d::Vec3 minPoint;
+    };
+
     class Polygon3D : public cocos2d::Ref {
 
     public:
@@ -87,8 +100,24 @@ namespace FoldPaper {
          */
         int getDepth();
 
+        /**
+         * 两个多边形是否相交
+         * @param poly0
+         * @param poly1
+         * @return
+         */
+        bool isPolygonsIntersected(Polygon3D* otherPolygon);
+
+        /**
+         * 备份还原
+         * @param recursively
+         */
+        void backup(bool recursively = false);
+        void restore(bool recursively = false);
+
     public:
         std::vector<Vertex> vertexList; //点集合
+        std::vector<Vertex> backupVertexList; //备份的顶点集合
         cocos2d::Color4F polygonColor; //多边形颜色
         int faceType;
 

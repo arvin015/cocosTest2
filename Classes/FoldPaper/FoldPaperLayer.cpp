@@ -76,6 +76,10 @@ namespace FoldPaper {
         });
         addChild(makeLayer);
 
+        foldLayer = FoldPaperFoldLayer::create();
+        foldLayer->setVisible(false);
+        addChild(foldLayer);
+
         for (int i = 0; i < 5; i++) {
             auto polygon = Button::create("mian_button_01_125x54.png");
             polygon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
@@ -133,11 +137,6 @@ namespace FoldPaper {
             makeLayer->setVisible(eventType == CheckBox::EventType::SELECTED ? false : true);
             makeLayer->responseFoldClick(eventType == CheckBox::EventType::SELECTED ? true : false);
 
-            if (foldLayer == nullptr) {
-                foldLayer = FoldPaperFoldLayer::create();
-                foldLayer->setVisible(false);
-                addChild(foldLayer);
-            }
             foldLayer->setVisible(eventType == CheckBox::EventType::SELECTED ? true : false);
             foldLayer->responseFoldClick(eventType == CheckBox::EventType::SELECTED ? true : false);
 
