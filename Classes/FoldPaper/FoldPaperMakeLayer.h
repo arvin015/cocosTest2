@@ -10,10 +10,11 @@
 
 namespace FoldPaper {
 
-    enum PolygonType {
-        SQUARE,
-        POLYGON
-    };
+    const float PHI = 0.5f * (1.0f + sqrtf(5));
+
+    inline float getRadiusByEdge(int edge, float edgeLength) {
+            return edgeLength / (2.0f * sin(3.14 / edge));
+    }
 
     class FoldPaperMakeLayer : public cocos2d::Layer {
 
@@ -34,20 +35,42 @@ namespace FoldPaper {
     public:
 
         /**
+         * 生产多面体
+         * @param side
+         * @param edgeLength
+         * @param height
+         */
+        void createPolygonViewFromPrism(int side, float edgeLength);
+
+        /**
+         * 生产立方体
+         * @param edgeLength
+         */
+        void createPolygonViewFromCube(float edgeLength);
+
+        /**
          * 创建多边形
          * @param polygonType
          * @param centerPoint
          * @param edge
-         * @param width
+         * @param edgeLength
          * @param height
+         * @param faceType
          */
-        void createPolygonView(PolygonType polygonType, const cocos2d::Vec2 &centerPoint, int edge, float width, float height);
+        void createPolygonView(int polygonType, const cocos2d::Vec2 &centerPoint, int edge, float edgeLength, float height, int faceType = 0);
 
+    public:
         /**
          * 响应颜色点击事件
          * @param color
          */
         void responseColorClick(const cocos2d::Color4F &color);
+        
+        /**
+         * 响应贴图点击
+         * @param textureId
+         */
+        void responseTextureClick(const std::string &textureName);
 
         /**
          * 响应折叠按钮点击事件
@@ -59,6 +82,11 @@ namespace FoldPaper {
          * 响应删除按钮点击事件
          */
         void responseDelClick();
+
+        /**
+         * 响应重置点击事件
+         */
+        void responseResetClick();
 
         void setCheckCanFoldCallback(CheckCanFoldCallback callback) {
             this->checkCanFoldCallback = callback;

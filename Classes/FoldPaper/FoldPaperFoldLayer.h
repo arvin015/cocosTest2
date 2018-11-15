@@ -53,7 +53,7 @@ namespace FoldPaper {
         virtual void update(float dt);
 
         /**
-         * 转换成3D坐标，并居中对齐
+         * 居中对齐
          */
         void alignToOrigin();
 

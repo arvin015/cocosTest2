@@ -54,16 +54,38 @@ namespace FoldPaper {
     : polygonColor(Color4F(76 / 255.0, 198 / 255.0, 198 / 255.0, 1))
     , targetAngle(3.14 / 2) //HALF_PI
     , rotatedTotal(0)
-    , faceType(FaceType::FaceTypeUnknown) {
+    , faceType(FaceType::FaceTypeUnknown)
+    , textureId(0)
+    , polygonType(P_UNKNOWN)
+    , parent(nullptr) {
 
     }
 
-    Polygon3D::Polygon3D(const vector<Vertex> &vertexList, int faceType, const Color4F &polygonColor)
+    Polygon3D::Polygon3D(const vector<Vertex> &vertexList, int faceType, const Color4F &polygonColor, unsigned int textureId)
     : Polygon3D() {
 
         this->vertexList = vertexList;
         this->faceType = faceType;
         this->polygonColor = polygonColor;
+        this->textureId = textureId;
+
+        //确定纹理坐标
+        if (polygonType == RECTANGLE) {
+            Vec3 center = getCenter();
+            for (int i = 0; i < vertexList.size(); i++) {
+                Vec3 p = vertexList[i].position;
+                float dx = fmaxf(center.x, p.x) - fminf(center.x, p.x) - 1;
+                float dy = fmaxf(center.y, p.y) - fminf(center.y, p.y) - 1;
+                p.x = p.x + ((center.x > p.x) ? dx : -dx);
+                p.y = p.y + ((center.y > p.y) ? dy : -dy);
+                texturePts.push_back(p);
+            }
+        } else {
+            for (int i = 0; i < vertexList.size(); i++) {
+                texturePts.push_back(vertexList[i].position);
+            }
+        }
+
     }
 
     Polygon3D::~Polygon3D() {
@@ -111,6 +133,23 @@ namespace FoldPaper {
 
             Vec3 out = o + r * u * cos(angle) + r * v * sin(angle);
             vertexList[i].position = out;
+
+            //纹理坐标
+            Vec3 pt1 = texturePts[i];
+
+            Vec3 o1 = closestPointToLine(pt1, p0, p1);
+            float r1 = (pt1 - o1).length();
+
+            Vec3 u1 = pt1 - o1;
+            u1.normalize();
+            u1 = u1.getNormalized();
+
+            Vec3 v1 = p0 - p1;
+            v1.cross(u1);
+            v1.normalize();
+            v1 = v1.getNormalized();
+
+            texturePts[i] = o1 + r1 * u1 * cos(angle) + r1 * v1 * sin(angle);
         }
     }
 
@@ -152,8 +191,6 @@ namespace FoldPaper {
                     if (axisIds != nullptr) {
                         axisIds[0] = i0;
                         axisIds[1] = i1;
-                        axisIds[2] = j0;
-                        axisIds[3] = j1;
                     }
                     return true;
                 }
@@ -220,13 +257,19 @@ namespace FoldPaper {
                 child[i]->backup(recursively);
             }
         }
+
+        backupTexturePts.clear();
+        backupTexturePts = texturePts;
     }
 
     void Polygon3D::restore(bool recursively) {
         if (backupVertexList.size() != vertexList.size()) return;
 
-        for(int i = 0; i < vertexList.size(); i++) {
+        for (int i = 0; i < vertexList.size(); i++) {
             vertexList[i] = backupVertexList[i];
+        }
+        for (int j = 0; j < texturePts.size(); j++) {
+            texturePts[j] = backupTexturePts[j];
         }
 
         if (recursively) {

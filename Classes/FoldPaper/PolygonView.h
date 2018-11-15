@@ -71,6 +71,18 @@ namespace FoldPaper {
         void updatePolygonColor(const cocos2d::Color4F &fillColor);
 
         /**
+         * 设置纹理
+         * @param textureName
+         */
+        void setTextureName(const std::string &textureName);
+
+        /**
+         * 获取纹理ID
+         * @return
+         */
+        unsigned int getTextureId();
+
+        /**
          * 设置多边形是否选中
          * @param visible
          */
@@ -212,6 +224,7 @@ namespace FoldPaper {
 
         PolygonView* parentPolygonView;
         cocos2d::Vector<PolygonView*> childPolygonViewList;
+
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
 
@@ -220,6 +233,8 @@ namespace FoldPaper {
 
         cocos2d::Vector<cocos2d::Sprite*> rotateSpriteList; //顶点旋转Sprite
         cocos2d::Color4F fillColor; //多边形填充色
+        cocos2d::Sprite* textureSprite; //纹理精灵
+        std::string textureName;
 
         bool isTouchEnabled;
         bool isSelected; //多边形是否选中

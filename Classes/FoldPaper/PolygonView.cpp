@@ -29,7 +29,9 @@ namespace FoldPaper {
     touchType(NONE),
     touchEndCallback(nullptr),
     parentPolygonView(nullptr),
-    faceType(FaceType::FaceTypeUnknown) {
+    faceType(FaceType::FaceTypeUnknown),
+    textureSprite(nullptr),
+    textureName("") {
 
     }
 
@@ -78,6 +80,12 @@ namespace FoldPaper {
         //绘制
         onDraw();
 
+        //加上贴图
+        textureSprite = Sprite::create();
+        textureSprite->setPosition(polygonDrawNode->getContentSize() / 2);
+        textureSprite->setScale(0.5f);
+        polygonDrawNode->addChild(textureSprite);
+
         //顶点加上旋转精灵
         rotateSpriteList.clear();
         float perDegree = 360.0 / polygon.getVertexNum();
@@ -93,8 +101,6 @@ namespace FoldPaper {
 
             rotateDegree += perDegree;
         }
-
-        setPolygonSelectedState(true);
     }
     
     bool PolygonView::onTouchBegan(Touch* touch, Event* event) {
@@ -228,6 +234,15 @@ namespace FoldPaper {
     void PolygonView::updatePolygonColor(const Color4F &fillColor) {
         this->fillColor = fillColor;
         onDraw();
+    }
+
+    void PolygonView::setTextureName(const string &textureName) {
+        this->textureName = textureName;
+        textureSprite->setTexture(textureName);
+    }
+
+    unsigned int PolygonView::getTextureId() {
+        return textureName.empty() ? 0 : textureSprite->getTexture()->getName();
     }
 
     void PolygonView::movePolygon(const Vec2 &deltaPos) {

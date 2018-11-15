@@ -37,6 +37,17 @@ namespace FoldPaper {
 
         virtual bool shouldWhiteBg() {return false;};
 
+        /**
+         * 选择物体
+         * @param shapeIndex
+         */
+        void selectShape(int shapeIndex);
+
+        /**
+         * 重置
+         */
+        void reset();
+
     private:
         cocos2d::ui::CheckBox* foldBtn;
         cocos2d::ui::Button* delBtn;
@@ -44,6 +55,8 @@ namespace FoldPaper {
         PaperState paperState;
         FoldPaperMakeLayer* makeLayer;
         FoldPaperFoldLayer* foldLayer;
+
+        int shapeIndex;
     };
 }
 

@@ -3,6 +3,7 @@
 //
 
 #include "FoldPaperMakeLayer.h"
+#include "BasicData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -69,17 +70,66 @@ namespace FoldPaper {
     void FoldPaperMakeLayer::onTouchEnded(Touch* touch, Event* event) {
     }
 
-    void FoldPaperMakeLayer::createPolygonView(PolygonType polygonType, const Vec2 &centerPoint, int edge, float width, float height) {
-        PolygonView* polygonView = PolygonView::create();
-        switch (polygonType) {
-            case SQUARE:
-                polygonView->createSquare(centerPoint, width, height);
+    void FoldPaperMakeLayer::createPolygonViewFromPrism(int side, float edgeLength) {
+        if (side < 3) return;
+
+        PolygonType type = P_UNKNOWN;
+        switch (side) {
+            case 3:
+                type = TRIANGLE;
                 break;
-            case POLYGON:
-                polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, width);
+            case 4:
+                type = RECTANGLE;
+                break;
+            case 5:
+                type = FIVE_POLY;
+                break;
+            case 6:
+                type = SIX_POLY;
+                break;
+        }
+
+        float beginX = 100.0f;
+        float beginY = 100.0f;
+
+        for (int i = 0; i < side + 2; i++) {
+            if (i == 0 || i == 1) { //上下面
+                createPolygonView(type, Vec2(beginX + i * 100, beginY + i * 80), side, edgeLength, edgeLength, FaceTypeBase);
+            } else { //侧面
+                createPolygonView(RECTANGLE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength * PHI, FaceTypeLateralFace);
+            }
+
+        }
+    }
+
+    void FoldPaperMakeLayer::createPolygonViewFromCube(float edgeLength) {
+        float beginX = 100.0f;
+        float beginY = 100.0f;
+
+        for (int i = 0; i < 6; i++) {
+            if (i == 0 || i == 1) { //上下面
+                createPolygonView(SQUARE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength, FaceTypeBase);
+            } else { //侧面
+                createPolygonView(SQUARE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength, FaceTypeLateralFace);
+            }
+        }
+    }
+
+    void FoldPaperMakeLayer::createPolygonView(int polygonType, const Vec2 &centerPoint, int edge, float edgeLength, float height, int faceType) {
+        PolygonView* polygonView = PolygonView::create();
+        switch ((PolygonType)polygonType) {
+            case SQUARE:
+            case RECTANGLE:
+                polygonView->createSquare(centerPoint, edgeLength, height);
+                break;
+            case TRIANGLE:
+            case FIVE_POLY:
+            case SIX_POLY:
+                polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, edgeLength);
                 break;
         }
         polygonView->setTag(ids);
+        polygonView->faceType = faceType;
         polygonView->initView();
         polygonView->setOnTouchEndCallback([this, polygonView]() {
             attachPolygons(polygonView);
@@ -91,10 +141,13 @@ namespace FoldPaper {
 
         polygonViewList.pushBack(polygonView);
 
-        if (selectedPolygonView != nullptr) {
-            selectedPolygonView->setPolygonSelectedState(false);
+        if (faceType == FaceTypeUnknown) {
+            if (selectedPolygonView != nullptr) {
+                selectedPolygonView->setPolygonSelectedState(false);
+            }
+            selectedPolygonView = polygonView;
+            selectedPolygonView->setPolygonSelectedState(true);
         }
-        selectedPolygonView = polygonView;
 
         ids++;
     }
@@ -102,6 +155,12 @@ namespace FoldPaper {
     void FoldPaperMakeLayer::responseColorClick(const cocos2d::Color4F &color) {
         if (selectedPolygonView != nullptr) {
             selectedPolygonView->updatePolygonColor(color);
+        }
+    }
+
+    void FoldPaperMakeLayer::responseTextureClick(const string &textureName) {
+        if (selectedPolygonView != nullptr) {
+            selectedPolygonView->setTextureName(textureName);
         }
     }
 
@@ -120,6 +179,15 @@ namespace FoldPaper {
                 checkCanFoldCallback(checkCanFold());
             }
         }
+    }
+
+    void FoldPaperMakeLayer::responseResetClick() {
+        doContainerNode->removeAllChildren();
+        polygonViewList.clear();
+        rootPolygonView = nullptr;
+        selectedPolygonView = nullptr;
+        ids = 1;
+        isTouchEnabled = true;
     }
 
     void FoldPaperMakeLayer::updateAllPolygonsPosition(const cocos2d::Vec2 &delta) {
@@ -224,6 +292,9 @@ namespace FoldPaper {
                 }
             }
         }
+
+        graph.clear();
+        visited.clear();
     }
 
     PolygonView* FoldPaperMakeLayer::getRootPolygonView() {

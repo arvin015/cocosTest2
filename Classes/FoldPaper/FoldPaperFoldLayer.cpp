@@ -15,15 +15,6 @@ namespace FoldPaper {
     const Color4F BACK_FACE_COLOR = Color4F(0.8f, 0.8f, 0.8f, 1.0f);
     const Color4F DIVIDE_LINE_COLOR = Color4F(229 / 255.0, 229 / 255.0, 229 / 255.0, 1.0f);
 
-    //根据父层数量排序
-    class SortNodeByLevel {
-    public:
-        bool operator()(Polygon3D* n0, Polygon3D* n1) const;
-    };
-    bool SortNodeByLevel::operator()(Polygon3D* n0, Polygon3D* n1) const {
-        return n0->getDepth() < n1->getDepth() ;
-    }
-
     FoldPaperFoldLayer::FoldPaperFoldLayer()
     : touchListener(nullptr),
       cc3dLayer(nullptr),
@@ -85,14 +76,16 @@ namespace FoldPaper {
     void FoldPaperFoldLayer::update(float dt) {
 
         if (!isVisible()) return;
-
+        
         fold(dt); //折叠
     }
 
     void FoldPaperFoldLayer::fold(float dt) {
-
+        
         if (!isFolding || isFoldOver || polygon3DList.size() < 2 || foldingPolygon3D == nullptr) return;
-
+        
+        alignToOrigin(); //折叠中时刻保持居中对齐
+        
         int id0 = foldingPolygon3D->foldAxisIds[0];
         int id1 = foldingPolygon3D->foldAxisIds[1];
 
@@ -114,7 +107,7 @@ namespace FoldPaper {
                 mIter++;
                 if (mIter != polygon3DList.end()) {
                     foldingPolygon3D = *mIter;
-
+                
                     if (!canFoldThisPolygon(foldingPolygon3D)) {
                         bool hasFoldableNode = false;
 
@@ -202,11 +195,11 @@ namespace FoldPaper {
             for (int i = 0; i < (int)polygon3DList.size(); i++) {
                 Polygon3D* p = polygon3DList[i];
 
-                if (polygon->parent == p) continue;
+                if (polygon == p || polygon->parent == p) continue;
 
                 vector<Polygon3D*>::iterator it = find(aboutToFoldPolygons.begin(), aboutToFoldPolygons.end(), p);
                 if (it != aboutToFoldPolygons.end()) continue;
-
+                
                 for (int j = 0; j < (int)aboutToFoldPolygons.size(); j++) {
                     Polygon3D* pp = aboutToFoldPolygons[j];
                     if (p->isPolygonsIntersected(pp)) {
@@ -216,6 +209,7 @@ namespace FoldPaper {
                 }
             }
             targetAngle -= angle_inc;
+            polygon->restore(true); //还原
         }
         polygon->restore(true); //还原
         return canFold;
@@ -263,7 +257,7 @@ namespace FoldPaper {
         }
 
         //绘制贴图
-        if (isFront) {
+        if (isFront && polygon3D->textureId != 0) {
 
             //纹理坐标
             Vec2 uvs[] = {
@@ -273,10 +267,13 @@ namespace FoldPaper {
                     Vec2(0, 1)
             };
 
-            draw3d->set3DTextture(Director::getInstance()->getTextureCache()->addImage("paper_img_animal_tortoise.png")->getName());
-            draw3d->drawPolygonForTexture(vertexs, uvs, polygon3D->vertexList.size());
-        }
+            for (int i = 0; i < polygon3D->texturePts.size(); i++) {
+                vertexs[i] = polygon3D->texturePts[i];
+            }
 
+            draw3d->set3DTextture(polygon3D->textureId);
+            draw3d->drawPolygonForTexture(vertexs, uvs, polygon3D->texturePts.size());
+        }
         delete[] vertexs;
     }
 
@@ -332,7 +329,6 @@ namespace FoldPaper {
     }
 
     void FoldPaperFoldLayer::setData(std::vector<Polygon3D*> polygon3DList) {
-        this->polygon3DList.clear();
         this->polygon3DList = polygon3DList;
 
         alignToOrigin();
@@ -355,6 +351,9 @@ namespace FoldPaper {
                 if (v.y < minVertex.y) {
                     minVertex.y = v.y;
                 }
+                if (v.z < minVertex.z) {
+                    minVertex.z = v.z;
+                }
 
                 if (v.x > maxVertex.x) {
                     maxVertex.x = v.x;
@@ -362,12 +361,18 @@ namespace FoldPaper {
                 if (v.y > maxVertex.y) {
                     maxVertex.y = v.y;
                 }
+                if (v.z > maxVertex.z) {
+                    maxVertex.z = v.z;
+                }
             }
         }
         Vec3 center = (maxVertex + minVertex) / 2.0;
         for (Polygon3D* p : polygon3DList) {
             for (int i = 0; i < p->vertexList.size(); i++) {
-                p->vertexList[i].position = (p->vertexList[i].position - center) / (120 / 2);
+                p->vertexList[i].position = p->vertexList[i].position - center;
+            }
+            for (int j = 0; j < p->texturePts.size(); j++) {
+                p->texturePts[j] = p->texturePts[j] - center;
             }
         }
     }
@@ -391,27 +396,25 @@ namespace FoldPaper {
             }
         }
 
-        //找出被吸附最多的多边形
+        float baseSideCount = 3; //侧面个数
         int max = 0;
         map<Polygon3D*, vector<Polygon3D*>>::iterator it;
         for (it = relationMap.begin(); it != relationMap.end(); it++) {
             Polygon3D* cp = it->first;
+            cp->parent = nullptr;
+            cp->child.clear();
+
             if (it->second.size() > max) {
                 rootPolygon3D = cp;
                 max = it->second.size();
             }
+
+            if (it->first->faceType == FaceType::FaceTypeBase) {
+                baseSideCount = it->first->getVertexCount();
+            }
         }
 
         if (rootPolygon3D == nullptr) return;
-
-        //确定上下面的边数
-        float baseSideCount = 3;
-        map<Polygon3D*, vector<Polygon3D*>>::iterator it1;
-        for (it1 = relationMap.begin(); it1 != relationMap.end(); it1++) {
-            if (it1->first->faceType == FaceType::FaceTypeBase) {
-                baseSideCount = it1->first->getVertexCount();
-            }
-        }
 
         //建立父子关系
         map<Polygon3D*, bool> visited;
@@ -460,21 +463,28 @@ namespace FoldPaper {
                         visited.insert(make_pair(child, true));
                         q.push(child);
                     }
+                    delete [] axisIds;
                 }
             }
         }
+        
+        relationMap.clear();
+        visited.clear();
     }
 
+    //根据父层数量排序
+    bool sortNodeByLevel(Polygon3D* n0, Polygon3D* n1) {
+        return n0->getDepth() < n1->getDepth() ;
+    }
+    
     void FoldPaperFoldLayer::setFoldPolygon() {
-        if (rootPolygon3D == nullptr) return;
-
-        std::sort(polygon3DList.begin(), polygon3DList.end(), SortNodeByLevel());
-
-        mIter = polygon3DList.begin();
+        
+        std::sort(polygon3DList.begin(), polygon3DList.end(), sortNodeByLevel);
 
         foldingPolygon3D = nullptr;
         if (polygon3DList.size() >= 2) {
             foldingPolygon3D = polygon3DList[1];
+            mIter = polygon3DList.begin() + 1;
         }
     }
 }
