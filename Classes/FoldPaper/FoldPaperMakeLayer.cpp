@@ -73,20 +73,9 @@ namespace FoldPaper {
     void FoldPaperMakeLayer::createPolygonViewFromPrism(int side, float edgeLength) {
         if (side < 3) return;
 
-        PolygonType type = P_UNKNOWN;
-        switch (side) {
-            case 3:
-                type = TRIANGLE;
-                break;
-            case 4:
-                type = RECTANGLE;
-                break;
-            case 5:
-                type = FIVE_POLY;
-                break;
-            case 6:
-                type = SIX_POLY;
-                break;
+        PolygonType type = POLYGON;
+        if (side == 4) {
+            type = SQUARE;
         }
 
         float beginX = 100.0f;
@@ -96,7 +85,7 @@ namespace FoldPaper {
             if (i == 0 || i == 1) { //上下面
                 createPolygonView(type, Vec2(beginX + i * 100, beginY + i * 80), side, edgeLength, edgeLength, FaceTypeBase);
             } else { //侧面
-                createPolygonView(RECTANGLE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength * PHI, FaceTypeLateralFace);
+                createPolygonView(SQUARE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength * PHI, FaceTypeLateralFace);
             }
 
         }
@@ -117,16 +106,10 @@ namespace FoldPaper {
 
     void FoldPaperMakeLayer::createPolygonView(int polygonType, const Vec2 &centerPoint, int edge, float edgeLength, float height, int faceType) {
         PolygonView* polygonView = PolygonView::create();
-        switch ((PolygonType)polygonType) {
-            case SQUARE:
-            case RECTANGLE:
-                polygonView->createSquare(centerPoint, edgeLength, height);
-                break;
-            case TRIANGLE:
-            case FIVE_POLY:
-            case SIX_POLY:
-                polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, edgeLength);
-                break;
+        if (polygonType == SQUARE) {
+            polygonView->createSquare(centerPoint, edgeLength, height);
+        } else if (polygonType == POLYGON) {
+            polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, edgeLength);
         }
         polygonView->setTag(ids);
         polygonView->faceType = faceType;
@@ -218,7 +201,7 @@ namespace FoldPaper {
 
     bool FoldPaperMakeLayer::checkCanFold() {
 
-        if (isExitOverlap()) return false;
+        if (isExistOverlap()) return false;
 
         initGraph();
         buildGraph();
@@ -228,7 +211,7 @@ namespace FoldPaper {
         return getTreeNum(rootPolygonView) == polygonViewList.size();
     }
 
-    bool FoldPaperMakeLayer::isExitOverlap() {
+    bool FoldPaperMakeLayer::isExistOverlap() {
         for (int i = 0; i < polygonViewList.size(); i++) {
             PolygonView* polygonView = polygonViewList.at(i);
             for (int j = i + 1; j < polygonViewList.size(); j++) {

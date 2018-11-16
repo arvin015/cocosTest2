@@ -14,13 +14,4 @@ namespace FoldPaper {
         FaceTypeBase,
         FaceTypeLateralFace
     };
-
-    enum PolygonType {
-        P_UNKNOWN,
-        TRIANGLE,
-        SQUARE,
-        RECTANGLE,
-        FIVE_POLY,
-        SIX_POLY
-    };
 }

@@ -9,6 +9,7 @@
 #include "Polygon.h"
 #include "MathUtils.h"
 #include "BasicData.h"
+#include "Slab.h"
 
 USING_NS_CC;
 using namespace std;
@@ -18,6 +19,25 @@ namespace FoldPaper {
 #define PI 3.14
 #define R_SCALE 0.6
 #define MaxDegree 15
+#define TEXTURE_SIZE 256.0f
+
+    Slab makeSlab(PolygonView* polygonView, const Vec2& pt0, const Vec2& pt1) {
+        Slab s;
+        Vec2 v0 = pt1 - pt0;
+        Vec2 n  = Vec2(-v0.y, v0.x);
+        n.normalize();
+        n = n.getNormalized();
+        int size = polygonView->polygon.getVertexNum();
+        for (int i = 0; i < size; i++) {
+            Vec2 v = polygonView->getPolygonViewWorldPoint(polygonView->polygon.getVertexPos(i)) - pt0;
+            float d = 0.0f;
+            if (v.length() > 0.0f) {
+                d = v.dot(n);
+            }
+            s.insert(d);
+        }
+        return s;
+    }
 
     PolygonView::PolygonView() :
     touchListener(nullptr),
@@ -83,7 +103,7 @@ namespace FoldPaper {
         //加上贴图
         textureSprite = Sprite::create();
         textureSprite->setPosition(polygonDrawNode->getContentSize() / 2);
-        textureSprite->setScale(0.5f);
+        textureSprite->setScale(getTextureScale());
         polygonDrawNode->addChild(textureSprite);
 
         //顶点加上旋转精灵
@@ -180,26 +200,48 @@ namespace FoldPaper {
         //绘制多边形
         Vec2* vertexs = new Vec2[polygon.getVertexNum()];
         for (int i = 0; i < polygon.getVertexNum(); i++) {
-            vertexs[i] = polygon.vertexList[i];
+            vertexs[i] = polygon.vertexList[i].position;
         }
         polygonDrawNode->drawPolygon(vertexs, polygon.getVertexNum(), fillColor, 1,
                                      Color4F::BLACK);
         delete [] vertexs;
     }
 
+    float PolygonView::getTextureScale() {
+        float scale = fminf(polygonDrawNode->getContentSize().width, polygonDrawNode->getContentSize().height) / TEXTURE_SIZE;
+        if (polygon.getVertexNum() == 3 || polygon.getVertexNum() == 5) {
+            scale -= 0.1f;
+        }
+        return scale;
+    }
+
     void PolygonView::createSquare(const Vec2 &centerPoint, float width, float height) {
         if (width <= 0.0f || height <= 0.0f)
             return;
 
-        vector<Vec2> vertexList;
+        vector<Vertex2D> vertexList;
 
         float cx = centerPoint.x;
         float cy = centerPoint.y;
 
-        vertexList.push_back(Vec2(cx - width / 2, cy + height / 2));
-        vertexList.push_back(Vec2(cx + width / 2, cy + height / 2));
-        vertexList.push_back(Vec2(cx + width / 2, cy - height / 2));
-        vertexList.push_back(Vec2(cx - width / 2, cy - height / 2));
+        //通过改变纹理坐标来保证图案不会变形
+        float minX = 0.0f, minY = 0.0f, maxX = 1.0f, maxY = 1.0f; //正方形
+
+        if (fabsf(width - height) > 0.1f) { //长方形
+            if (width >= height) {
+                float s = width / height;
+                minX = 0.5f - 0.5f * s;
+                maxX = 0.5f + 0.5f * s;
+            } else {
+                float s = height / width;
+                minY = 0.5f - 0.5f * s;
+                maxY = 0.5f + 0.5f * s;
+            }
+        }
+        vertexList.push_back(Vertex2D(Vec2(cx - width / 2, cy + height / 2), Vec2(minX, minY)));
+        vertexList.push_back(Vertex2D(Vec2(cx + width / 2, cy + height / 2), Vec2(maxX, minY)));
+        vertexList.push_back(Vertex2D(Vec2(cx + width / 2, cy - height / 2), Vec2(maxX, maxY)));
+        vertexList.push_back(Vertex2D(Vec2(cx - width / 2, cy - height / 2), Vec2(minX, maxY)));
 
         polygon = Polygon(vertexList, centerPoint);
     }
@@ -208,14 +250,20 @@ namespace FoldPaper {
         if (edge < 3)
             return;
 
-        vector<Vec2> vertexList;
+        vector<Vertex2D> vertexList;
 
+        float edgeLength = radius * 2.0f * sin(3.14 / (float)edge);
         float angle_inc = -2 * PI / (float) edge;
         float angle = 0.5f * PI - 0.5f * angle_inc;
         for (int i = 0; i < edge; i++) {
             float x = radius * cos(angle);
             float y = radius * sin(angle);
-            vertexList.push_back(centerPoint + Vec2(x, y));
+
+            float r = edgeLength / radius;
+            float u = (0.5f + r * 0.5f * cos(angle + PI));
+            float v = (0.5f + r * 0.5f * sin(angle + PI));
+
+            vertexList.push_back(Vertex2D(centerPoint + Vec2(x, y), Vec2(1.0f - u, v)));
             angle += angle_inc;
         }
 
@@ -308,22 +356,27 @@ namespace FoldPaper {
     }
 
     bool PolygonView::checkIsOverlap(PolygonView* otherPolygon) {
-        int count = 0;
-        for (Edge edge : polygon.edgeList) {
-            Vec2 preWorldPoint = getPolygonViewWorldPoint(edge.prePoint);
-            Vec2 nextWorldPoint = getPolygonViewWorldPoint(edge.nextPoint);
+        if (otherPolygon == nullptr) return false;
 
-            for (Edge e : otherPolygon->polygon.edgeList) {
-                Vec2 point1 = otherPolygon->getPolygonViewWorldPoint(e.prePoint);
-                Vec2 point2 = otherPolygon->getPolygonViewWorldPoint(e.nextPoint);
+        int size0 = polygon.getVertexNum();
+        for (int i = 0; i < size0; i++) {
+            Vec2 pt0 = getPolygonViewWorldPoint(polygon.getVertexPos(i));
+            Vec2 pt1 = getPolygonViewWorldPoint(polygon.getVertexPos((i + 1) % size0));
 
-                if (Edge::isCloseEnough(point1, point2, preWorldPoint, nextWorldPoint, 1.0f, 1.0f)) {
-                    count++;
-                }
-            }
+            Slab s0 = makeSlab(this, pt0, pt1);
+            Slab s1 = makeSlab(otherPolygon, pt0, pt1);
+            if (!s0.overlapped(s1)) return false;
         }
 
-        return count > 1;
+        int size1 = otherPolygon->polygon.getVertexNum();
+        for (int i = 0; i < size1; i++) {
+            Vec2 pt0 = otherPolygon->getPolygonViewWorldPoint(otherPolygon->polygon.getVertexPos(i));
+            Vec2 pt1 = otherPolygon->getPolygonViewWorldPoint(otherPolygon->polygon.getVertexPos((i + 1) % size1));
+            Slab s0 = makeSlab(this, pt0, pt1);
+            Slab s1 = makeSlab(otherPolygon, pt0, pt1);
+            if (!s0.overlapped(s1)) return false;
+        }
+        return true;
     }
 
     void PolygonView::setPolygonSelectedState(bool isSelected) {

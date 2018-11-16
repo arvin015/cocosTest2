@@ -14,6 +14,19 @@
 
 namespace FoldPaper {
 
+    class Vertex2D {
+    public:
+        Vertex2D() {}
+        Vertex2D(const cocos2d::Vec2 &position, const cocos2d::Vec2 &uv) {
+            this->position = position;
+            this->uv = uv;
+        }
+        ~Vertex2D() {}
+
+        cocos2d::Vec2 position;
+        cocos2d::Vec2 uv;
+    };
+
     class Edge : public cocos2d::Ref {
 
     public:
@@ -153,7 +166,7 @@ namespace FoldPaper {
     public:
         Polygon();
 
-        Polygon(std::vector<cocos2d::Vec2> vertexList, const cocos2d::Vec2 &centerPoint);
+        Polygon(std::vector<Vertex2D> vertexList, const cocos2d::Vec2 &centerPoint);
 
         ~Polygon();
 
@@ -173,7 +186,7 @@ namespace FoldPaper {
          * 获取顶点坐标
          */
         cocos2d::Vec2 getVertexPos(int i) {
-            return vertexList.at(i);
+            return vertexList.at(i).position;
         }
 
         /**
@@ -204,7 +217,7 @@ namespace FoldPaper {
     public:
         Rect boundBox; //边框
         cocos2d::Vec2 centerPoint; //中心点
-        std::vector<cocos2d::Vec2> vertexList; //点集合
+        std::vector<Vertex2D> vertexList; //点集合
         std::vector<Edge> edgeList; //边集合
     };
 }

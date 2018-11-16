@@ -16,6 +16,11 @@ namespace FoldPaper {
             return edgeLength / (2.0f * sin(3.14 / edge));
     }
 
+    enum PolygonType {
+        SQUARE, //正方形、长方形
+        POLYGON //规则的多边形
+    };
+
     class FoldPaperMakeLayer : public cocos2d::Layer {
 
     public:
@@ -118,7 +123,7 @@ namespace FoldPaper {
          * 检测所有多边形是否存在重叠
          * @return
          */
-        bool isExitOverlap();
+        bool isExistOverlap();
 
         /**
          * 初始化图表

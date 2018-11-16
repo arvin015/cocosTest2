@@ -216,6 +216,12 @@ namespace FoldPaper {
          */
         void onDraw();
 
+        /**
+         * 计算贴图的缩放值
+         * @return
+         */
+        float getTextureScale();
+
     public:
         int faceType;
 

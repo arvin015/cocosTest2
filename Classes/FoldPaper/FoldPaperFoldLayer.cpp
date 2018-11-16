@@ -199,14 +199,16 @@ namespace FoldPaper {
 
                 vector<Polygon3D*>::iterator it = find(aboutToFoldPolygons.begin(), aboutToFoldPolygons.end(), p);
                 if (it != aboutToFoldPolygons.end()) continue;
-                
+
                 for (int j = 0; j < (int)aboutToFoldPolygons.size(); j++) {
                     Polygon3D* pp = aboutToFoldPolygons[j];
-                    if (p->isPolygonsIntersected(pp)) {
+                    if (pp->isPolygonsIntersected(p)) {
                         canFold = false;
                         break;
                     }
                 }
+                
+                if (!canFold) break;
             }
             targetAngle -= angle_inc;
             polygon->restore(true); //还原
@@ -235,11 +237,14 @@ namespace FoldPaper {
         draw3d->setCameraMask(cc3dLayer->getCameraMask());
         show3DContainer->addChild(draw3d);
 
-        //绘制颜色面
         Vec3* vertexs = new Vec3[polygon3D->vertexList.size()];
+        Vec2* uvs = new Vec2[polygon3D->vertexList.size()];
         for (int i = 0; i < polygon3D->vertexList.size(); i++) {
             vertexs[i] = polygon3D->vertexList[i].position;
+            uvs[i] = polygon3D->vertexList[i].uv;
         }
+
+        //绘制颜色面
         draw3d->drawPolygon(vertexs, polygon3D->vertexList.size(), isFront ? polygon3D->polygonColor : BACK_FACE_COLOR);
 
         //绘制分割线
@@ -249,32 +254,16 @@ namespace FoldPaper {
                 Vec3 p1 = polygon3D->vertexList[(i + 1) % polygon3D->vertexList.size()].position;
                 draw3d->drawLine(p0, p1, DIVIDE_LINE_COLOR);
             }
-        } else {
-            if (polygon3D->foldAxisIds.size() > 0) {
-                draw3d->drawLine(polygon3D->vertexList[polygon3D->foldAxisIds[0]].position,
-                                 polygon3D->vertexList[polygon3D->foldAxisIds[1]].position, DIVIDE_LINE_COLOR);
-            }
         }
 
         //绘制贴图
         if (isFront && polygon3D->textureId != 0) {
-
-            //纹理坐标
-            Vec2 uvs[] = {
-                    Vec2(0, 0),
-                    Vec2(1, 0),
-                    Vec2(1, 1),
-                    Vec2(0, 1)
-            };
-
-            for (int i = 0; i < polygon3D->texturePts.size(); i++) {
-                vertexs[i] = polygon3D->texturePts[i];
-            }
-
             draw3d->set3DTextture(polygon3D->textureId);
-            draw3d->drawPolygonForTexture(vertexs, uvs, polygon3D->texturePts.size());
+            draw3d->drawPolygonForTexture(vertexs, uvs, polygon3D->vertexList.size());
         }
+
         delete[] vertexs;
+        delete[] uvs;
     }
 
     bool FoldPaperFoldLayer::onTouchBegan(Touch* touch, Event* event) {
@@ -370,9 +359,6 @@ namespace FoldPaper {
         for (Polygon3D* p : polygon3DList) {
             for (int i = 0; i < p->vertexList.size(); i++) {
                 p->vertexList[i].position = p->vertexList[i].position - center;
-            }
-            for (int j = 0; j < p->texturePts.size(); j++) {
-                p->texturePts[j] = p->texturePts[j] - center;
             }
         }
     }
@@ -478,8 +464,8 @@ namespace FoldPaper {
     }
     
     void FoldPaperFoldLayer::setFoldPolygon() {
-        
-        std::sort(polygon3DList.begin(), polygon3DList.end(), sortNodeByLevel);
+
+        sort(polygon3DList.begin(), polygon3DList.end(), sortNodeByLevel);
 
         foldingPolygon3D = nullptr;
         if (polygon3DList.size() >= 2) {

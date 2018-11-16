@@ -12,14 +12,14 @@ namespace FoldPaper {
     class Vertex {
     public:
         Vertex() {};
-        Vertex(const cocos2d::Vec3& pos, const cocos2d::Vec3& uv) : Vertex() {
+        Vertex(const cocos2d::Vec3& pos, const cocos2d::Vec2& uv) : Vertex() {
             this->position = pos;
             this->uv = uv;
         }
         ~Vertex() {};
 
         cocos2d::Vec3 position;
-        cocos2d::Vec3 uv;
+        cocos2d::Vec2 uv;
     };
 
     class Rect3D {
@@ -119,12 +119,9 @@ namespace FoldPaper {
     public:
         std::vector<Vertex> vertexList; //点集合
         std::vector<Vertex> backupVertexList; //备份的顶点集合
-        std::vector<cocos2d::Vec3> texturePts; //纹理坐标
-        std::vector<cocos2d::Vec3> backupTexturePts; //纹理坐标备份
         cocos2d::Color4F polygonColor; //多边形颜色
         unsigned int textureId; //纹理ID
         int faceType;
-        int polygonType;
 
         //for fold
         float targetAngle; //总需旋转角度

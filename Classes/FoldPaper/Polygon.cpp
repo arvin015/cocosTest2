@@ -16,7 +16,7 @@ namespace FoldPaper {
 
     }
 
-    Polygon::Polygon(vector<Vec2> vertexList, const Vec2 &centerPoint)
+    Polygon::Polygon(vector<Vertex2D> vertexList, const Vec2 &centerPoint)
     : Polygon() {
         this->vertexList = vertexList;
         this->centerPoint = centerPoint;
@@ -44,10 +44,10 @@ namespace FoldPaper {
     }
 
     void Polygon::changePointsToNode(Node* targetNode) {
-        vector<Vec2> list;
-        for (Vec2 vertex : vertexList) {
-            Vec2 p = targetNode->convertToNodeSpace(vertex);
-            list.push_back(p);
+        vector<Vertex2D> list;
+        for (Vertex2D vertex : vertexList) {
+            Vec2 p = targetNode->convertToNodeSpace(vertex.position);
+            list.push_back(Vertex2D(p, vertex.uv));
         }
         vertexList = list;
         boundBox = getBoundBox();
@@ -56,8 +56,8 @@ namespace FoldPaper {
 
     Vec2 Polygon::getCenterPoint() {
         Vec2 center;
-        for (Vec2 vertex : vertexList) {
-            center += vertex;
+        for (Vertex2D vertex : vertexList) {
+            center += vertex.position;
         }
         centerPoint = center / vertexList.size();
         return centerPoint;
@@ -69,29 +69,29 @@ namespace FoldPaper {
 
         for (int i = 0; i < vertexList.size(); i++) {
             if (i == vertexList.size() - 1) {
-                edgeList.push_back(Edge(vertexList[i], vertexList[0]));
+                edgeList.push_back(Edge(vertexList[i].position, vertexList[0].position));
             } else {
-                edgeList.push_back(Edge(vertexList[i], vertexList[i + 1]));
+                edgeList.push_back(Edge(vertexList[i].position, vertexList[i + 1].position));
             }
         }
     }
 
     Rect Polygon::getBoundBox() {
         Rect rect;
-        float minX = vertexList[0].x, minY = vertexList[0].y;
-        float maxX = vertexList[0].x, maxY = vertexList[0].y;
+        float minX = vertexList[0].position.x, minY = vertexList[0].position.y;
+        float maxX = vertexList[0].position.x, maxY = vertexList[0].position.y;
 
         for (int i = 1; i < vertexList.size(); i++) {
-            Vec2 vertex = vertexList[i];
-            if (vertex.x < minX) {
-                minX = vertex.x;
-            } else if (vertex.x > maxX) {
-                maxX = vertex.x;
+            Vertex2D vertex = vertexList[i];
+            if (vertex.position.x < minX) {
+                minX = vertex.position.x;
+            } else if (vertex.position.x > maxX) {
+                maxX = vertex.position.x;
             }
-            if (vertex.y < minY) {
-                minY = vertex.y;
-            } else if (vertex.y > maxY) {
-                maxY = vertex.y;
+            if (vertex.position.y < minY) {
+                minY = vertex.position.y;
+            } else if (vertex.position.y > maxY) {
+                maxY = vertex.position.y;
             }
         }
 

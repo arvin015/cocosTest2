@@ -124,8 +124,7 @@ namespace FoldPaper {
                     height = 120;
                     width = PHI * 120;
                 }
-                makeLayer->createPolygonView(tag == 0 ? SQUARE : RECTANGLE,
-                                             Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
+                makeLayer->createPolygonView(SQUARE, Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
             });
             addChild(polygon);
         }
@@ -190,10 +189,10 @@ namespace FoldPaper {
                 vector<Polygon3D *> polygon3DList;
                 for (PolygonView *p : makeLayer->polygonViewList) {
                     vector<Vertex> vertexList;
-                    for (Vec2 v : p->polygon.vertexList) {
-                        v = p->getPolygonViewWorldPoint(v); //转成相对于cocos2d的世界坐标
-                        v = v / 60; //转成相对于3D坐标
-                        vertexList.push_back(Vertex(Vec3(v.x, v.y, 0), Vec3::ZERO));
+                    for (Vertex2D v : p->polygon.vertexList) {
+                        Vec2 position = p->getPolygonViewWorldPoint(v.position); //转成相对于cocos2d的世界坐标
+                        position = position / 60; //转成相对于3D坐标
+                        vertexList.push_back(Vertex(Vec3(position.x, position.y, 0), v.uv));
                     }
                     Polygon3D *polygon3D = new Polygon3D(vertexList, p->faceType, p->getColor(),
                                                          p->getTextureId());
@@ -218,6 +217,7 @@ namespace FoldPaper {
         delBtn->setTitleText("删除");
         delBtn->setTitleColor(Color3B::WHITE);
         delBtn->addClickEventListener([this](Ref *pSender) {
+            if (shapeIndex != -1) return;
             if (paperState == PAPER_MAKING) {
                 makeLayer->responseDelClick();
             }
