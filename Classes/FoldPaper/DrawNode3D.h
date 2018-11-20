@@ -38,14 +38,29 @@ class DrawNode3D: public cocos2d::Node
 {
 public:
 
-    /** @struct V3F_C4B_T2F_Triangle
-     * A Triangle of V3F_C4B_T2F.
-    */
-    struct CC_DLL V3F_C4B_T2F_Triangle
+    struct CC_DLL V3F_C4B_V2F_V3F
     {
-        V3F_C4B_T2F a;
-        V3F_C4B_T2F b;
-        V3F_C4B_T2F c;
+        /// vertices (3F)
+        Vec3     vertices;            // 12 bytes
+
+        /// colors (4B)
+        Color4B      colors;              // 4 bytes
+
+        // tex coords (2F)
+        Vec2        texCoords;           // 8 bytes
+
+        // normal
+        Vec3        normal;         // 12 bytes
+    };
+
+    /** @struct V3F_C4B_V2F_V3F_Triangle
+     * A Triangle of V3F_C4B_V2F_V3F.
+    */
+    struct CC_DLL V3F_C4B_V2F_V3F_Triangle
+    {
+        V3F_C4B_V2F_V3F a;
+        V3F_C4B_V2F_V3F b;
+        V3F_C4B_V2F_V3F c;
     };
 
     /** creates and initialize a DrawNode3D node */
@@ -57,35 +72,15 @@ public:
     void drawLine(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4F &color);
 
     /**
-     * Draw 3D Polygon
-     * @param verts
-     * @param count
-     * @param fillColor
-     */
-    void drawPolygon(const cocos2d::Vec3 *verts, int count, const cocos2d::Color4F &fillColor);
-
-    /**
-     * Draw 3D Polygon
+     * Draw 3D with light
      * @param verts
      * @param uvs
+     * @param normal
+     * @param fillColor
      * @param count
      */
-    void drawPolygonForTexture(const cocos2d::Vec3 *verts, const cocos2d::Vec2 *uvs, int count);
-    
-    /**
-    * Draw 3D cube
-    * @param point to a vertex array who has 8 element.
-    *        vertices[0]:Left-top-front,
-    *        vertices[1]:Left-bottom-front,
-    *        vertices[2]:Right-bottom-front,
-    *        vertices[3]:Right-top-front,
-    *        vertices[4]:Right-top-back,
-    *        vertices[5]:Right-bottom-back,
-    *        vertices[6]:Left-bottom-back,
-    *        vertices[7]:Left-top-back.
-    * @param color
-    */
-    void drawCube(cocos2d::Vec3* vertices, const Color4F &color);
+    void drawPolygonWithLight(const cocos2d::Vec3 *verts, const cocos2d::Vec2 *uvs,
+                              const cocos2d::Vec3 &normal, const cocos2d::Color4F &fillColor, int count);
 
     /**
      * set 3d texture
@@ -113,12 +108,7 @@ public:
     void setBlendFunc(const BlendFunc &blendFunc);
 
     virtual void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
-
-    virtual void onDrawGLLine(const cocos2d::Mat4 &transform, uint32_t flags);
-
-    virtual void onDrawGLPoint(const cocos2d::Mat4 &transform, uint32_t flags);
-
-    virtual void onDrawGLTexture(const cocos2d::Mat4& transform, uint32_t flags);
+    virtual void onDrawGLLine(const cocos2d::Mat4& transform, uint32_t flags);
     
     // Overrides
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
@@ -128,6 +118,8 @@ public:
     // Get CocosStudio guide lines width.
     GLfloat getLineWidth();
 
+    void setLightDir(const Vec3 &lightDir);
+
 CC_CONSTRUCTOR_ACCESS:
     DrawNode3D(GLfloat lineWidth = DEFAULT_3D_LINE_WIDTH);
     virtual ~DrawNode3D();
@@ -136,48 +128,31 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
 
     void ensureCapacity(int count);
-    void ensureCapacityGLPoint(int count);
     void ensureCapacityGLLine(int count);
-    void ensureCapacityGLTexture(int count);
 
     GLuint      _vao;
     GLuint      _vbo;
-    GLuint      _vaoGLPoint;
-    GLuint      _vboGLPoint;
     GLuint      _vaoGLLine;
     GLuint      _vboGLLine;
-    GLuint      _vaoGLTexture;
-    GLuint      _vboGLTexture;
 
     int         _bufferCapacity;
     GLsizei     _bufferCount;
     V3F_C4B_T2F *_buffer;
 
-    int         _bufferCapacityGLPoint;
-    GLsizei     _bufferCountGLPoint;
-    V3F_C4B_T2F *_bufferGLPoint;
-
     int         _bufferCapacityGLLine;
     GLsizei     _bufferCountGLLine;
     V3F_C4B_T2F *_bufferGLLine;
 
-    int         _bufferCapacityGLTexture;
-    GLsizei     _bufferCountGLTexture;
-    V3F_C4B_T2F *_bufferGLTexture;
-
     BlendFunc   _blendFunc;
     CustomCommand _customCommand;
-    CustomCommand _customCommandGLPoint;
     CustomCommand _customCommandGLLine;
-    CustomCommand _customCommandGLTexture;
 
     bool        _dirty;
-    bool        _dirtyGLPoint;
     bool        _dirtyGLLine;
-    bool        _dirtyGLTexture;
 
     GLfloat     _lineWidth;
     GLfloat     _defaultLineWidth;
+    Vec3        _lightDir;
 
     unsigned int _texture;
 

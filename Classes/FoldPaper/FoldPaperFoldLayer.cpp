@@ -14,6 +14,8 @@ namespace FoldPaper {
     const float FOLD_SPEED = 1.2f;
     const Color4F BACK_FACE_COLOR = Color4F(0.8f, 0.8f, 0.8f, 1.0f);
     const Color4F DIVIDE_LINE_COLOR = Color4F(229 / 255.0, 229 / 255.0, 229 / 255.0, 1.0f);
+    unsigned int BACK_FACE_TEXTURE;
+    unsigned int FRONT_FACE_TEXTURE;
 
     FoldPaperFoldLayer::FoldPaperFoldLayer()
     : touchListener(nullptr),
@@ -25,7 +27,8 @@ namespace FoldPaper {
       rootPolygon3D(nullptr),
       foldingPolygon3D(nullptr),
       show3DContainer(nullptr) {
-
+          BACK_FACE_TEXTURE = Director::getInstance()->getTextureCache()->addImage("gray_dot.png")->getName();
+          FRONT_FACE_TEXTURE = Director::getInstance()->getTextureCache()->addImage("white2.png")->getName();
     }
 
     FoldPaperFoldLayer::~FoldPaperFoldLayer() {
@@ -62,7 +65,8 @@ namespace FoldPaper {
         cc3dLayer->userCameraFlag(CameraFlag::USER1);
         addChild(cc3dLayer);
         cc3dLayer->addChild(AmbientLight::create(Color3B(160, 160, 160)));
-        cc3dLayer->_camera->addChild(DirectionLight::create(Vec3(1, -3, -5).getNormalized(), Color3B(100, 100, 100)));
+        light = DirectionLight::create(Vec3(1, -3, -5).getNormalized(), Color3B(100, 100, 100));
+        cc3dLayer->_camera->addChild(light);
         cc3dLayer->setCamLoc(camtarget, camquat, camoffset);
 
         show3DContainer = Node::create();
@@ -146,9 +150,7 @@ namespace FoldPaper {
         for (Polygon3D* polygon3D : polygon3DList) {
 
             Vec3 n = polygon3D->getNormal();
-            Vec3 viewDir = polygon3D->getCenter() - cc3dLayer->_camera->getPosition3D();
-            viewDir.normalize();
-            viewDir = viewDir.getNormalized();
+            Vec3 viewDir = (polygon3D->getCenter() - cc3dLayer->_camera->getPosition3D()).getNormalized();
 
             if (n.dot(viewDir) > 0.0f) {
                 frontFaces.push_back(polygon3D);
@@ -233,8 +235,12 @@ namespace FoldPaper {
     }
 
     void FoldPaperFoldLayer::draw3DObj(Polygon3D* polygon3D, bool isFront) {
-        auto draw3d = DrawNode3D::create(3);
+        
+        Vec3 lightDir = light->getDirection(); //暂定
+
+        auto draw3d = DrawNode3D::create(4);
         draw3d->setCameraMask(cc3dLayer->getCameraMask());
+        draw3d->setLightDir(lightDir);
         show3DContainer->addChild(draw3d);
 
         Vec3* vertexs = new Vec3[polygon3D->vertexList.size()];
@@ -244,22 +250,25 @@ namespace FoldPaper {
             uvs[i] = polygon3D->vertexList[i].uv;
         }
 
-        //绘制颜色面
-        draw3d->drawPolygon(vertexs, polygon3D->vertexList.size(), isFront ? polygon3D->polygonColor : BACK_FACE_COLOR);
-
-        //绘制分割线
-        if (isFront) {
-            for (int i = 0; i < polygon3D->vertexList.size(); i++) {
-                Vec3 p0 = polygon3D->vertexList[i].position;
-                Vec3 p1 = polygon3D->vertexList[(i + 1) % polygon3D->vertexList.size()].position;
-                draw3d->drawLine(p0, p1, DIVIDE_LINE_COLOR);
-            }
-        }
+        //绘制面
+        draw3d->set3DTextture(isFront ? FRONT_FACE_TEXTURE : BACK_FACE_TEXTURE);
+        draw3d->drawPolygonWithLight(vertexs, uvs, polygon3D->getNormal(), isFront ? polygon3D->polygonColor : BACK_FACE_COLOR, polygon3D->vertexList.size());
 
         //绘制贴图
         if (isFront && polygon3D->textureId != 0) {
-            draw3d->set3DTextture(polygon3D->textureId);
-            draw3d->drawPolygonForTexture(vertexs, uvs, polygon3D->vertexList.size());
+            auto draw = DrawNode3D::create();
+            draw->setLightDir(lightDir);
+            draw->setCameraMask(cc3dLayer->getCameraMask());
+            draw->set3DTextture(polygon3D->textureId);
+            draw->drawPolygonWithLight(vertexs, uvs, polygon3D->getNormal(), Color4F::WHITE, polygon3D->vertexList.size());
+            draw3d->addChild(draw);
+        }
+
+        //绘制分割线
+        for (int i = 0; i < polygon3D->vertexList.size(); i++) {
+            Vec3 p0 = polygon3D->vertexList[i].position;
+            Vec3 p1 = polygon3D->vertexList[(i + 1) % polygon3D->vertexList.size()].position;
+            draw3d->drawLine(p0, p1, DIVIDE_LINE_COLOR);
         }
 
         delete[] vertexs;
@@ -382,18 +391,24 @@ namespace FoldPaper {
             }
         }
 
-        float baseSideCount = 3; //侧面个数
+        //确定依附最多的多边形
         int max = 0;
+        for (Polygon3D* p : polygon3DList) {
+            if (relationMap.find(p) == relationMap.end()) continue;
+
+            int size = relationMap[p].size();
+            if (size > max) {
+                max = size;
+                rootPolygon3D = p;
+            }
+        }
+
+        //确定侧面个数
+        float baseSideCount = 3;
         map<Polygon3D*, vector<Polygon3D*>>::iterator it;
         for (it = relationMap.begin(); it != relationMap.end(); it++) {
-            Polygon3D* cp = it->first;
-            cp->parent = nullptr;
-            cp->child.clear();
-
-            if (it->second.size() > max) {
-                rootPolygon3D = cp;
-                max = it->second.size();
-            }
+            it->first->parent = nullptr;
+            it->first->child.clear();
 
             if (it->first->faceType == FaceType::FaceTypeBase) {
                 baseSideCount = it->first->getVertexCount();

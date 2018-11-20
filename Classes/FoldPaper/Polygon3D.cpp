@@ -11,12 +11,6 @@ using namespace std;
 
 namespace FoldPaper {
 
-    inline Vec3 normalisedCopy(Vec3 v) {
-        Vec3 rv = v;
-        rv.normalize();
-        return rv.getNormalized();
-    }
-
     inline Rect3D getBoundBox(const Vec3 &a, const Vec3 &b, const Vec3 &c) {
         float inf = std::numeric_limits<float>::infinity();
         Vec3 minPt(inf, inf, inf);
@@ -85,7 +79,6 @@ namespace FoldPaper {
         Vec3 p0 = vertexList[1].position - vertexList[0].position;
         Vec3 p1 = vertexList[2].position - vertexList[0].position;
         p0.cross(p1);
-        p0.normalize();
         return p0.getNormalized();
     }
 
@@ -102,13 +95,10 @@ namespace FoldPaper {
             Vec3 o = closestPointToLine(pt, p0, p1);
             float r = (pt - o).length();
 
-            Vec3 u = pt - o;
-            u.normalize();
-            u = u.getNormalized();
+            Vec3 u = (pt - o).getNormalized();
 
             Vec3 v = p0 - p1;
             v.cross(u);
-            v.normalize();
             v = v.getNormalized();
 
             Vec3 out = o + r * u * cos(angle) + r * v * sin(angle);
@@ -190,17 +180,17 @@ namespace FoldPaper {
             Vec3 v2 = vertexList[j].position;
             Vec3 center1 = (v0 + v1 + v2) / 3.0f;
             // Make the triangle smaller to avoid boundary case
-            v0 = center1 + scale * (v0 - center1).length() * normalisedCopy(v0 - center1);
-            v1 = center1 + scale * (v1 - center1).length() * normalisedCopy(v1 - center1);
-            v2 = center1 + scale * (v2 - center1).length() * normalisedCopy(v2 - center1);
+            v0 = center1 + scale * (v0 - center1).length() * (v0 - center1).getNormalized();
+            v1 = center1 + scale * (v1 - center1).length() * (v1 - center1).getNormalized();
+            v2 = center1 + scale * (v2 - center1).length() * (v2 - center1).getNormalized();
             for (size_t k = 2; k < otherCount; k++) {
                 Vec3 p0 = otherPolygon->vertexList[0].position;
                 Vec3 p1 = otherPolygon->vertexList[k - 1].position;
                 Vec3 p2 = otherPolygon->vertexList[k].position;
                 Vec3 center0 = (p0 + p1 + p2) / 3.0f;
-                p0 = center0 + scale * (p0 - center0).length() * normalisedCopy(p0 - center0);
-                p1 = center0 + scale * (p1 - center0).length() * normalisedCopy(p1 - center0);
-                p2 = center0 + scale * (p2 - center0).length() * normalisedCopy(p2 - center0);
+                p0 = center0 + scale * (p0 - center0).length() * (p0 - center0).getNormalized();
+                p1 = center0 + scale * (p1 - center0).length() * (p1 - center0).getNormalized();
+                p2 = center0 + scale * (p2 - center0).length() * (p2 - center0).getNormalized();
 
                 // The Triangle to Triangle test fail in some case, we use the bounding box test to help
                 Rect3D box0 = getBoundBox(v0, v1, v2);
