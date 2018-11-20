@@ -221,7 +221,6 @@ void DrawNode3D::onDraw(const Mat4 &transform, uint32_t flags)
     glProgram->setUniformsForBuiltins(transform);
     //设置Uniform数据
     glProgram->setUniformLocationWith3f(glProgram->getUniformLocation("lightDir"), _lightDir.x, _lightDir.y, _lightDir.z);
-    glProgram->setUniformLocationWith1i(glProgram->getUniformLocation("diffuse"), 0);
     GL::blendFunc(_blendFunc.src, _blendFunc.dst);
 
     if (_dirty)

@@ -65,7 +65,7 @@ namespace FoldPaper {
         cc3dLayer->userCameraFlag(CameraFlag::USER1);
         addChild(cc3dLayer);
         cc3dLayer->addChild(AmbientLight::create(Color3B(160, 160, 160)));
-        light = DirectionLight::create(Vec3(1, -3, -5).getNormalized(), Color3B(100, 100, 100));
+        light = DirectionLight::create(Vec3(1.0f, -3.0f, -5.0f).getNormalized(), Color3B(100, 100, 100));
         cc3dLayer->_camera->addChild(light);
         cc3dLayer->setCamLoc(camtarget, camquat, camoffset);
 
@@ -236,7 +236,7 @@ namespace FoldPaper {
 
     void FoldPaperFoldLayer::draw3DObj(Polygon3D* polygon3D, bool isFront) {
         
-        Vec3 lightDir = light->getDirection(); //暂定
+        Vec3 lightDir = light->getDirectionInWorld();
 
         auto draw3d = DrawNode3D::create(4);
         draw3d->setCameraMask(cc3dLayer->getCameraMask());
