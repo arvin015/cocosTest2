@@ -119,8 +119,11 @@ bool DrawNode3D::init()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 
-    auto glProgram = GLProgram::createWithFilenames("MyVertexShader.vert", "MyFragmentShader.frag");
-    GLProgramCache::getInstance()->addGLProgram(glProgram, MY_SHADER);
+    auto glProgram = GLProgramCache::getInstance()->getGLProgram(MY_SHADER);
+    if (glProgram == nullptr) {
+        glProgram = GLProgram::createWithFilenames("MyVertexShader.vert", "MyFragmentShader.frag");
+        GLProgramCache::getInstance()->addGLProgram(glProgram, MY_SHADER);
+    }
     setGLProgramState(GLProgramState::getOrCreateWithGLProgramName(MY_SHADER));
 
     ensureCapacity(512);
