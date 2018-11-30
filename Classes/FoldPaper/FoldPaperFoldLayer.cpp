@@ -140,6 +140,23 @@ namespace FoldPaper {
         draw3D();
     }
 
+    class TSorter
+    {
+    public:
+        TSorter(const Vec3 & eyePos)
+        {
+            mEyePos = eyePos;
+        }
+        bool operator()(Polygon3D* face0, Polygon3D* face1) const
+        {
+            float dist0 = (mEyePos - face0->getCenter()).length();
+            float dist1 = (mEyePos - face1->getCenter()).length();
+            return dist0 > dist1;
+        }
+    protected:
+        Vec3 mEyePos;
+    };
+    
     void FoldPaperFoldLayer::draw3D() {
 
         show3DContainer->removeAllChildren();
@@ -158,6 +175,10 @@ namespace FoldPaper {
                 backFaces.push_back(polygon3D);
             }
         }
+        
+        //排序，解决穿透问题
+        sort(backFaces.begin(), backFaces.end(), TSorter(cc3dLayer->_camera->getPosition3D()));
+        sort(frontFaces.begin(), frontFaces.end(), TSorter(cc3dLayer->_camera->getPosition3D()));
 
         //先绘制后面
         for (Polygon3D* backPolygon3D : backFaces) {
