@@ -86,3 +86,24 @@ void UIDrawNodeEx::drawSolidArc(const Vec2 &center, float radius, float startAng
     
     CC_SAFE_DELETE_ARRAY(vertices);
 }
+
+void UIDrawNodeEx::drawSolidCircleWithBorder(const Vec2 &center, float radius, unsigned int segments, const Color4F &color, float borderWidth, const Color4F &borderColor) {
+
+    float coef = 2 * M_PI / segments;
+
+    Vec2 *vertices = new (std::nothrow) Vec2[segments];
+    if (!vertices)
+        return;
+
+    for (unsigned int i = 0; i < segments; i++) {
+        float rads = i * coef;
+        GLfloat j = radius * cosf(rads) + center.x;
+        GLfloat k = radius * sinf(rads) + center.y;
+
+        vertices[i].x = j;
+        vertices[i].y = k;
+    }
+    drawPolygon(vertices, segments, color, borderWidth, borderColor);
+
+    CC_SAFE_DELETE_ARRAY(vertices);
+}
