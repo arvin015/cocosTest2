@@ -1,4 +1,4 @@
-﻿#include "CC3DLayer.h"
+#include "CC3DLayer.h"
 
 //#include "CC2D3Util.h"
 #include "CC3DMath.h"

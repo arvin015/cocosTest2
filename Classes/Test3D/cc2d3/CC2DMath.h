@@ -1,4 +1,4 @@
-﻿#ifndef CC2D3MATHUTILH__
+#ifndef CC2D3MATHUTILH__
 #define CC2D3MATHUTILH__
 
 #include "cocos2d.h"
@@ -18,7 +18,7 @@ inline float shapeArea(const std::vector<Vec2>& pts) {
 }
 
 inline bool shapeIsClockwise(const std::vector<Vec2> &pts) {
-	return 0 > shapeAreaSigned2(pts);
+	return 0 >= shapeAreaSigned2(pts); //arvin edit add'='
 }
 
 

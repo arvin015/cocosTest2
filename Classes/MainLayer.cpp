@@ -31,6 +31,8 @@
 #include "FoldPaperLayer.h"
 #include "Test3DLayer.h"
 #include "FractionBarLayer.h"
+#include "VolumesOfCubesLayer.h"
+#include "VolumeCutfillLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -48,7 +50,7 @@ int getArrLen(T &array) {
 
 const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
                         "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
-                        "Cutting", "FoldPaper", "Test3D", "分数棒"};
+                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -222,6 +224,16 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 15: {
                 auto fractionBarLayer = FractionBar::FractionBarLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(fractionBarLayer);
+                break;
+            }
+            case 16: {
+                auto volumesOfCubesLayer = VolumesOfCubesLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(volumesOfCubesLayer);
+                break;
+            }
+            case 17: {
+                auto volumeCutfillLayer = VolumeCutfillLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(volumeCutfillLayer);
                 break;
             }
                 

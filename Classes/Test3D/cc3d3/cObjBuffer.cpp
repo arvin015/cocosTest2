@@ -1,4 +1,4 @@
-﻿#include "cObjBuffer.h"
+#include "cObjBuffer.h"
 #include "cG3DefModelGen.h"
 #include "cG3DefModelGenSphere.h"
 
