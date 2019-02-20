@@ -10,82 +10,109 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "eGeom3D.h"
+#include "Geom3D.h"
+#include "BasicData.h"
 
-class CC3DLayer;
+//namespace VolumeCutfill {
 
-class Volume3D : public cocos2d::Ref {
+    const float Volume_MoveByValue = 0.08f;
+    const float Volume_Duration = 0.3f;
 
-public:
+    class CC3DLayer;
 
-    Volume3D();
-    virtual ~Volume3D();
+    class Volume3D : public cocos2d::Ref {
 
-    void setData(CC3DLayer* cc3DLayer, std::vector<cocos2d::Vec2> vecs);
+    public:
 
-    void showModel();
+        const enum TRANS_DIRECTION {
+            HOR,
+            VER
+        };
 
-    /**
-     * 获取最近的点
-     */
-    void findMinDisPoint(const cocos2d::Vec2 &point, const cocos2d::Vec2 &startPoint, cocos2d::Vec2 &rsPoint, float &dis);
+        Volume3D();
+        virtual ~Volume3D();
 
-    /**
-     * 分割
-     */
-    void cutPolygon(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, std::vector<cocos2d::Vec2> &leftVecList, std::vector<cocos2d::Vec2> &rightVecList);
+        void setData(CC3DLayer* cc3DLayer, const std::vector<VertexInfo> &vecs);
 
-    /**
-     * 播放移位动画
-     */
-    void playTranslateAnim(float duration, const cocos2d::Vec3 &offset);
+        void showModel();
 
-    /**
-     * 清除
-     */
-    void clear();
+        /**
+         * 获取最近的点
+         */
+        bool getMinDisPoint(const cocos2d::Vec2 &point, const cocos2d::Vec2 &startPoint, float maxDis, VertexInfo &rs, float &dist);
 
-private:
+        /**
+         * 是否可切割
+         */
+        bool checkCanCut(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2);
 
-    /**
-     * 加载面
-     */
-    void loadFaces();
+        /**
+         * 分割
+         */
+        void cutPolygon(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, std::vector<VertexInfo> &leftVecList, std::vector<VertexInfo> &rightVecList);
 
-    /**
-     * 加载描边
-     */
-    void loadEdges();
+        /**
+         * 播放未参与分割块移位动画
+         */
+        void playTransAnim(float duration, const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, const TRANS_DIRECTION &direction);
 
-    /**
-     * 创建描边Sprite3D
-     */
-    Sprite3D* makeEdgeSprite(const cocos2d::Vec3 &v1, const cocos2d::Vec3 &v2, cocos2d::Node *cc3dlayer);
+        /**
+         * 播放移位动画
+         */
+        void playTranslateAnim(float duration, const cocos2d::Vec3 &offset);
 
-    /**
-     * 世界坐标转成屏幕坐标
-     */
-    void vector3dTo2d();
+        /**
+         * 清除
+         */
+        void clear();
 
-    /**
-     * 绘制2D
-     */
-    void draw2D();
+    private:
 
-private:
-    CC3DLayer* cc3DLayer;
-    eGeom3D geom3D;
+        /**
+         * 加载面
+         */
+        void loadFaces();
 
-    cocos2d::Sprite3D* volume3d;
-    cocos2d::Sprite3D* topSp3d;
-    cocos2d::Sprite3D* sideSp3d;
-    cocos2d::Sprite3D* bottomSp3d;
-    std::vector<cocos2d::Sprite3D*> spEdges;
+        /**
+         * 加载描边
+         */
+        void loadEdges();
 
-    cocos2d::DrawNode* dotDrawNode;
+        /**
+         * 创建描边Sprite3D
+         */
+        Sprite3D* makeEdgeSprite(const cocos2d::Vec3 &v1, const cocos2d::Vec3 &v2, cocos2d::Node *cc3dlayer);
 
-    cocos2d::Vec3 offset; //动画位移值
-    std::vector<cocos2d::Vec2> top2dVecs;
-};
+        /**
+         * 世界坐标转成屏幕坐标
+         */
+        void vertex3dTo2d();
+
+        /**
+         * 获取2d中心点坐标
+         */
+        cocos2d::Vec2 getCenterPoint();
+
+        /**
+         * 绘制2D
+         */
+        void draw2D();
+
+    private:
+        CC3DLayer* cc3DLayer;
+        Geom3D geom3D;
+
+        cocos2d::Sprite3D* volume3d;
+        cocos2d::Sprite3D* topSp3d;
+        cocos2d::Sprite3D* sideSp3d;
+        cocos2d::Sprite3D* bottomSp3d;
+        std::vector<cocos2d::Sprite3D*> spEdges;
+
+        cocos2d::DrawNode* dotDrawNode;
+
+        cocos2d::Vec3 offset; //动画位移值
+        std::vector<VertexInfo> top2dVecs; //屏幕上2d坐标集
+    };
+//}
 
 #endif /* Volume3D_h */

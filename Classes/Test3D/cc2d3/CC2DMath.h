@@ -18,9 +18,14 @@ inline float shapeArea(const std::vector<Vec2>& pts) {
 }
 
 inline bool shapeIsClockwise(const std::vector<Vec2> &pts) {
-	return 0 >= shapeAreaSigned2(pts); //arvin edit add'='
+	return 0 > shapeAreaSigned2(pts);
 }
 
+inline bool shapeIsClockwise2(std::vector<Vec2> pts) { //arvin edit
+	if (pts.size() < 1) return false;
+	pts.push_back(pts.at(0));
+	return 0 > shapeAreaSigned2(pts);
+}
 
 // Angle Functions ===== ===== ===== ===== ===== ===== ===== 
 inline float Deg2Rad(float d) {

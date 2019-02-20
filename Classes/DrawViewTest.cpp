@@ -43,7 +43,7 @@ bool DrawViewTest::init() {
     });
     this->addChild(drawTypeBtn);
     
-    auto drawNode = UIDrawNodeEx::create(4);
+    auto drawNode = DrawNodeEx::create(4);
     drawNode->drawArc(Vec2(200, 200), 100, 225, 90, 120, Color4F::RED, true);
     drawNode->drawArc(Vec2(300, 300), 100, 225, 90, 120, Color4F::RED, false);
     drawNode->drawSolidArc(Vec2(400, 400), 100, 225, 90, 120, Color4F::RED, 1, Color4F::BLACK);

@@ -14,16 +14,53 @@
 USING_NS_CC;
 using namespace std;
 
-#define PI 3.1415926
+//浮点数比较是否相等
+inline bool Equal(float f1, float f2) {
+    return (abs(f1 - f2) < 0.008);
+}
+
+//判断点在线的哪边---有方向性：返回值：-1左边；0线上；1右边
+inline int judgePointToLine(const Vec2 lineP1, const Vec2 lineP2, const Vec2 p) {
+    Vec2 v1 = p - lineP1;
+    Vec2 v2 = lineP2 - lineP1;
+    float cross = v1.cross(v2); //外积
+    if (cross > 0.01) return 1;
+    if (cross < 0.01) return -1;
+    return 0;
+}
+
+//两点求斜率
+inline float getSlope(const Vec2 &p1, const Vec2 &p2) {
+    if (Equal(p1.x, p2.x)) { //斜率不存在
+        return -2;
+    }
+    return (p2.y - p1.y) / (p2.x - p1.x);
+}
+
+//斜率获取两点与X轴的夹角
+inline float getAngleWith2Point(const Point &p1, const Point &p2) {
+    float angle;
+    if (Equal(p1.x, p2.x)) {
+        angle = M_PI_2;
+    } else {
+        angle = atanf((p2.y - p1.y) / (p2.x - p1.x));
+    }
+    return angle;
+}
+
+//向量法获取三点的夹角
+inline float getAngleWith3Point(const Point &p1, const Point &centerP, const Point &p2) {
+    Point v1 = p1 - centerP;
+    Point v2 = p2 - centerP;
+    return acosf(v1.dot(v2) / (sqrtf(v1.lengthSquared()) * sqrtf(v2.lengthSquared())));
+}
 
 //两点确定y = kx + b
-inline void getLineFormula(const Point &point1, const Point &point2, float &k, float &b) {
-    if (abs(point1.x - point2.x) < FLT_EPSILON) {
-        k = 10000.0;
-    } else {
-        k = (point2.y - point1.y) / (point2.x - point1.x);
-        b = point1.y - k * point1.x;
-    }
+inline bool getLineFormula(const Point &point1, const Point &point2, float &k, float &b) {
+    if (Equal(point1.x, point2.x)) return false;
+    k = (point2.y - point1.y) / (point2.x - point1.x);
+    b = point1.y - k * point1.x;
+    return true;
 }
 
 //叉积
@@ -53,10 +90,6 @@ inline bool intersect(Point aa, Point bb, Point cc, Point dd) {
         return false;
     }
     return true;
-}
-
-inline bool Equal(float f1, float f2) {
-    return (abs(f1 - f2) < 1e-4f);
 }
 
 //计算两向量外积
@@ -175,6 +208,65 @@ inline int intersection(Point p1, Point p2, Point p3, Point p4, Point &Int) {
     Int.y = (ConB * v1.y - ConA * v2.y) / Corss;
     //正交返回1
     return 1;
+}
+
+//判断点是否在多边形内
+inline bool isInPolygon(const vector<Vec2> &vecs, const Vec2 &point) {
+    int count = 0; //统计交点
+    for (int i = 0; i < vecs.size(); i++) {
+        Vec2 v1 = vecs.at(i);
+        Vec2 v2 = vecs.at((i+1)%vecs.size());
+        Vec2 rs;
+        if (intersection(v1, v2, Vec2(0, point.y), point, rs) > 0) {
+            count++;
+        }
+    }
+    if (count % 2 > 0) return true;
+    return false;
+}
+
+/************************************************计算点到线段的距离**************************************************
+                             /P                                          /P                           P\
+                            /                                       　　/                              　\
+                           /                                       　　/                               　 \
+                          /                                          /                                    \
+                        A ----C-------B                    A--------B   C                           C     A ----------B
+
+    长度：                        CP                                BP                                        AP
+    计算：d = dot(AP,AB)/|AB|^2
+    判断依据：                    if(0<d<1)                    if(d>1)                                if(d<0)
+    ************************************************计算点到线段的距离**************************************************/
+
+/**
+ * @brief
+ * @param point_A 点A的位置坐标（x,y,z）| (x,y)
+ * @param point_B 点B的位置坐标（x,y,z）| (x,y)
+ * @param point_C 点C的位置坐标（x,y,z）| (x,y)
+ * @param dot     表示点C与线段AB的相对位置 此为返回值 if(0<dot<1)点C在线段AB的中间区域 if(dot>1)点C在线段AB的右边区域 if(dot<0)点C在线段AB的左边区域
+ * @param point_C 点C的位置坐标（x,y,z）| (x,y) 此为返回值
+ * @return float  返回点C到线段AB的最近距离
+ */
+inline float Dis_PointToLineSegment(const Point& point_A, const Point& point_B, const Point& point_P, float &dot, Point &point_C)
+{
+    Point AP = point_P -  point_A;
+    Point AB = point_B -  point_A;
+    float ABdic = AB.length();
+    dot = AP.dot(AB) / (ABdic * ABdic);
+    Point AC = AB * dot;
+//    Point AC = AP.project(AB);
+    point_C = AC + point_A;
+
+    float length;
+    if (dot > 1) { //距离为BP
+        Point BP = point_P - point_B;
+        length = BP.length();
+    } else if (dot < 0) { //距离为AP
+        length = AP.length();
+    } else { //距离为PC
+        Point PC = point_P - point_C;
+        length = PC.length();
+    }
+    return length;
 }
 
 #endif /* MathUtils_h */

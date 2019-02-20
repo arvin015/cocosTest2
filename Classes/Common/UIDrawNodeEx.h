@@ -11,17 +11,17 @@
 #include <stdio.h>
 #include "cocos2d.h"
 
-class UIDrawNodeEx : public cocos2d::DrawNode {
+class DrawNodeEx : public cocos2d::DrawNode {
 
 public:
-    
-    UIDrawNodeEx(GLfloat defaultLineWidth = 2.0f);
-    virtual ~UIDrawNodeEx();
+
+    DrawNodeEx(GLfloat defaultLineWidth = 2.0f);
+    virtual ~DrawNodeEx();
 
     /**
      * 创建
      */
-    static UIDrawNodeEx* create(GLfloat defaultLineWidth = 2.0f);
+    static DrawNodeEx* create(GLfloat defaultLineWidth = 2.0f);
     
     /**
      * 初始化
@@ -42,6 +42,11 @@ public:
      * 绘制带边框的实心圆
      */
     void drawSolidCircleWithBorder(const cocos2d::Vec2 &center, float radius, unsigned int segments, const cocos2d::Color4F &color, float borderWidth, const cocos2d::Color4F &borderColor);
+
+    /**
+     * 绘制虚线
+     */
+    void drawDashLine(const cocos2d::Vec2 &start, const cocos2d::Vec2 &end, float radius, float dashWidth, float spanWidth, const cocos2d::Color4F &color);
 };
 
 #endif /* UIDrawNodeEx_h */

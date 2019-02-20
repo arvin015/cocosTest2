@@ -10,15 +10,15 @@
 USING_NS_CC;
 using namespace std;
 
-UIDrawNodeEx::UIDrawNodeEx(GLfloat defaultLineWidth)
+DrawNodeEx::DrawNodeEx(GLfloat defaultLineWidth)
 : DrawNode(defaultLineWidth) {
 }
 
-UIDrawNodeEx::~UIDrawNodeEx() {
+DrawNodeEx::~DrawNodeEx() {
 }
 
-UIDrawNodeEx* UIDrawNodeEx::create(GLfloat defaultLineWidth) {
-    auto drawNodeEx = new (std::nothrow) UIDrawNodeEx(defaultLineWidth);
+DrawNodeEx* DrawNodeEx::create(GLfloat defaultLineWidth) {
+    auto drawNodeEx = new (std::nothrow) DrawNodeEx(defaultLineWidth);
     if (drawNodeEx && drawNodeEx->init()) {
         drawNodeEx->autorelease();
     } else {
@@ -27,11 +27,11 @@ UIDrawNodeEx* UIDrawNodeEx::create(GLfloat defaultLineWidth) {
     return drawNodeEx;
 }
 
-bool UIDrawNodeEx::init() {
+bool DrawNodeEx::init() {
     return DrawNode::init();
 }
 
-void UIDrawNodeEx::drawArc(const Vec2 &center, float radius, float startAngle, float sweepAngle, unsigned int segments, const Color4F &color, bool drawLineToCenter) {
+void DrawNodeEx::drawArc(const Vec2 &center, float radius, float startAngle, float sweepAngle, unsigned int segments, const Color4F &color, bool drawLineToCenter) {
     
     float coef = CC_DEGREES_TO_RADIANS(sweepAngle) / segments;
 
@@ -61,7 +61,7 @@ void UIDrawNodeEx::drawArc(const Vec2 &center, float radius, float startAngle, f
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
-void UIDrawNodeEx::drawSolidArc(const Vec2 &center, float radius, float startAngle, float sweepAngle, unsigned int segments, const Color4F &color, float borderWidth, const Color4F &borderColor) {
+void DrawNodeEx::drawSolidArc(const Vec2 &center, float radius, float startAngle, float sweepAngle, unsigned int segments, const Color4F &color, float borderWidth, const Color4F &borderColor) {
     
     float coef = CC_DEGREES_TO_RADIANS(sweepAngle) / segments;
     
@@ -87,7 +87,7 @@ void UIDrawNodeEx::drawSolidArc(const Vec2 &center, float radius, float startAng
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
-void UIDrawNodeEx::drawSolidCircleWithBorder(const Vec2 &center, float radius, unsigned int segments, const Color4F &color, float borderWidth, const Color4F &borderColor) {
+void DrawNodeEx::drawSolidCircleWithBorder(const Vec2 &center, float radius, unsigned int segments, const Color4F &color, float borderWidth, const Color4F &borderColor) {
 
     float coef = 2 * M_PI / segments;
 
@@ -107,3 +107,37 @@ void UIDrawNodeEx::drawSolidCircleWithBorder(const Vec2 &center, float radius, u
 
     CC_SAFE_DELETE_ARRAY(vertices);
 }
+
+inline float getAngle(const Vec2 &p1, const Vec2 &p2) {
+    float angle;
+    if (fabsf(p1.x - p2.x) < 1e-4f) {
+        angle = M_PI_2;
+    } else {
+        angle = atanf((p2.y - p1.y) / (p2.x - p1.x));
+    }
+    return angle;
+}
+
+void DrawNodeEx::drawDashLine(const Vec2 &start, const Vec2 &end, float radius, float dashWidth, float spanWidth, const Color4F &color) {
+    float totalL = start.distance(end);
+    int num = totalL / (dashWidth + spanWidth); //画线条数
+    float angle = getAngle(start, end);
+    float offsetX = cosf(angle);
+    float offsetY = sinf(angle);
+    if (start.x > end.x) {
+        offsetX = -offsetX;
+        offsetY = -offsetY;
+    }
+    for (int i = 0; i < num; i++) {
+        float len1 = (dashWidth + spanWidth) * i;
+        float len2 = i == num - 1 ? totalL : len1 + dashWidth;
+        float x1 = start.x + offsetX * len1;
+        float y1 = start.y + offsetY * len1;
+        float x2 = start.x + offsetX * len2;
+        float y2 = start.y + offsetY * len2;
+
+        drawSegment(Vec2(x1, y1), Vec2(x2, y2), radius, color);
+    }
+}
+
+

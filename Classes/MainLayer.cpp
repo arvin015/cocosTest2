@@ -50,7 +50,7 @@ int getArrLen(T &array) {
 
 const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
                         "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
-                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿"};
+                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割填补"};
 
 inline int getMRow(int index, int col) {
     return index / col;
