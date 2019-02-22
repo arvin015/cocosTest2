@@ -12,76 +12,72 @@
 #include "BaseLayer.h"
 #include "cMultiTouch.h"
 #include "CC3DLayer.h"
-#include "BasicData.h"
-#include "UIDrawNodeEx.h"
-#include "Volume3D.h"
 #include "ui/UIButton.h"
+#include "ui/UIRadioButton.h"
+#include "CutLayer.h"
+#include "FillLayer.h"
 
-//namespace VolumeCutfill {
+class VolumeQuestion;
 
-    class Volume3D;
+class VolumeCutfillLayer : public BaseLayer {
 
-    class VolumeCutfillLayer : public BaseLayer {
+public:
 
-    public:
-
-        VolumeCutfillLayer();
-        virtual ~VolumeCutfillLayer();
-
-        virtual void onEnter();
-        virtual void onExit();
-
-        virtual bool init();
-
-        CREATE_FUNC(VolumeCutfillLayer);
-
-        virtual bool shouldWhiteBg() {return false;};
-
-        void reset();
-
-    private:
-
-        virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-        virtual void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-        virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
-
-        void initDefaultSolid();
-
-        Volume3D* createVolume3D(const std::vector<VertexInfo> &vecs);
-
-        VertexInfo getStartPoint(const cocos2d::Vec2 &point);
-
-        bool getEndPoint(const cocos2d::Vec2 &point, const cocos2d::Vec2 &startPoint, VertexInfo &rs);
-
-        /**
-         * 切割
-         */
-        void cutSolid(Volume3D* volume3D, const VertexInfo &ver1, const VertexInfo &ver2);
-
-        /**
-         * 获取切割分离移位方向
-         */
-        Volume3D::TRANS_DIRECTION getTransDirection(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2);
-
-    private:
-
-        cocos2d::EventListenerTouchOneByOne* touchListener;
-        CC3DLayer* cc3DLayer;
-        cocos2d::DirectionLight* light;
-        cocos2d::Vec3 camtarget, camoffset;
-        cocos2d::Quaternion camquat;
-        cMultiTouch multitouch;
-        bool canRotateCamera;
-
-        DrawNodeEx* drawNodeEx;
-
-        Volume3D* curVolume3D;
-        cocos2d::Vector<Volume3D*> volume3DList;
-
-        VertexInfo startVertex;
-
-        cocos2d::ui::Button* resetBtn;
+    enum WorkType {
+        NONE,
+        CUT,
+        FILL
     };
-//}
+
+    VolumeCutfillLayer();
+    virtual ~VolumeCutfillLayer();
+
+    virtual void onEnter();
+    virtual void onExit();
+
+    virtual bool init();
+
+    CREATE_FUNC(VolumeCutfillLayer);
+
+    virtual bool shouldWhiteBg() {return false;};
+
+    virtual std::string toJSON();
+    virtual void fromJSON(const std::string &json);
+
+    void setWorkType(WorkType workType);
+
+    void reset();
+
+private:
+
+    virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    virtual void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+
+    void loadQuestion(int qId);
+
+    VolumeQuestion* getQuestionById(int qId);
+
+private:
+
+    cocos2d::EventListenerTouchOneByOne* touchListener;
+    CC3DLayer* cc3DLayer;
+    cocos2d::DirectionLight* light;
+    cocos2d::Vec3 camtarget, camoffset;
+    cocos2d::Quaternion camquat;
+    cMultiTouch multitouch;
+
+    std::vector<VolumeQuestion*> questionList;
+
+    BaseCutfillLayer* currentLayer;
+    CutLayer* cutLayer;
+    FillLayer* fillLayer;
+
+    WorkType workType;
+
+    cocos2d::ui::Button* cutBtn;
+    cocos2d::ui::Button* fillBtn;
+    cocos2d::ui::Button* resetBtn;
+};
 
 #endif /* VolumeCutfillLayer_h */
