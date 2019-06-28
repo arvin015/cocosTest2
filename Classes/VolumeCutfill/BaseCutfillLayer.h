@@ -47,6 +47,7 @@ public:
 protected:
 
     Solid3D* createSolid3D(const std::vector<VertexInfo> &vecs);
+    Solid3D* createSolid3D(const rapidjson::Value &json);
 
     VertexInfo getStartPoint(const cocos2d::Vec2 &point);
 

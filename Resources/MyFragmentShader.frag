@@ -16,10 +16,10 @@ void main (void)
 {
     mediump vec3 n = normalize(Normal);
     
-    vec4 combinedColor = vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 combinedColor = vec4(0.9, 0.9, 0.9, 1.0);
     
     vec3 lightDirection = normalize(lightDir * 2.0);
-    combinedColor.xyz += computeLighting(n, -lightDirection, vec3(0.3, 0.3, 0.3), 1.0);
+    combinedColor.xyz += computeLighting(n, -lightDirection, vec3(0.15, 0.15, 0.15), 1.0);
 
     gl_FragColor = texture2D(CC_Texture0, texCoord) * fragColor * combinedColor;
 }

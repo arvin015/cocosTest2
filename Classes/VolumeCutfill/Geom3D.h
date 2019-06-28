@@ -18,87 +18,18 @@ inline bool isClockwise(std::vector<VertexInfo> pts) {
     return 0 > a;
 }
 
-class Geom3D {
-
-public:
-
-    //2D
-    std::vector<VertexInfo> vecFree; //初始2d顶点集
-    std::vector<cocos2d::Vec2> vecFreeTris; //转换成三角形后的2d顶点集
-
-    //3D
-    Vec3 vHeight, baseCenter;
-    std::vector<VertexInfo> v3BtmSides; //vecFree转成3d顶点集
-
-    cG3DefModelGen *model, *modeltop, *modelbottom; //侧面、上面、下面数据模型
-
-public:
-    Geom3D()
-    : model(nullptr)
-    , modeltop(nullptr)
-    , modelbottom(nullptr)
-    , vHeight(0, 0, 0.5f) {}
-
-    virtual ~Geom3D() {
-        unload();
-    }
-
-    void unload();
-
-    static inline float pixelto3dunit(float pix) {
-        return pix / 256.0f;
-    }
-
-    /**
-     * 多边形分割为多个三角形---解决凹多边形填充问题
-     */
-    void poly2tri();
-
-    /**
-     * 释放3D
-     */
-    void unloadModel();
-
-    /**
-     * 加载3D
-     */
-    bool loadModel();
-
-    /**
-     * 创建上下面3D数据模型-若干个3D三角形组成
-     */
-    cG3DefModelGen* loadModelTris(const std::vector<Vec2> &tris, float z);
-
-    /**
-     * 创建侧面3D数据模型
-     */
-    cG3DefModelGen* loadModelPillarSides(const std::vector<VertexInfo> &vecs, const Vec3 sidehigh);
-};
-
 /**
- * 创建Sprite3D
+ * 2d坐标值转3d
  */
-inline Sprite3D* addSprite3D(Node* pnode, Sprite3D* sp3d) {
-    pnode->addChild(sp3d);
-    sp3d->setCameraMask(pnode->getCameraMask());
-    return sp3d;
+inline float pixelto3dunit(float pix) {
+    return pix / 256.0f;
 }
-
-/**
- * 根据3D数据模型创建Sprite3D
- */
-Sprite3D* addSprite3DModel(cG3DefModelGen* mdl, Node* pnode, const Vec3 &pos);
-
-/**
- * 创建3D数据模型
- */
-cG3DefModelGen* preallocModel(int cntvec, int cntidx);
 
 /**
  * 2d坐标转3d坐标
  */
 inline Vec3 poly2solid(const Vec2 &v2, float z) {
-    return Vec3(Vec3(Geom3D::pixelto3dunit(v2.x - 512), Geom3D::pixelto3dunit(v2.y - 384), z));
+    return Vec3(Vec3(pixelto3dunit(v2.x - 512), pixelto3dunit(v2.y - 384), z));
 }
 
 /**
@@ -121,9 +52,7 @@ inline Vec3 polylist2solid(const std::vector<VertexInfo> &v2, std::vector<Vertex
 /**
  * 设置三角形3D模型数据
  */
-inline void
-modelSetTri(cG3DefModel* model, int idx0, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2,
-            const Vec3 &nor) {
+inline void modelSetTri(cG3DefModel* model, int idx0, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2, const Vec3 &nor) {
     model->vers[idx0].set(v0);
     model->vers[idx0 + 1].set(v1);
     model->vers[idx0 + 2].set(v2);
@@ -143,8 +72,7 @@ modelSetTri(cG3DefModel* model, int idx0, const Vec3 &v0, const Vec3 &v1, const 
 /**
  * 设置单元三角形3D模型数据
  */
-inline void
-modelSetTri(cG3DefModel* model, int idx0, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2) {
+inline void modelSetTri(cG3DefModel* model, int idx0, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2) {
     modelSetTri(model, idx0, v0, v1, v2, tri2normal(v1, v0, v2));
 }
 
@@ -161,8 +89,7 @@ inline std::vector<T> vectormakereverse(const std::vector<T> &src) {
 /**
  * 设置矩形3D模型数据
  */
-inline void modelSetQuatVec(cG3DefModel* model, int idx0, int vi0, const Vec3 &v0, const Vec3 &v1,
-                            const Vec3 &v2, const Vec3 &v3) {
+inline void modelSetQuatVec(cG3DefModel* model, int idx0, int vi0, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2, const Vec3 &v3) {
     //4 vecs
     model->vers[vi0].set(v0);
     model->vers[vi0 + 1].set(v1);
@@ -188,5 +115,92 @@ inline void modelSetQuatVec(cG3DefModel* model, int idx0, int vi0, const Vec3 &v
     model->idxs[idx0 + 4] = vi0 + 3;
     model->idxs[idx0 + 5] = vi0 + 2;
 }
+
+/**
+ * 创建3D基本数据模型
+ */
+cG3DefModelGen* preallocModel(int cntvec, int cntidx);
+
+/**
+ * 创建立方体数据模型
+ * @size 边长
+ */
+cG3DefModelGen* loadModelCube(float size);
+
+/**
+ * 创建圆锥体数据模型
+ * @side   侧面数
+ * @r      底部圆半径
+ * @height 圆锥体高
+ */
+cG3DefModelGen* loadModelCone(int side, float r, float height);
+
+/**
+ * 创建圆数据模型
+ * @r        球半径
+ * @latCount 纬度圈数
+ * @lonCount 经度圈数
+ */
+cG3DefModelGen* loadModelSphere(float r, int latCount, int lonCount);
+
+/**
+ * 创建Sprite3D
+ */
+inline Sprite3D* addSprite3D(Node* pnode, Sprite3D* sp3d) {
+    pnode->addChild(sp3d);
+    sp3d->setCameraMask(pnode->getCameraMask());
+    return sp3d;
+}
+
+/**
+ * 根据3D数据模型创建Sprite3D
+ */
+Sprite3D* addSprite3DModel(cG3DefModelGen* mdl, Node* pnode, const Vec3 &pos);
+
+class Geom3D {
+
+public:
+    Geom3D();
+    virtual ~Geom3D();
+
+    void unload();
+
+    /**
+     * 多边形分割为多个三角形---解决凹多边形填充问题
+     */
+    void poly2tri();
+
+    /**
+     * 释放3D
+     */
+    void unloadModel();
+
+    /**
+     * 加载3D
+     */
+    bool loadModel();
+
+    /**
+     * 创建上下面3D数据模型-若干个3D三角形组成
+     */
+    cG3DefModelGen* loadModelTris(const std::vector<Vec2> &tris, float z);
+
+    /**
+     * 创建侧面3D数据模型
+     */
+    cG3DefModelGen* loadModelPillarSides(const std::vector<VertexInfo> &vecs, const Vec3 sidehigh);
+
+public:
+
+    //2D
+    std::vector<VertexInfo> vecFree; //初始2d顶点集
+    std::vector<cocos2d::Vec2> vecFreeTris; //转换成三角形后的2d顶点集
+
+    //3D
+    Vec3 vHeight, baseCenter;
+    std::vector<VertexInfo> v3BtmSides; //vecFree转成3d顶点集
+
+    cG3DefModelGen *model, *modeltop, *modelbottom; //侧面、上面、下面数据模型
+};
 
 #endif

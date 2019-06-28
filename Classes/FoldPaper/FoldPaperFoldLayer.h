@@ -98,6 +98,9 @@ namespace FoldPaper {
          */
         void draw3DObj(Polygon3D* polygon3D, bool isFront);
 
+    public:
+        int shapeType; //物体类型
+
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;
         CC3DLayer* cc3dLayer;

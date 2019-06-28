@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "Polygon.h"
+#include "UIDrawNodeEx.h"
 
 namespace FoldPaper {
 
@@ -65,6 +66,21 @@ namespace FoldPaper {
         void createRegularPolygonWithEdgeLength(const cocos2d::Vec2 &centerPoint, int edge, float edgeLength);
 
         /**
+         * 创建圆形
+         */
+        void createCircle(const cocos2d::Vec2 &centerPoint, float radius);
+
+        /**
+         * 创建圆弧
+         */
+        void createArc(const cocos2d::Vec2 &centerPoint, float radius);
+
+        /**
+         * 创建等腰三角形
+         */
+        void createTriangle(const cocos2d::Vec2 &centerPoint, float baseLength, float broadsideLength);
+
+        /**
          * 更新多边形填充色
          * @param fillColor
          */
@@ -91,12 +107,12 @@ namespace FoldPaper {
         /**
          * 平移多边形，实际平移PolygonDrawNode
          */
-        void movePolygon(const cocos2d::Vec2 &deltaPos);
+        void movePolygon(const cocos2d::Vec2 &pos);
 
         /**
          * 旋转多边形，实际旋转PolygonDrawNode
          */
-        void rotatePolygon(float deltaDegree);
+        void rotatePolygon(float degree);
 
         /**
          * 获取旋转角度，实际获取PolygonDrawNode旋转角度
@@ -107,6 +123,13 @@ namespace FoldPaper {
         }
 
         /**
+         * 获取位置，实际获取PolygonDrawNode位置
+         */
+        cocos2d::Vec2 getPolygonPosition() {
+            return polygonDrawNode->getPosition();
+        }
+
+        /**
          * 检测两个多边形是否需要吸附
          * @param otherPolygon
          * @param minDistance
@@ -114,6 +137,11 @@ namespace FoldPaper {
          * @return
          */
         bool checkIsCloseEnough(PolygonView* otherPolygon, float minDistance, bool needAttach = false);
+
+        /**
+         * 检测圆和圆弧是否需要吸附
+         */
+        bool checkIsCloseEnough2(PolygonView* otherPolygon, float minDistance, bool needAttach = false);
 
         /**
          * 检测两个多边形是否重叠
@@ -205,6 +233,11 @@ namespace FoldPaper {
         void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
         /**
+         * 检测触摸点是否在多边形内
+         */
+        bool checkIsInPolygon(const cocos2d::Vec2 &location);
+
+        /**
          * 检测是否是旋转多边形
          * @param pos
          * @return
@@ -222,14 +255,23 @@ namespace FoldPaper {
          */
         float getTextureScale();
 
+        /**
+         * 加旋转精灵
+         */
+        void addRotateSprite(const cocos2d::Vec2 &pos, float rotateDegree);
+
     public:
         int faceType;
+        int polygonType;
 
-        cocos2d::DrawNode* polygonDrawNode;
+        DrawNodeEx* polygonDrawNode;
         Polygon polygon;
 
         PolygonView* parentPolygonView;
         cocos2d::Vector<PolygonView*> childPolygonViewList;
+
+        //圆、圆弧
+        float radius; //半径
 
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;

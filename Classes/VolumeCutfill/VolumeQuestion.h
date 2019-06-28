@@ -9,6 +9,7 @@
 #define VolumeQuestion_h
 
 #include "cocos2d.h"
+#include "json/document.h"
 
 class VertexInfo {
     
@@ -27,6 +28,24 @@ public:
     }
     
     virtual ~VertexInfo() {};
+
+    void toJson(rapidjson::Document &doc) {
+        doc.SetObject();
+        doc.AddMember("vId", vId, doc.GetAllocator());
+        doc.AddMember("p2dX", p2d.x, doc.GetAllocator());
+        doc.AddMember("p2dY", p2d.y, doc.GetAllocator());
+        doc.AddMember("p3dX", p3d.x, doc.GetAllocator());
+        doc.AddMember("p3dY", p3d.y, doc.GetAllocator());
+        doc.AddMember("p3dZ", p3d.z, doc.GetAllocator());
+    }
+
+    void fromJson(const rapidjson::Value &json) {
+        if (!json.IsObject()) return;
+        
+        this->vId = json["vId"].GetInt();
+        p2d = cocos2d::Vec2(json["p2dX"].GetFloat(), json["p2dY"].GetFloat());
+        p3d = cocos2d::Vec3(json["p3dX"].GetFloat(), json["p3dY"].GetFloat(), json["p3dZ"].GetFloat());
+    }
     
     int vId;
     cocos2d::Vec2 p2d;

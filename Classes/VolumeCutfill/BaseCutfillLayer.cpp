@@ -58,7 +58,19 @@ void BaseCutfillLayer::setData(CC3DLayer* cc3DLayer, VolumeQuestion* question) {
 Solid3D* BaseCutfillLayer::createSolid3D(const vector<VertexInfo> &vecs) {
     Solid3D* solid3D = new Solid3D();
     solid3D->setCameraMask((int)CameraFlag::USER1);
-    solid3D->setData(cc3DLayer, vecs);
+    solid3D->set3DLayer(cc3DLayer);
+    solid3D->setData(vecs);
+    solid3D->showModel();
+    _3dContainer->addChild(solid3D);
+    solid3DList.pushBack(solid3D);
+    return solid3D;
+}
+
+Solid3D* BaseCutfillLayer::createSolid3D(const rapidjson::Value &json) {
+    Solid3D* solid3D = new Solid3D();
+    solid3D->setCameraMask((int)CameraFlag::USER1);
+    solid3D->set3DLayer(cc3DLayer);
+    solid3D->fromJson(json);
     solid3D->showModel();
     _3dContainer->addChild(solid3D);
     solid3DList.pushBack(solid3D);
@@ -84,14 +96,6 @@ VertexInfo BaseCutfillLayer::getStartPoint(const Vec2 &point) {
     return rs;
 }
 
-void BaseCutfillLayer::toJson(rapidjson::Document &json) {
-
-}
-
-void BaseCutfillLayer::fromJson(const rapidjson::Value &json) {
-
-}
-
 void BaseCutfillLayer::reset() {
     clear();
     question->reset();
@@ -104,4 +108,24 @@ void BaseCutfillLayer::clear() {
     drawNodeEx->clear();
     _3dContainer->removeAllChildren();
     solid3DList.clear();
+}
+
+void BaseCutfillLayer::toJson(rapidjson::Document &json) {
+    json.SetArray();
+    for (Solid3D* solid3D : solid3DList) {
+        rapidjson::Document doc1(&json.GetAllocator());
+        solid3D->toJson(doc1);
+        json.PushBack(rapidjson::Value(doc1, json.GetAllocator()), json.GetAllocator());
+    }
+}
+
+void BaseCutfillLayer::fromJson(const rapidjson::Value &json) {
+    if (!json.IsArray()) return;
+    
+    clear();
+    
+    for (rapidjson::SizeType i = 0; i < json.Size(); i++) {
+        const rapidjson::Value &obj = json[i];
+        createSolid3D(obj);
+    }
 }

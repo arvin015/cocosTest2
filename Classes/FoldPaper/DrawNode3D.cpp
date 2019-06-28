@@ -30,9 +30,57 @@ const std::string MY_SHADER = "MY_SHADER_NAME";
 
 static Vec2 v2fzero(0.0f,0.0f);
 
+static inline Vec2 v2f(float x, float y)
+{
+    Vec2 ret(x, y);
+    return ret;
+}
+
+static inline Vec3 v3f(float x, float y, float z)
+{
+    Vec3 ret(x, y, z);
+    return ret;
+}
+
 static inline Tex2F __t(const Vec2 &v)
 {
    return *(Tex2F*)&v;
+}
+
+static inline Vec3 v3fnormalize(const Vec3 &p)
+{
+    Vec3 r(p.x, p.y, p.z);
+    r.normalize();
+    return v3f(r.x, r.y, r.z);
+}
+
+static inline Vec3 _v3f(const Vec3 &v)
+{
+//#ifdef __LP64__
+    return v3f(v.x, v.y, v.z);
+// #else
+//     return * ((Vec2*) &v);
+// #endif
+}
+
+static inline Vec3 v3fadd(const Vec3 &v0, const Vec3 &v1)
+{
+    return v3f(v0.x+v1.x, v0.y+v1.y, v0.z+v1.z);
+}
+
+static inline Vec3 v3fsub(const Vec3 &v0, const Vec3 &v1)
+{
+    return v3f(v0.x-v1.x, v0.y-v1.y, v0.z-v1.z);
+}
+
+static inline Vec3 v3fmult(const Vec3 &v, float s)
+{
+    return v3f(v.x * s, v.y * s, v.z * s);
+}
+
+static inline float v3fdot(const Vec3 &p0, const Vec3 &p1)
+{
+    return p0.dot(p1);
 }
 
 DrawNode3D::DrawNode3D(GLfloat lineWidth)
@@ -100,7 +148,7 @@ void DrawNode3D::ensureCapacity(int count)
     if(_bufferCount + count > _bufferCapacity)
     {
 		_bufferCapacity += MAX(_bufferCapacity, count);
-		_buffer = (V3F_C4B_T2F*)realloc(_buffer, _bufferCapacity*sizeof(V3F_C4B_T2F));
+		_buffer = (V3F_C4B_V2F_V3F*)realloc(_buffer, _bufferCapacity*sizeof(V3F_C4B_V2F_V3F));
 	}
 }
 
@@ -222,6 +270,8 @@ void DrawNode3D::onDraw(const Mat4 &transform, uint32_t flags)
     auto glProgram = GLProgramCache::getInstance()->getGLProgram(MY_SHADER);
     glProgram->use();
     glProgram->setUniformsForBuiltins(transform);
+    glEnable(GL_DEPTH_TEST);
+    RenderState::StateBlock::_defaultState->setDepthTest(true);
     //设置Uniform数据
     glProgram->setUniformLocationWith3f(glProgram->getUniformLocation("lightDir"), _lightDir.x, _lightDir.y, _lightDir.z);
     GL::blendFunc(_blendFunc.src, _blendFunc.dst);
@@ -278,6 +328,13 @@ void DrawNode3D::onDrawGLLine(const Mat4 &transform, uint32_t /*flags*/)
     glProgram->use();
     glProgram->setUniformsForBuiltins(transform);
 
+    glEnable(GL_DEPTH_TEST);
+    RenderState::StateBlock::_defaultState->setDepthTest(true);
+
+    //解决z-fighting
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(2.0f, 2.0f);
+    
     GL::blendFunc(_blendFunc.src, _blendFunc.dst);
 
     if (_dirtyGLLine)
@@ -317,6 +374,8 @@ void DrawNode3D::onDrawGLLine(const Mat4 &transform, uint32_t /*flags*/)
         GL::bindVAO(0);
     }
 
+    glDisable(GL_POLYGON_OFFSET_FILL);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,_bufferCountGLLine);
 
@@ -339,9 +398,18 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4F &color
     _dirtyGLLine = true;
 }
 
-void DrawNode3D::drawPolygonWithLight(const Vec3 *verts, const Vec2 *uvs,
-                              const Vec3 &normal, const Color4F &fillColor, int count) {
-    auto triangle_count = count - 2;
+void DrawNode3D::drawPolygonWithLight(const Vec3 *verts, const Vec2 *uvs, const Vec3 &normal, const Color4F &fillColor, int count) {
+    drawPolygonWithLight1(verts, uvs, normal, fillColor, count, Color4F(0, 0, 0, 0), 0);
+}
+
+void DrawNode3D::drawPolygonWithLight1(const Vec3 *verts, const Vec2 *uvs, const Vec3 &normal, const Color4F &fillColor, int count, const Color4F &borderColor, int scale) {
+
+    bool outline = false;
+    if (count != 0 && borderColor.a != 0) {
+        outline = true;
+    }
+
+    auto triangle_count = outline ? 3*count - 2 : count - 2;
     auto vertex_count = 3*triangle_count;
     ensureCapacity(vertex_count);
 
@@ -357,6 +425,61 @@ void DrawNode3D::drawPolygonWithLight(const Vec3 *verts, const Vec2 *uvs,
         };
 
         *cursor++ = tmp;
+    }
+
+    //绘制边框
+    if (outline) {
+        struct ExtrudeVerts {Vec3 offset, n;};
+        struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts)*count);
+        memset(extrude, 0, sizeof(struct ExtrudeVerts)*count);
+
+        for (int i = 0; i < count; i++)
+        {
+            Vec3 v0 = _v3f(verts[(i-1+count)%count]);
+            Vec3 v1 = _v3f(verts[i]);
+            Vec3 v2 = _v3f(verts[(i+1)%count]);
+
+            Vec3 n1 = normal;
+            Vec3 n2 = normal;
+
+            Vec3 offset = v3fmult(v3fadd(n1, n2), 1.0f / (v3fdot(n1, n2) + 1));
+            offset = offset / scale;
+            struct ExtrudeVerts tmp = {offset, n2};
+            extrude[i] = tmp;
+        }
+
+        for(int i = 0; i < count; i++)
+        {
+            int j = (i+1)%count;
+            Vec3 v0 = _v3f(verts[i]);
+            Vec3 v1 = _v3f(verts[j]);
+
+            Vec3 n0 = extrude[i].n;
+
+            Vec3 offset0 = extrude[i].offset;
+            Vec3 offset1 = extrude[j].offset;
+
+            Vec3 inner0 = v3fsub(v0, v3fmult(offset0, 1));
+            Vec3 inner1 = v3fsub(v1, v3fmult(offset1, 1));
+            Vec3 outer0 = v3fadd(v0, v3fmult(offset0, 1));
+            Vec3 outer1 = v3fadd(v1, v3fmult(offset1, 1));
+
+            V3F_C4B_V2F_V3F_Triangle tmp1 = {
+                    {inner0, Color4B(Color4F::BLACK), Vec2::ZERO, normal},
+                    {inner1, Color4B(Color4F::BLACK), Vec2::ZERO, normal},
+                    {outer1, Color4B(Color4F::BLACK), Vec2::ZERO, normal}
+            };
+            *cursor++ = tmp1;
+
+            V3F_C4B_V2F_V3F_Triangle tmp2 = {
+                    {inner0, Color4B(Color4F::BLACK), Vec2::ZERO, normal},
+                    {outer0, Color4B(Color4F::BLACK), Vec2::ZERO, normal},
+                    {outer1, Color4B(Color4F::BLACK), Vec2::ZERO, normal}
+            };
+            *cursor++ = tmp2;
+        }
+
+        free(extrude);
     }
 
     _bufferCount += vertex_count;

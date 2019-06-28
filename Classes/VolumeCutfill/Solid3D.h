@@ -12,11 +12,13 @@
 #include "cocos2d.h"
 #include "Geom3D.h"
 #include "VolumeQuestion.h"
+#include "json/document.h"
 
 const float Volume_MoveByValue = 0.08f;
 const float Volume_Duration = 0.3f;
 
 class CC3DLayer;
+class cG3DefModelGen;
 
 class Solid3D : public cocos2d::Sprite3D {
 
@@ -36,7 +38,11 @@ public:
     virtual bool init();
     CREATE_FUNC(Solid3D);
 
-    void setData(CC3DLayer* cc3DLayer, const std::vector<VertexInfo> &vecs);
+    void toJson(rapidjson::Document &doc);
+    void fromJson(const rapidjson::Value &json);
+
+    void set3DLayer(CC3DLayer* cc3DLayer);
+    void setData(const std::vector<VertexInfo> &vecs);
 
     void showModel();
 

@@ -79,22 +79,23 @@ namespace FoldPaper {
         }
 
         /**
-         * 计算两条边的夹角
+         * 计算两条边的夹角---夹角小于90
          */
         inline static float crossDegree(const cocos2d::Vec2 &pA, const cocos2d::Vec2 &pB,
                                         const cocos2d::Vec2 &pC, const cocos2d::Vec2 &pD) {
 
-            if (fabsf(pA.x - pB.x) < FLT_EPSILON || fabsf(pC.x - pD.x) < FLT_EPSILON) {
-                float r = getDifferDegree(pA, pB, pC, pD);
-                return abs(r);
+            if (fabsf(pA.x - pB.x) < FLT_EPSILON && fabsf(pC.x - pD.x) < FLT_EPSILON) {
+                return 0;
+            } else if (fabsf(pA.x - pB.x) < FLT_EPSILON) {
+                return fabsf(90 - CC_RADIANS_TO_DEGREES(atanf(fabsf((pD.y - pC.y) / (pD.x - pC.x)))));
+            } else if (fabsf(pC.x - pD.x) < FLT_EPSILON) {
+                return fabsf(90 - CC_RADIANS_TO_DEGREES(atanf(fabsf((pA.y - pB.y) / (pA.x - pB.x)))));
             }
 
-            float k1, b1;
-            float k2, b2;
-            getLineFormula(pA, pB, k1, b1);
-            getLineFormula(pC, pD, k2, b2);
+            float k1 = (pB.y - pA.y) / (pB.x - pA.x);
+            float k2 = (pD.y - pC.y) / (pD.x - pC.x);
 
-            return atanf(abs((k2 - k1) / (1 + k1 * k2))) * 180.0  / PI;
+            return CC_RADIANS_TO_DEGREES(atanf(fabsf((k2 - k1) / (1 + k1 * k2))));
         }
 
         /**
@@ -108,18 +109,16 @@ namespace FoldPaper {
             if (fabsf(referPA.x - referPB.x) < FLT_EPSILON) {
                 referDegree = 90;
             } else {
-                float k1, b1;
-                getLineFormula(referPA, referPB, k1, b1);
-                referDegree = atanf(k1) * 180.0 / PI;
+                float k1 = (referPB.y - referPA.y) / (referPB.x - referPA.x);
+                referDegree = CC_RADIANS_TO_DEGREES(atanf(k1));
                 if (referDegree < 0) referDegree = 180 + referDegree;
             }
 
             if (fabsf(pC.x - pD.x) < FLT_EPSILON) {
                 degree = 90;
             } else {
-                float k2, b2;
-                getLineFormula(pC, pD, k2, b2);
-                degree = atanf(k2) * 180.0  / PI;
+                float k2 = (pD.y - pC.y) / (pD.x - pC.x);
+                degree = CC_RADIANS_TO_DEGREES(atanf(k2));
                 if (degree < 0) degree = 180 + degree;
             }
 
@@ -157,6 +156,17 @@ namespace FoldPaper {
                 return true;
             }
 
+            return false;
+        }
+
+        /**
+         * 圆心是否可吸附该边
+         */
+        inline bool isCircleCloseEnough(const cocos2d::Vec2 &centerPoint, float minDis, float radius, cocos2d::Vec2 &c) {
+            if (fabsf(2 * M_PI * radius - getLength()) > 0.2f) return false;
+            float dot;
+            float dis = Dis_PointToLineSegment(prePoint, nextPoint, centerPoint, dot, c);
+            if (dis < (minDis + radius) && (dot > 0 && dot < 1)) return true;
             return false;
         }
     };
@@ -200,6 +210,11 @@ namespace FoldPaper {
          * @return
          */
         cocos2d::Vec2 getCenterPoint();
+
+        /**
+         * 圆是否可吸附该Polygon
+         */
+        bool isCircleCloseEnough(const cocos2d::Vec2 &centerPoint, float minDis, float radius, cocos2d::Vec2 &c);
 
     private:
 

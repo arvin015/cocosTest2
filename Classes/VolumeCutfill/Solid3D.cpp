@@ -7,15 +7,23 @@
 
 #include "Solid3D.h"
 #include "CC3DLayer.h"
-#include "CC2D3Util.h"
 #include "cG3DefModelGen.h"
 #include "BasicData.h"
 #include "MathUtils.h"
+#include "ui/UIText.h"
+#include "CommonUtils.h"
 
 USING_NS_CC;
 using namespace std;
 
 const float frameradius = 0.003f;
+
+template <typename T>
+inline T *SAFE_RETAIN(T* node) {
+    if (node)
+        node->retain();
+    return node;
+}
 
 inline Vec2 solid2poly(const Vec3 &v) {
     return Vec2(v.x*256+512, v.y*256+384);
@@ -63,8 +71,39 @@ bool Solid3D::init() {
     return true;
 }
 
-void Solid3D::setData(CC3DLayer* cc3DLayer, const vector<VertexInfo> &vecs) {
+void Solid3D::toJson(rapidjson::Document &doc) {
+    doc.SetObject();
+    rapidjson::Value array(rapidjson::kArrayType);
+    for (VertexInfo v : geom3D.v3BtmSides) {
+        Vec2 originalVec = solid2poly(v.p3d); //vecFree动画之后的坐标
+        VertexInfo vertexInfo = VertexInfo(v.vId, originalVec);
+        rapidjson::Document doc1(&doc.GetAllocator());
+        vertexInfo.toJson(doc1);
+        array.PushBack(rapidjson::Value(doc1, doc.GetAllocator()), doc.GetAllocator());
+    }
+    doc.AddMember("vecs", array, doc.GetAllocator());
+}
+
+void Solid3D::fromJson(const rapidjson::Value &json) {
+    if (!json.IsObject() || !json.HasMember("vecs")) return;
+    const rapidjson::Value &array = json["vecs"];
+    if (!array.IsArray()) return;
+
+    geom3D.vecFree.clear();
+    for (rapidjson::SizeType i = 0; i < array.Size(); i++) {
+        VertexInfo v;
+        v.fromJson(array[i]);
+        geom3D.vecFree.push_back(v);
+    }
+
+    setData(geom3D.vecFree);
+}
+
+void Solid3D::set3DLayer(CC3DLayer* cc3DLayer) {
     this->cc3DLayer = cc3DLayer;
+}
+
+void Solid3D::setData(const vector<VertexInfo> &vecs) {
     geom3D.vecFree = vecs;
 
     geom3D.poly2tri();
@@ -109,6 +148,38 @@ void Solid3D::loadEdges() {
     for (Sprite3D* sp : spEdges) {
         sp->setColor(Color3B::BLACK);
     }
+    
+//    vector<VertexInfo> vList = vectormakereverse(vs);
+//
+//    auto label = Label::createWithTTF("6cm", "fonts/arial.ttf", 16);
+//    label->setTextColor(Color4B::RED);
+//    label->setPosition3D(Vec3(vList[0].p3d.x + (vList[1].p3d.x - vList[0].p3d.x) / 2, vList[0].p3d.y + 0.1f, 0));
+//    label->setScale(0.006);
+//    label->setCameraMask((int)cc3DLayer->getCameraMask());
+//    topSp3d->addChild(label);
+//
+//    auto label1 = Label::createWithTTF("7cm", "fonts/arial.ttf", 16);
+//    label1->setTextColor(Color4B::RED);
+//    label1->setPosition3D(Vec3(vList[1].p3d.x + (vList[2].p3d.x - vList[1].p3d.x) / 2 + 0.1f, vList[1].p3d.y + (vList[2].p3d.y - vList[1].p3d.y) / 2, 0));
+//    label1->setScale(0.006);
+//    label1->setCameraMask((int)cc3DLayer->getCameraMask());
+//    topSp3d->addChild(label1);
+//
+//    auto label2 = Label::createWithTTF("1cm", "fonts/arial.ttf", 16);
+//    label2->setTextColor(Color4B::RED);
+//    label2->setPosition3D(Vec3(vList[2].p3d.x + 0.1f, vList[2].p3d.y, 0.15f));
+//    label2->setScale(0.006);
+//    label2->setCameraMask((int)cc3DLayer->getCameraMask());
+//    label2->setRotationQuat(Quaternion(-0.222790, 0.015957, -0.096368, 1));
+//    sideSp3d->addChild(label2);
+//
+//    auto label3 = Label::createWithTTF("1cm", "fonts/arial.ttf", 16);
+//    label3->setTextColor(Color4B::RED);
+//    label3->setPosition3D(Vec3(vList[3].p3d.x - 0.1f, vList[3].p3d.y, 0.15f));
+//    label3->setScale(0.006);
+//    label3->setCameraMask((int)cc3DLayer->getCameraMask());
+//    label3->setRotationQuat(Quaternion(0.222790, 0.015957, 0.096368, 1));
+//    sideSp3d->addChild(label3);
 }
 
 Sprite3D* Solid3D::makeEdgeSprite(const Vec3 &v1, const Vec3 &v2, Node *cc3dlayer) {
@@ -292,6 +363,7 @@ void Solid3D::draw2D() {
 
     int edges = geom3D.vecFree.size();
     for (int i = 0; i < edges; i++) {
-        drawNode->drawSegment(geom3D.vecFree[i].p2d, geom3D.vecFree[(i+1)%edges].p2d, 1, Color4F::BLACK);
+        drawNode->drawSegment(geom3D.vecFree[i].p2d, geom3D.vecFree[(i + 1) % edges].p2d, 1,
+                              Color4F::BLACK);
     }
 }

@@ -6,15 +6,22 @@
 //
 
 #include "VolumeCutfillLayer.h"
-#include "cG3DefModelGen.h"
-#include "CC2D3Util.h"
-#include "Solid3D.h"
 #include "VolumeQuestion.h"
 #include "MathUtils.h"
+#include "CommonUtils.h"
+#include "CC3DMath.h"
+#include "Geom3D.h"
 
 USING_NS_CC;
 using namespace ui;
 using namespace std;
+
+string savePath;
+
+inline cocos2d::Vec2 GLNormalized(const cocos2d::Vec2 &v) {
+    cocos2d::Size size = cocos2d::Size(1024, 768);
+    return cocos2d::Vec2((2.0f * v.x / size.width), (2.0f * v.y / size.height));
+}
 
 VolumeCutfillLayer::VolumeCutfillLayer()
 : cc3DLayer(nullptr)
@@ -23,10 +30,12 @@ VolumeCutfillLayer::VolumeCutfillLayer()
 , cutBtn(nullptr)
 , fillBtn(nullptr)
 , resetBtn(nullptr)
-, workType(NONE)
+, workTypeQ1(NONE)
+, workTypeQ2(NONE)
 , currentLayer(nullptr)
 , cutLayer(nullptr)
-, fillLayer(nullptr) {
+, fillLayer(nullptr)
+, currentQId(-1) {
 
 }
 
@@ -56,6 +65,8 @@ bool VolumeCutfillLayer::init() {
         return false;
     }
 
+    savePath = FileUtils::getInstance()->getWritablePath();
+
     auto ca = Camera::create();
     ca->setDepth(-1);
     ca->setCameraFlag(CameraFlag::USER2);
@@ -75,6 +86,7 @@ bool VolumeCutfillLayer::init() {
     cc3DLayer->_camera->addChild(light);
 
     cutLayer = CutLayer::create();
+    cutLayer->setVisible(false);
     cc3DLayer->addChild(cutLayer);
 
     fillLayer = FillLayer::create();
@@ -90,10 +102,7 @@ bool VolumeCutfillLayer::init() {
     cutBtn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     cutBtn->setPosition(Vec2(20, 600));
     cutBtn->addClickEventListener([this](Ref* pSender) {
-        setWorkType(CUT);
-        
-        fillBtn->setTitleColor(Color3B::BLACK);
-        cutBtn->setTitleColor(Color3B::BLUE);
+        setWorkType(CUT, false);
     });
     addChild(cutBtn);
     
@@ -104,10 +113,7 @@ bool VolumeCutfillLayer::init() {
     fillBtn->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     fillBtn->setPosition(Vec2(20, 560));
     fillBtn->addClickEventListener([this](Ref* pSender) {
-        setWorkType(FILL);
-        
-        cutBtn->setTitleColor(Color3B::BLACK);
-        fillBtn->setTitleColor(Color3B::BLUE);
+        setWorkType(FILL, false);
     });
     addChild(fillBtn);
     
@@ -116,7 +122,7 @@ bool VolumeCutfillLayer::init() {
     resetBtn->setTitleColor(Color3B::BLACK);
     resetBtn->setTitleFontSize(24);
     resetBtn->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-    resetBtn->setPosition(Vec2(ScreenSize().width / 2, 10));
+    resetBtn->setPosition(Vec2(1024 / 2, 10));
     resetBtn->addClickEventListener([this](Ref* pSender) {
         reset();
     });
@@ -124,32 +130,47 @@ bool VolumeCutfillLayer::init() {
     
     auto radioGroup = RadioButtonGroup::create();
     radioGroup->addEventListener([this](RadioButton* radioButton, int index, RadioButtonGroup::EventType) {
+        if (currentQId != -1) {
+           saveRecord(); //保存上一题
+        }
         loadQuestion(index + 1);
+        loadRecord(); //加载当前题旧记录
     });
     addChild(radioGroup);
     auto question1 = RadioButton::create("img_question1.png", "img_question1_selected.png");
     question1->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
-    question1->setPosition(Vec2(ScreenSize().width - 20, ScreenSize().height - 30));
+    question1->setPosition(Vec2(1024 - 20, 768 - 30));
     radioGroup->addRadioButton(question1);
     radioGroup->addChild(question1);
     auto question2 = RadioButton::create("img_question2.png", "img_question2_selected.png");
     question2->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
-    question2->setPosition(Vec2(ScreenSize().width - 20, ScreenSize().height - 70));
+    question2->setPosition(Vec2(1024 - 20, 768 - 70));
     radioGroup->addRadioButton(question2);
     radioGroup->addChild(question2);
     radioGroup->setSelectedButton(0);
+
+    //测试创建立方体
+//    Sprite3D* cubeSp3d = addSprite3DModel(loadModelCube(0.5f), cc3DLayer, Vec3::ZERO);
+//    cubeSp3d->setColor(Color3B::YELLOW);
+
+    //测试创建圆锥体
+    Sprite3D* coneSp3d = addSprite3DModel(loadModelCone(128, 0.25f, 0.5f), cc3DLayer, Vec3::ZERO);
+    coneSp3d->setColor(Color3B::YELLOW);
 
     return true;
 }
 
 void VolumeCutfillLayer::loadQuestion(int qId) {
+    this->currentQId = qId;
 
     if (qId == 1) {
-        camquat.set(0.222790, 0.015957, 0.096368, 0.969961);
+        camquat.set(0.169140, 0.088621, 0.079981, 0.978338);
     } else {
         camquat.set(-0.150073, 0.188259, 0.094490, 0.965988);
     }
     cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
+
+    setWorkType(currentQId == 1 ? workTypeQ1 : workTypeQ2, true);
 
     VolumeQuestion* question = getQuestionById(qId);
     if (question == nullptr) {
@@ -269,6 +290,8 @@ void VolumeCutfillLayer::loadQuestion(int qId) {
         question->vertexList = defaultVecs;
         question->cutInfoList = cutInfos;
         question->fillInfoList = fillInfos;
+
+        questionList.push_back(question);
     }
 
     cutLayer->setData(cc3DLayer, question);
@@ -286,9 +309,9 @@ VolumeQuestion* VolumeCutfillLayer::getQuestionById(int qId) {
 
 bool VolumeCutfillLayer::onTouchBegan(Touch* touch, Event* event) {
     if (!isVisible()) return false;
-    return false;
-//    multitouch.OnTouchDown(touch->getID(), convertTouchToNodeSpaceAR(touch));
-//    return true;
+//    return false;
+    multitouch.OnTouchDown(touch->getID(), convertTouchToNodeSpaceAR(touch));
+    return true;
 }
 
 void VolumeCutfillLayer::onTouchMoved(Touch* touch, Event* event) {
@@ -319,31 +342,88 @@ void VolumeCutfillLayer::onTouchEnded(Touch* touch, Event* event) {
 }
 
 string VolumeCutfillLayer::toJSON() {
-    return "";
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.AddMember("currentQId", currentQId, doc.GetAllocator());
+    doc.AddMember("workTypeQ1", workTypeQ1, doc.GetAllocator());
+    doc.AddMember("workTypeQ2", workTypeQ2, doc.GetAllocator());
+
+    rapidjson::Document doc1(&doc.GetAllocator());
+    cutLayer->toJson(doc1);
+    doc.AddMember("cut", rapidjson::Value(doc1, doc.GetAllocator()), doc.GetAllocator());
+
+    rapidjson::Document doc2(&doc.GetAllocator());
+    fillLayer->toJson(doc2);
+    doc.AddMember("fill", rapidjson::Value(doc2, doc.GetAllocator()), doc.GetAllocator());
+
+    return getStringFromJson(doc);
 }
 
 void VolumeCutfillLayer::fromJSON(const string &json) {
+    if (json.empty()) return;
 
+    rapidjson::Document doc;
+    doc.Parse(json.c_str());
+    if (!doc.IsObject()) return;
+
+    this->currentQId = doc["currentQId"].GetInt();
+    this->workTypeQ1 = (WorkType)doc["workTypeQ1"].GetInt();
+    this->workTypeQ2 = (WorkType)doc["workTypeQ2"].GetInt();
+
+    loadQuestion(currentQId);
+
+    cutLayer->fromJson(doc["cut"]);
+    fillLayer->fromJson(doc["fill"]);
 }
 
-void VolumeCutfillLayer::setWorkType(WorkType workType) {
-    if (this->workType == workType) return;
-    this->workType = workType;
+void VolumeCutfillLayer::setWorkType(WorkType workType, bool isLoadQuestion) {
+    if (currentQId == 1) {
+        if (!isLoadQuestion) if (this->workTypeQ1 == workType) return;
+        this->workTypeQ1 = workType;
+    } else {
+        if (!isLoadQuestion) if (this->workTypeQ2 == workType) return;
+        this->workTypeQ2 = workType;
+    }
 
     if (currentLayer != nullptr) {
         currentLayer->setVisible(false);
     }
     if (workType == CUT) {
         currentLayer = cutLayer;
+
+        cutBtn->setTitleColor(Color3B::BLUE);
+        fillBtn->setTitleColor(Color3B::BLACK);
     } else if (workType == FILL) {
         currentLayer = fillLayer;
+
+        cutBtn->setTitleColor(Color3B::BLACK);
+        fillBtn->setTitleColor(Color3B::BLUE);
+    } else {
+        cutBtn->setTitleColor(Color3B::BLACK);
+        fillBtn->setTitleColor(Color3B::BLACK);
     }
-    currentLayer->setVisible(true);
-    currentLayer->setTouchEnabled(true);
+//    currentLayer->setVisible(true);
+    currentLayer->setTouchEnabled(workType != NONE);
 }
 
 void VolumeCutfillLayer::reset() {
     if (currentLayer != nullptr) {
         currentLayer->reset();
+    }
+}
+
+void VolumeCutfillLayer::saveRecord() {
+    string saveFile = savePath + StringUtils::format("q%d.txt", currentQId);
+    if (FileUtils::getInstance()->isFileExist(saveFile)) {
+        FileUtils::getInstance()->removeFile(saveFile);
+    }
+
+    FileUtils::getInstance()->writeStringToFile(toJSON(), saveFile);
+}
+
+void VolumeCutfillLayer::loadRecord() {
+    string saveFile = savePath + StringUtils::format("q%d.txt", currentQId);
+    if (FileUtils::getInstance()->isFileExist(saveFile)) {
+        fromJSON(FileUtils::getInstance()->getStringFromFile(saveFile));
     }
 }

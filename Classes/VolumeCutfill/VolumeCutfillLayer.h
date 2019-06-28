@@ -44,9 +44,13 @@ public:
     virtual std::string toJSON();
     virtual void fromJSON(const std::string &json);
 
-    void setWorkType(WorkType workType);
+    void setWorkType(WorkType workType, bool isLoadQuestion);
 
     void reset();
+
+    void saveRecord();
+
+    void loadRecord();
 
 private:
 
@@ -73,7 +77,10 @@ private:
     CutLayer* cutLayer;
     FillLayer* fillLayer;
 
-    WorkType workType;
+    int currentQId;
+
+    WorkType workTypeQ1;
+    WorkType workTypeQ2;
 
     cocos2d::ui::Button* cutBtn;
     cocos2d::ui::Button* fillBtn;

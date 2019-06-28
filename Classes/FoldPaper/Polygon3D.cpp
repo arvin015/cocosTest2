@@ -54,10 +54,11 @@ namespace FoldPaper {
 
     }
 
-    Polygon3D::Polygon3D(const vector<Vertex> &vertexList, int faceType, const Color4F &polygonColor, unsigned int textureId)
+    Polygon3D::Polygon3D(const vector<Vertex> &vertexList, int faceType, int polygonType, const Color4F &polygonColor, unsigned int textureId)
     : Polygon3D() {
         this->vertexList = vertexList;
         this->faceType = faceType;
+        this->polygonType = polygonType;
         this->polygonColor = polygonColor;
         this->textureId = textureId;
     }

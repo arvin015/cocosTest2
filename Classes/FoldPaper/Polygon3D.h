@@ -39,7 +39,7 @@ namespace FoldPaper {
 
     public:
         Polygon3D();
-        Polygon3D(const std::vector<Vertex> &vertexList, int faceType, const cocos2d::Color4F &polygonColor,
+        Polygon3D(const std::vector<Vertex> &vertexList, int faceType, int polygonType, const cocos2d::Color4F &polygonColor,
                   unsigned int textureId);
         ~Polygon3D();
 
@@ -121,7 +121,8 @@ namespace FoldPaper {
         std::vector<Vertex> backupVertexList; //备份的顶点集合
         cocos2d::Color4F polygonColor; //多边形颜色
         unsigned int textureId; //纹理ID
-        int faceType;
+        int faceType; //底边还是侧边
+        int polygonType; //类型
 
         //for fold
         float targetAngle; //总需旋转角度

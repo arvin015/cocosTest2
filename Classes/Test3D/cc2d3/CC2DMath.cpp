@@ -1,4 +1,4 @@
-﻿#include "CC2DMath.h"
+#include "CC2DMath.h"
 
 //2D Line Functions
 bool lineCrossed(const Vec2 &line1a, const Vec2 &line1b, const Vec2 &line2a, const Vec2 &line2b) {

@@ -16,11 +16,6 @@ namespace FoldPaper {
             return edgeLength / (2.0f * sin(3.14 / edge));
     }
 
-    enum PolygonType {
-        SQUARE, //正方形、长方形
-        POLYGON //规则的多边形
-    };
-
     class FoldPaperMakeLayer : public cocos2d::Layer {
 
     public:
@@ -52,14 +47,29 @@ namespace FoldPaper {
          * @param edgeLength
          */
         void createPolygonViewFromCube(float edgeLength);
+        
+        /**
+         * 生产圆柱
+         */
+        void createPolygonViewFromCylinder(float shortEdgeLength, float longEdgeLength);
 
         /**
-         * 创建多边形
+         * 生产圆锥
+         */
+        void createPolygonViewFromCircular(float circumference);
+
+        /**
+         * 生成锥形
+         */
+        void createPolygonViewFromCone(int side, float baseLength, float broadsideLength);
+
+        /**
+         * 创建多边形、圆、圆弧、等腰三角形
          * @param polygonType
          * @param centerPoint
          * @param edge
-         * @param edgeLength
-         * @param height
+         * @param edgeLength-圆、圆弧时指半径；等腰三角形时指底边
+         * @param height-等腰三角形时指侧边
          * @param faceType
          */
         void createPolygonView(int polygonType, const cocos2d::Vec2 &centerPoint, int edge, float edgeLength, float height, int faceType = 0);
@@ -167,6 +177,7 @@ namespace FoldPaper {
 
     public:
         cocos2d::Vector<PolygonView*> polygonViewList;
+        int shapeType; //物体类型
 
     private:
         cocos2d::EventListenerTouchOneByOne* touchListener;

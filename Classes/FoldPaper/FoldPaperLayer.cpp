@@ -19,7 +19,8 @@ namespace FoldPaper {
 
     const string types[] = {
             "正方形",
-            "长方形"
+            "长方形",
+            "圆"
     };
 
     const string cubes[] = {
@@ -27,7 +28,13 @@ namespace FoldPaper {
             "长方体",
             "三面柱",
             "五面柱",
-            "六面柱"
+            "六面柱",
+            "圆柱",
+            "圆锥",
+            "三角锥",
+            "四角锥",
+            "五角锥",
+            "六角锥"
     };
 
     const Color4F colors[] = {
@@ -98,10 +105,11 @@ namespace FoldPaper {
         foldLayer->setVisible(false);
         addChild(foldLayer);
 
-        for (int i = 0; i < 2; i++) {
-            auto polygon = Button::create("mian_button_01_125x54.png");
+        for (int i = 0; i < 3; i++) {
+            auto polygon = Button::create("blue_btn_bg.png");
             polygon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-            polygon->setPosition(Vec2(20, 650 - i * 60));
+            polygon->setPosition(Vec2(20, 690 - i * 45));
+            polygon->setContentSize(Size(100, 40));
             polygon->setTitleText(types[i]);
             polygon->setTitleColor(Color3B::WHITE);
             polygon->setTitleFontSize(22);
@@ -116,23 +124,29 @@ namespace FoldPaper {
                 auto b = dynamic_cast<Button *>(pSender);
                 int tag = b->getTag();
 
-                int edge = 4;
-                float width = 120;
-                float height = 120;
+                if (tag == 2) { //圆
+                    float radius = (PHI * 120) / (2 * M_PI);
+                    makeLayer->createPolygonView(CIRCLE, Vec2(V_WIDTH / 2, V_HEIGHT / 2), 1, radius, radius);
+                } else {
+                    int edge = 4;
+                    float width = 120;
+                    float height = 120;
 
-                if (tag == 1) {
-                    height = 120;
-                    width = PHI * 120;
+                    if (tag == 1) {
+                        height = 120;
+                        width = PHI * 120;
+                    }
+                    makeLayer->createPolygonView(tag == 0 ? SQUARE : RECTANGLE, Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
                 }
-                makeLayer->createPolygonView(SQUARE, Vec2(V_WIDTH / 2, V_HEIGHT / 2), edge, width, height);
             });
             addChild(polygon);
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 11; i++) {
             auto p = Button::create("mian_button_01_125x54.png");
+            p->setContentSize(Size(100, 40));
             p->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-            p->setPosition(Vec2(20, 500 - i * 60));
+            p->setPosition(Vec2(20, 550 - i * 45));
             p->setTitleText(cubes[i]);
             p->setTitleColor(Color3B::WHITE);
             p->setTitleFontSize(22);
@@ -194,11 +208,12 @@ namespace FoldPaper {
                         position = position / 60; //转成相对于3D坐标
                         vertexList.push_back(Vertex(Vec3(position.x, position.y, 0), v.uv));
                     }
-                    Polygon3D *polygon3D = new Polygon3D(vertexList, p->faceType, p->getColor(),
+                    Polygon3D *polygon3D = new Polygon3D(vertexList, p->faceType, p->polygonType, p->getColor(),
                                                          p->getTextureId());
                     polygon3DList.push_back(polygon3D);
                 }
 
+                foldLayer->shapeType = makeLayer->shapeType;
                 foldLayer->setData(polygon3DList);
                 paperState = PAPER_FOLDING;
 
@@ -210,12 +225,14 @@ namespace FoldPaper {
         addChild(foldBtn);
 
         delBtn = Button::create("mian_button_01_125x54.png");
+        delBtn->setContentSize(Size(100, 54));
         delBtn->setAnchorPoint(Vec2::ZERO);
         delBtn->setPosition(Vec2(20, 20));
         delBtn->setScale9Enabled(true);
         delBtn->setTitleFontSize(22);
         delBtn->setTitleText("删除");
         delBtn->setTitleColor(Color3B::WHITE);
+        delBtn->setScale9Enabled(true);
         delBtn->addClickEventListener([this](Ref *pSender) {
             if (shapeIndex != -1) return;
             if (paperState == PAPER_MAKING) {
@@ -236,35 +253,55 @@ namespace FoldPaper {
 
         this->shapeIndex = shapeIndex;
 
+        ShapeType shapeType = NORMAL; //物体类型
+
         float edgeLength = 100.0f; //边长
 
         switch (shapeIndex) {
-            case 0:
-            {
+            case 0: {
                 makeLayer->createPolygonViewFromCube(edgeLength);
+                shapeType = NORMAL;
                 break;
             }
-            case 1:
-            {
+            case 1: {
                 makeLayer->createPolygonViewFromPrism(4, edgeLength);
+                shapeType = NORMAL;
                 break;
             }
-            case 2:
-            {
+            case 2: {
                 makeLayer->createPolygonViewFromPrism(3, edgeLength);
+                shapeType = NORMAL;
                 break;
             }
-            case 3:
-            {
+            case 3: {
                 makeLayer->createPolygonViewFromPrism(5, edgeLength);
                 break;
             }
-            case 4:
-            {
+            case 4: {
                 makeLayer->createPolygonViewFromPrism(6, edgeLength);
+                shapeType = NORMAL;
+                break;
+            }
+            case 5: { //圆柱
+                makeLayer->createPolygonViewFromCylinder(120, PHI * 120);
+                shapeType = CYLINDER;
+                break;
+            }
+            case 6: { //圆锥
+                makeLayer->createPolygonViewFromCircular(PHI * 120);
+                shapeType = CIRCULAR_CONE;
+                break;
+            }
+            case 7:
+            case 8:
+            case 9:
+            case 10: { //正三、四、五、六角锥
+                makeLayer->createPolygonViewFromCone(shapeIndex - 4, edgeLength, 1.5 * edgeLength);
+                shapeType = (ShapeType)(shapeIndex - 4);
                 break;
             }
         }
+        makeLayer->shapeType = shapeType;
     }
 
     void FoldPaperLayer::reset() {

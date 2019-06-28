@@ -63,6 +63,13 @@ namespace FoldPaper {
         return centerPoint;
     }
 
+    bool Polygon::isCircleCloseEnough(const Vec2 &centerPoint, float minDis, float radius, cocos2d::Vec2 &c) {
+        for (Edge edge : edgeList) {
+            if (edge.isCircleCloseEnough(centerPoint, minDis, radius, c)) return true;
+        }
+        return false;
+    }
+
     void Polygon::productEdges() {
 
         edgeList.clear();

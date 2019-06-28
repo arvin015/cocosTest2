@@ -13,7 +13,7 @@ namespace FoldPaper {
 
     const float FOLD_SPEED = 1.2f;
     const Color4F BACK_FACE_COLOR = Color4F(0.8f, 0.8f, 0.8f, 1.0f);
-    const Color4F DIVIDE_LINE_COLOR = Color4F(229 / 255.0, 229 / 255.0, 229 / 255.0, 1.0f);
+    const Color4F DIVIDE_LINE_COLOR = Color4F(200 / 255.0, 200 / 255.0, 200 / 255.0, 1.0f);
     unsigned int BACK_FACE_TEXTURE;
     unsigned int FRONT_FACE_TEXTURE;
 
@@ -273,7 +273,7 @@ namespace FoldPaper {
 
         //绘制面
         draw3d->set3DTextture(isFront ? FRONT_FACE_TEXTURE : BACK_FACE_TEXTURE);
-        draw3d->drawPolygonWithLight(vertexs, uvs, polygon3D->getNormal(), isFront ? polygon3D->polygonColor : BACK_FACE_COLOR, polygon3D->vertexList.size());
+        draw3d->drawPolygonWithLight(vertexs, uvs, isFront ? -polygon3D->getNormal() : polygon3D->getNormal(), isFront ? polygon3D->polygonColor : BACK_FACE_COLOR, polygon3D->vertexList.size());
 
         //绘制贴图
         if (isFront && polygon3D->textureId != 0) {
@@ -281,7 +281,7 @@ namespace FoldPaper {
             draw->setLightDir(lightDir);
             draw->setCameraMask(cc3dLayer->getCameraMask());
             draw->set3DTextture(polygon3D->textureId);
-            draw->drawPolygonWithLight(vertexs, uvs, polygon3D->getNormal(), Color4F::WHITE, polygon3D->vertexList.size());
+            draw->drawPolygonWithLight(vertexs, uvs, -polygon3D->getNormal(), Color4F::WHITE, polygon3D->vertexList.size());
             draw3d->addChild(draw);
         }
 
@@ -463,14 +463,37 @@ namespace FoldPaper {
                         int f0 = parent->faceType;
                         int f1 = child->faceType;
 
-                        float targetAngle = 3.14 / 2;
+                        float targetAngle = M_PI_2;
                         if ((f0 == FaceType::FaceTypeBase && f1 == FaceType::FaceTypeLateralFace) ||
                             (f1 == FaceType::FaceTypeBase && f0 == FaceType::FaceTypeLateralFace) ||
                             (f1 == FaceType::FaceTypeBase && f0 == FaceType::FaceTypeBase)) {
-                            targetAngle = 3.14 / 2;
+                            if (shapeType == THREE_CONE) { //正三角锥
+//                                targetAngle = M_PI - acosf(sqrtf(6) / 12);
+                                targetAngle = M_PI - acosf(0.26);
+                            } else if (shapeType == FOUR_CONE) { //正四角锥
+//                                targetAngle = M_PI - acosf(sqrtf(2) / 4);
+                                targetAngle = M_PI - acosf(0.45);
+                            } else if (shapeType == FIVE_CONE) { //正五角锥
+                                targetAngle = M_PI - acosf(0.62);
+                            } else if (shapeType == SIX_CONE) { //正六角锥
+//                                targetAngle = M_PI - acosf(sqrtf(6) / 4);
+                                targetAngle = M_PI - acosf(0.78);
+                            } else {
+                                targetAngle = M_PI_2;
+                            }
                         } else if (f0 == FaceType::FaceTypeLateralFace && f1 == FaceType::FaceTypeLateralFace) {
-                            int n = baseSideCount;
-                            targetAngle = 3.14 * 2 / (float)n;
+                            if (shapeType == THREE_CONE) { //正三角锥
+                                targetAngle = CC_DEGREES_TO_RADIANS(113.4);
+                            } else if (shapeType == FOUR_CONE) { //正四角锥
+                                targetAngle = CC_DEGREES_TO_RADIANS(78.2);
+                            } else if (shapeType == FIVE_CONE) { //正五角锥
+                                targetAngle = CC_DEGREES_TO_RADIANS(54.6);
+                            } else if (shapeType == SIX_CONE) { //正六角锥
+                                targetAngle = CC_DEGREES_TO_RADIANS(36.6);
+                            } else {
+                                int n = baseSideCount;
+                                targetAngle = M_PI * 2 / (float)n;
+                            }
                         }
                         child->targetAngle = -targetAngle;
 

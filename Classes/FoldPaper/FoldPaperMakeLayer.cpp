@@ -16,7 +16,8 @@ namespace FoldPaper {
       rootPolygonView(nullptr),
       doContainerNode(nullptr),
       isTouchEnabled(true),
-      checkCanFoldCallback(nullptr) {
+      checkCanFoldCallback(nullptr),
+      shapeType(NORMAL) {
 
     }
 
@@ -85,9 +86,8 @@ namespace FoldPaper {
             if (i == 0 || i == 1) { //上下面
                 createPolygonView(type, Vec2(beginX + i * 100, beginY + i * 80), side, edgeLength, edgeLength, FaceTypeBase);
             } else { //侧面
-                createPolygonView(SQUARE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength * PHI, FaceTypeLateralFace);
+                createPolygonView(RECTANGLE, Vec2(beginX + i * 100, beginY + i * 80), 4, edgeLength, edgeLength * PHI, FaceTypeLateralFace);
             }
-
         }
     }
 
@@ -104,15 +104,58 @@ namespace FoldPaper {
         }
     }
 
+    void FoldPaperMakeLayer::createPolygonViewFromCylinder(float shortEdgeLength, float longEdgeLength) {
+        //两个圆
+        float circleRadius = longEdgeLength / (M_PI * 2); //圆半径
+        createPolygonView(CIRCLE, Vec2(300, 300), 0, circleRadius, 0, FaceTypeBase);
+        createPolygonView(CIRCLE, Vec2(360, 360), 0, circleRadius, 0, FaceTypeBase);
+        
+        //一个矩形
+        createPolygonView(RECTANGLE, Vec2(500, 500), 4, longEdgeLength, shortEdgeLength, FaceTypeLateralFace);
+    }
+    
+    void FoldPaperMakeLayer::createPolygonViewFromCircular(float circumference) {
+        //圆
+        float circleRadius = circumference / (M_PI * 2); //圆半径
+        createPolygonView(CIRCLE, Vec2(400, 400), 0, circleRadius, 0, FaceTypeBase);
+
+        //圆弧
+        float arcRadius = circumference / M_PI_2; //圆弧半径
+        createPolygonView(ARC, Vec2(520, 520), 0, arcRadius, 0, FaceTypeLateralFace);
+    }
+
+    void FoldPaperMakeLayer::createPolygonViewFromCone(int side, float baseLength, float broadsideLength) {
+        //底边
+        float beginX = 200.0f;
+        float beginY = 200.0f;
+        if (side == 4) {
+            createPolygonView(SQUARE, Vec2(beginX, beginY), side, baseLength, baseLength, FaceTypeBase);
+        } else {
+            createPolygonView(POLYGON, Vec2(beginX, beginY), side, baseLength, baseLength, FaceTypeBase);
+        }
+
+        //侧边---等腰三角形
+        for (int i = 0; i < side; i++) {
+            createPolygonView(TRIANGLE, Vec2(beginX + (i + 1) * 100, beginY + (i + 1) * 80), side, baseLength, broadsideLength, FaceTypeLateralFace);
+        }
+    }
+
     void FoldPaperMakeLayer::createPolygonView(int polygonType, const Vec2 &centerPoint, int edge, float edgeLength, float height, int faceType) {
         PolygonView* polygonView = PolygonView::create();
-        if (polygonType == SQUARE) {
+        if (polygonType == SQUARE || polygonType == RECTANGLE) {
             polygonView->createSquare(centerPoint, edgeLength, height);
+        } if (polygonType == CIRCLE) {
+            polygonView->createCircle(centerPoint, edgeLength);
+        } else if (polygonType == ARC) {
+            polygonView->createArc(centerPoint, edgeLength);
+        } else if (polygonType == TRIANGLE) {
+            polygonView->createTriangle(centerPoint, edgeLength, height);
         } else if (polygonType == POLYGON) {
             polygonView->createRegularPolygonWithEdgeLength(centerPoint, edge, edgeLength);
         }
         polygonView->setTag(ids);
         polygonView->faceType = faceType;
+        polygonView->polygonType = polygonType;
         polygonView->initView();
         polygonView->setOnTouchEndCallback([this, polygonView]() {
             attachPolygons(polygonView);
@@ -175,21 +218,35 @@ namespace FoldPaper {
 
     void FoldPaperMakeLayer::updateAllPolygonsPosition(const cocos2d::Vec2 &delta) {
         for (PolygonView* p : polygonViewList) {
-            p->movePolygon(delta);
+            p->movePolygon(p->getPolygonPosition() + delta);
         }
     }
 
     void FoldPaperMakeLayer::attachPolygons(PolygonView* polygonView) {
 
-        for (PolygonView* referPolygonView : polygonViewList) {
-            if (referPolygonView == polygonView) {
-                continue;
-            }
-            if (polygonView->checkIsCloseEnough(referPolygonView, 15.0f, true)) {
-                if (checkCanFoldCallback != nullptr) {
-                    checkCanFoldCallback(checkCanFold());
+        if (shapeType == CIRCULAR_CONE && polygonViewList.size() == 2) { //圆锥检测吸附
+            for (PolygonView* referPolygonView : polygonViewList) {
+                if (referPolygonView == polygonView) {
+                    continue;
                 }
-                return;
+                if (polygonView->checkIsCloseEnough2(referPolygonView, 20.0f, true)) {
+                    if (checkCanFoldCallback != nullptr) {
+                        checkCanFoldCallback(true);
+                    }
+                    return;
+                }
+            }
+        } else {
+            for (PolygonView* referPolygonView : polygonViewList) { //除圆锥之外
+                if (referPolygonView == polygonView) {
+                    continue;
+                }
+                if (polygonView->checkIsCloseEnough(referPolygonView, 15.0f, true)) {
+                    if (checkCanFoldCallback != nullptr) {
+                        checkCanFoldCallback(checkCanFold());
+                    }
+                    return;
+                }
             }
         }
 

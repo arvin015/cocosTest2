@@ -82,6 +82,9 @@ public:
     void drawPolygonWithLight(const cocos2d::Vec3 *verts, const cocos2d::Vec2 *uvs,
                               const cocos2d::Vec3 &normal, const cocos2d::Color4F &fillColor, int count);
 
+    void drawPolygonWithLight1(const cocos2d::Vec3 *verts, const cocos2d::Vec2 *uvs,
+                              const cocos2d::Vec3 &normal, const cocos2d::Color4F &fillColor, int count, const cocos2d::Color4F &borderColor, int scale);
+
     /**
      * set 3d texture
      */
@@ -137,7 +140,7 @@ protected:
 
     int         _bufferCapacity;
     GLsizei     _bufferCount;
-    V3F_C4B_T2F *_buffer;
+    V3F_C4B_V2F_V3F *_buffer;
 
     int         _bufferCapacityGLLine;
     GLsizei     _bufferCountGLLine;
