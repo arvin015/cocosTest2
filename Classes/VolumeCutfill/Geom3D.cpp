@@ -150,10 +150,9 @@ cG3DefModelGen* loadModelCube(float size) {
 
         //每个面的4个法向量
         Vec3 normal = tri2normal(modelGen->vers[verStart+1], modelGen->vers[verStart], modelGen->vers[verStart+2]);
-        modelGen->nors[verStart] = normal;
-        modelGen->nors[verStart+1] = normal;
-        modelGen->nors[verStart+2] = normal;
-        modelGen->nors[verStart+3] = normal;
+        for (int i = 0; i < 4; i++) {
+            modelGen->nors[verStart+i] = normal;
+        }
 
         //每个面的6个索引（每个面分成2个三角形，每个三角形3个索引）
         modelGen->idxs[idStart] = verStart;
@@ -178,7 +177,7 @@ cG3DefModelGen* loadModelCone(int side, float r, float height) {
 
     //锥环
     Vec3 headVec = Vec3(0, 0, height);
-    for (int i = 0; i < verts.size(); i++) {
+    for (int i = 0; i < side; i++) {
         int verStart = i*3;
 
         modelGen->vers[verStart] = headVec;
@@ -200,7 +199,7 @@ cG3DefModelGen* loadModelCone(int side, float r, float height) {
     }
 
     //底部圆
-    for (int i = verts.size() - 1; i > -1; i--) {
+    for (int i = side - 1; i > -1; i--) {
         int verStart = side*3+(i*3);
 
         modelGen->vers[verStart] = Vec3::ZERO;
@@ -229,44 +228,76 @@ cG3DefModelGen* loadModelSphere(float r, int latCount, int lonCount) {
     const float alpha_inc = 2.0f * M_PI / (lonCount-1);
     const float beta_inc = -M_PI / (latCount-1);
 
-    cG3DefModelGen* modelGen = preallocModel(side*3*2, side*3*2);
+    int maxIndex = latCount * lonCount; //总顶点数
+
+    std::vector<Vec3> vects; //顶点集
+    std::map<int, std::vector<int>> faces; //面map
 
     int vIndex = 0;
-    int maxIndex = latCount * lonCount;
     for(int j = 0; j < latCount; j++) {
         float alpha = 0.0f;
         for (int i = 0; i < lonCount; i++) {
-            Vec3 p0;
-            p0.y = r * sin(beta);
-            p0.x = r * cos(beta) * cos(alpha);
-            p0.z = r * cos(beta) * sin(alpha);
+            float x = r * cos(beta) * cos(alpha);
+            float y = r * sin(beta);
+            float z = r * cos(beta) * sin(alpha);
+            Vec3 p = Vec3(x, y, z);
+            vects.push_back(p);
 
-            TVertex v0;
-            v0.mPosition = p0;
-            v0.mUV = Vector2::ZERO;
-            s->mVertices.push_back(v0);
-
-            TFace * face = new TFace();
-            face->mType = ftLateralFace;
+            std::vector<int> vs;
             int id0 = vIndex % maxIndex;
             int id1 = (id0 + 1) % maxIndex;
-            int id2 = (id1 + sliceCount) % maxIndex;
-            int id3 = (id0 + sliceCount) % maxIndex;
-
-            face->mIndices.push_back(id0);
-            face->mIndices.push_back(id1);
-            face->mIndices.push_back(id2);
-            face->mIndices.push_back(id3);
-
-            s->mFaces.push_back(face);
-
+            int id2 = (id1 + lonCount) % maxIndex;
+            int id3 = (id0 + lonCount) % maxIndex;
+            vs.push_back(id0);
+            vs.push_back(id1);
+            vs.push_back(id2);
+            vs.push_back(id3);
+            faces.insert(std::make_pair(vIndex, vs));
 
             alpha += alpha_inc;
-
-            ++vIndex;
+            vIndex++;
         }
         beta += beta_inc;
     }
+
+    //每个面4个顶点、6个索引
+    int faceCount = faces.size();
+    cG3DefModelGen* modelGen = preallocModel(faceCount*4, faceCount*6);
+
+    for (auto it = faces.begin(); it != faces.end(); it++) {
+        int index = it->first;
+        std::vector<int> vs = it->second;
+
+        int verStart = index*4;
+        int idStart = index*6;
+
+        //每个面的4个顶点
+        for (int i = 0; i < 4; i++) {
+            modelGen->vers[verStart+i] = vects[vs[i]];
+        }
+
+        //每个面的4个uvs
+        modelGen->uvs[verStart] = Vec2::ZERO;
+        modelGen->uvs[verStart+1] = Vec2::UNIT_X;
+        modelGen->uvs[verStart+2] = Vec2::ONE;
+        modelGen->uvs[verStart+3] = Vec2::UNIT_Y;
+
+        //每个面的4个法向量
+        Vec3 normal = tri2normal(vects[vs[1]], vects[vs[0]], vects[vs[2]]);
+        for (int i = 0; i < 4; i++) {
+            modelGen->nors[verStart+i] = normal;
+        }
+
+        //每个面的6个索引（每个面分成2个三角形，每个三角形3个索引）
+        modelGen->idxs[idStart] = verStart;
+        modelGen->idxs[idStart+1] = verStart+1;
+        modelGen->idxs[idStart+2] = verStart+2;
+        modelGen->idxs[idStart+3] = verStart;
+        modelGen->idxs[idStart+4] = verStart+2;
+        modelGen->idxs[idStart+5] = verStart+3;
+    }
+
+    return modelGen;
 }
 
 cG3DefModelGen* preallocModel(int cntvec, int cntidx) {

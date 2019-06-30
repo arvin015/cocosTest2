@@ -1,4 +1,4 @@
-//
+﻿//
 //  MainLayer.cpp
 //  CocosTest2
 //
@@ -9,6 +9,7 @@
 #include "MainLayer.h"
 #include "ui/UIButton.h"
 #include "ui/UICheckBox.h"
+#include "ui/UIScrollView.h"
 #include <spine/spine-cocos2dx.h>
 #include "spine/spine.h"
 #include "HelloWorldScene.h"
@@ -33,6 +34,7 @@
 #include "FractionBarLayer.h"
 #include "VolumesOfCubesLayer.h"
 #include "VolumeCutfillLayer.h"
+#include "VectorTestLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -50,7 +52,7 @@ int getArrLen(T &array) {
 
 const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
                         "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
-                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割填补"};
+                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿", "向量测试"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -130,7 +132,45 @@ bool MainLayer::init() {
 //    this->addChild(skeleton);
 //    
 //    skeleton->setAnimation(0, "drive", true);
-    
+
+    auto scrollView = ScrollView::create();
+    scrollView->setBackGroundColor(Color3B::GRAY);
+    scrollView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
+    scrollView->setPosition(Vec2(100, 200));
+    addChild(scrollView);
+
+    auto testImg = ImageView::create("paper_img_animal_dog.png");
+    testImg->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    scrollView->addChild(testImg);
+
+    float h = MIN(testImg->getContentSize().height, 200);
+    scrollView->setContentSize(Size(testImg->getContentSize().width, h));
+    scrollView->setInnerContainerSize(testImg->getContentSize());
+    testImg->setPosition(Vec2(0, scrollView->getInnerContainerSize().height));
+
+    scrollView->getInnerContainer()->setBackGroundColor(Color3B::YELLOW);
+    scrollView->getInnerContainer()->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
+
+    auto testBtn = Button::create();
+    testBtn->setPosition(Vec2(50, 50));
+    testBtn->setTitleText("Test");
+    testBtn->setTitleFontSize(30);
+    testBtn->setTitleColor(Color3B::BLUE);
+    testBtn->addClickEventListener([this, scrollView](Ref* pSender) {
+        scrollView->setContentSize(Size(256, 100));
+    });
+    addChild(testBtn);
+
+    Vec2 lp1 = Vec2(1, 1);
+    Vec2 lp2 = Vec2(2, 2);
+    Vec2 lp3 = Vec2(2, 0);
+    Vec2 lp4 = Vec2(1, 2);
+
+    Vec2 v1 = (lp2 - lp1).getNormalized();
+    Vec2 v2 = (lp3 - lp4).getNormalized();
+    float radian = acosf(v1.dot(v2) / (v1.length() * v2.length()));
+    log("-----------------degree = %f", CC_RADIANS_TO_DEGREES(radian));
+
     return true;
 }
 
@@ -236,7 +276,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 getMainScene()->getRootLayer()->controller->pushView(volumeCutfillLayer);
                 break;
             }
-                
+            case 18: {
+                auto* vecotrTestLayer = VectorTestLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(vecotrTestLayer);
+                break;
+            }
             default:
                 break;
         }

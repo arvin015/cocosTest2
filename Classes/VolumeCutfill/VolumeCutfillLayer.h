@@ -85,6 +85,23 @@ private:
     cocos2d::ui::Button* cutBtn;
     cocos2d::ui::Button* fillBtn;
     cocos2d::ui::Button* resetBtn;
+
+    //test
+    enum Type3D {
+        NON,
+        CUBE,
+        CONE,
+        SPHERE,
+    };
+    Type3D curType3D = NON;
+
+    cocos2d::ui::Button* cubeBtn;
+    cocos2d::ui::Button* coneBtn;
+    cocos2d::ui::Button* sphereBtn;
+    cocos2d::Sprite3D* cubeSp3d;
+    cocos2d::Sprite3D* coneSp3d;
+    cocos2d::Sprite3D* sphereSp3d;
+    //end
 };
 
 #endif /* VolumeCutfillLayer_h */
