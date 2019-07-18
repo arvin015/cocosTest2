@@ -37,6 +37,16 @@ bool VectorTestLayer::init() {
 
     polyViewList.pushBack(polyView1);
     polyViewList.pushBack(polyView2);
+    
+    Vec2 lp1 = Vec2(1, 1);
+    Vec2 lp2 = Vec2(2, 2);
+    Vec2 lp3 = Vec2(2, 0);
+    Vec2 lp4 = Vec2(1, 2);
+    
+    Vec2 v1 = (lp2 - lp1).getNormalized();
+    Vec2 v2 = (lp3 - lp4).getNormalized();
+    float radian = acosf(v1.dot(v2) / (v1.length() * v2.length()));
+    log("-----------------degree = %f", CC_RADIANS_TO_DEGREES(radian));
 
     return true;
 }

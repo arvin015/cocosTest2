@@ -223,6 +223,70 @@ cG3DefModelGen* loadModelCone(int side, float r, float height) {
     return modelGen;
 }
 
+cG3DefModelGen* loadModelPyramid(int side, float edge, float height) {
+    float perAngle = 2 * M_PI / side;
+    float r = 0.5f * edge / sinf(0.5f * perAngle);
+    std::vector<Vec3> vects; //顶点集
+    for (int i = 0; i < side; i++) {
+        vects.push_back(Vec3(r * sinf(perAngle * i), r * cosf(perAngle * i), 0));
+    }
+
+    cG3DefModelGen* modelGen = preallocModel(side * 3 + (side - 2) * 3, side * 3 + (side - 2) * 3);
+
+    //底面
+    int index = 1;
+    Vec3 normal = tri2normal(vects[1], vects[0], vects[2]);
+    for (int i = 0; i < side - 2; i++) {
+        modelGen->vers[i * 3] = vects[0];
+        modelGen->vers[i * 3 + 1] = vects[index];
+        modelGen->vers[i * 3 + 2] = vects[(index + 1) % vects.size()];
+        index = index + 1;
+
+        modelGen->nors[i * 3] = normal;
+        modelGen->nors[i * 3 + 1] = normal;
+        modelGen->nors[i * 3 + 2] = normal;
+
+        modelGen->uvs[i * 3] = Vec2::ZERO;
+        modelGen->uvs[i * 3 + 1] = Vec2::UNIT_Y;
+        modelGen->uvs[i * 3 + 2] = Vec2::ONE;
+
+        modelGen->idxs[i * 3] = i * 3;
+        modelGen->idxs[i * 3 + 1] = i * 3 + 1;
+        modelGen->idxs[i * 3 + 2] = i * 3 + 2;
+    }
+
+    vects = vectormakereverse(vects);
+
+    //侧面-side个侧面
+    int verS = (side - 2) * 3;
+    Vec3 topVec = Vec3(0, 0, height); //顶部点
+    for (int i = 0; i < side; i++) {
+        int verStart = verS + i * 3;
+        modelGen->vers[verStart] = topVec;
+        modelGen->vers[verStart + 1] = vects[i];
+        modelGen->vers[verStart + 2] = vects[(i + 1) % vects.size()];
+
+        Vec3 normal = tri2normal(modelGen->vers[verStart + 1], modelGen->vers[verStart], modelGen->vers[verStart + 2]);
+        modelGen->nors[verStart] = normal;
+        modelGen->nors[verStart + 1] = normal;
+        modelGen->nors[verStart + 2] = normal;
+
+        modelGen->uvs[verStart] = Vec2::ZERO;
+        modelGen->uvs[verStart + 1] = Vec2::UNIT_Y;
+        modelGen->uvs[verStart + 2] = Vec2::ONE;
+
+        modelGen->idxs[verStart] = verStart;
+        modelGen->idxs[verStart + 1] = verStart + 1;
+        modelGen->idxs[verStart + 2] = verStart + 2;
+    }
+
+    return modelGen;
+}
+
+cG3DefModelGen* loadModelCylinder(int side, float r, float height) {
+
+}
+
 cG3DefModelGen* loadModelSphere(float r, int latCount, int lonCount) {
     float beta = M_PI_2;
     const float alpha_inc = 2.0f * M_PI / (lonCount-1);

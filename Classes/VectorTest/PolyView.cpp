@@ -162,6 +162,7 @@ bool PolyView::checkIsContainerPoint(const Vec2 &touchP) {
         }
         return false;
     }
+    return false;
 }
 
 void PolyView::bringToFront() {

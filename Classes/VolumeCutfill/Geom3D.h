@@ -136,6 +136,22 @@ cG3DefModelGen* loadModelCube(float size);
 cG3DefModelGen* loadModelCone(int side, float r, float height);
 
 /**
+ * 创建规则凌锥数据模型
+ * @side   侧面数
+ * @edge   底部边长
+ * @height 凌锥高
+ */
+cG3DefModelGen* loadModelPyramid(int side, float edge, float height);
+
+/**
+ * 创建圆柱体数据模型
+ * @side   侧面数
+ * @r      底部圆半径
+ * @height 圆柱体高
+ */
+cG3DefModelGen* loadModelCylinder(int side, float r, float height);
+
+/**
  * 创建圆数据模型
  * @r        球半径
  * @latCount 纬度圈数

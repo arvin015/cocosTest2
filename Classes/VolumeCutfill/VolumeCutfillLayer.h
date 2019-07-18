@@ -14,6 +14,7 @@
 #include "CC3DLayer.h"
 #include "ui/UIButton.h"
 #include "ui/UIRadioButton.h"
+#include "ui/UIText.h"
 #include "CutLayer.h"
 #include "FillLayer.h"
 
@@ -91,6 +92,7 @@ private:
         NON,
         CUBE,
         CONE,
+        PYRAMID,
         SPHERE,
     };
     Type3D curType3D = NON;
@@ -98,9 +100,13 @@ private:
     cocos2d::ui::Button* cubeBtn;
     cocos2d::ui::Button* coneBtn;
     cocos2d::ui::Button* sphereBtn;
+    cocos2d::ui::Button* pyramidBtn;
     cocos2d::Sprite3D* cubeSp3d;
     cocos2d::Sprite3D* coneSp3d;
     cocos2d::Sprite3D* sphereSp3d;
+    cocos2d::ui::Text* pyramidNumText;
+    cocos2d::ui::Button* curBtn;
+    cocos2d::Sprite3D* curSp3d;
     //end
 };
 

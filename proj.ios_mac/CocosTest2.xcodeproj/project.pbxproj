@@ -66,6 +66,8 @@
 		A20B3CC121A3AA58007D6F8F /* MyVertexShader.vert in Resources */ = {isa = PBXBuildFile; fileRef = A20B3CBF21A3AA58007D6F8F /* MyVertexShader.vert */; };
 		A215014121ED7F26007544FD /* VolumesOfCubesLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A215013F21ED7F26007544FD /* VolumesOfCubesLayer.cpp */; };
 		A215014721ED94E0007544FD /* Cube3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A215014521ED94E0007544FD /* Cube3D.cpp */; };
+		A215FE8F22E076A100AA0BE7 /* VectorTestLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A215FE8B22E076A100AA0BE7 /* VectorTestLayer.cpp */; };
+		A215FE9022E076A100AA0BE7 /* PolyView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A215FE8C22E076A100AA0BE7 /* PolyView.cpp */; };
 		A21C39951F9050A8009644E8 /* ElectronicBoards.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */; };
 		A21C39961F9050A8009644E8 /* ElectronicBoardsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */; };
 		A21C39991F905217009644E8 /* select.png in Resources */ = {isa = PBXBuildFile; fileRef = A21C39971F905217009644E8 /* select.png */; };
@@ -338,6 +340,10 @@
 		A215014021ED7F26007544FD /* VolumesOfCubesLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VolumesOfCubesLayer.h; sourceTree = "<group>"; };
 		A215014521ED94E0007544FD /* Cube3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cube3D.cpp; sourceTree = "<group>"; };
 		A215014621ED94E0007544FD /* Cube3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cube3D.h; sourceTree = "<group>"; };
+		A215FE8B22E076A100AA0BE7 /* VectorTestLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VectorTestLayer.cpp; sourceTree = "<group>"; };
+		A215FE8C22E076A100AA0BE7 /* PolyView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PolyView.cpp; sourceTree = "<group>"; };
+		A215FE8D22E076A100AA0BE7 /* VectorTestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorTestLayer.h; sourceTree = "<group>"; };
+		A215FE8E22E076A100AA0BE7 /* PolyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyView.h; sourceTree = "<group>"; };
 		A21C39911F9050A8009644E8 /* ElectronicBoards.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoards.cpp; sourceTree = "<group>"; };
 		A21C39921F9050A8009644E8 /* ElectronicBoards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElectronicBoards.h; sourceTree = "<group>"; };
 		A21C39931F9050A8009644E8 /* ElectronicBoardsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElectronicBoardsLayer.cpp; sourceTree = "<group>"; };
@@ -819,6 +825,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A2C9FE9822C99485007D9106 /* VectorTest */,
 				A262B39A2212795700250AE9 /* VolumeCutfill */,
 				A215013D21ED7F13007544FD /* VolumesOfCubes */,
 				A21EB5C221D30C4100E4077C /* FractionBar */,
@@ -1166,6 +1173,17 @@
 			path = NumberInTwentyForSequence;
 			sourceTree = "<group>";
 		};
+		A2C9FE9822C99485007D9106 /* VectorTest */ = {
+			isa = PBXGroup;
+			children = (
+				A215FE8C22E076A100AA0BE7 /* PolyView.cpp */,
+				A215FE8E22E076A100AA0BE7 /* PolyView.h */,
+				A215FE8B22E076A100AA0BE7 /* VectorTestLayer.cpp */,
+				A215FE8D22E076A100AA0BE7 /* VectorTestLayer.h */,
+			);
+			path = VectorTest;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1412,6 +1430,7 @@
 			files = (
 				A27B549F221AB6420093353A /* Geom3D.cpp in Sources */,
 				A28443C7221E3D59003E9E4F /* CutLayer.cpp in Sources */,
+				A215FE8F22E076A100AA0BE7 /* VectorTestLayer.cpp in Sources */,
 				A215014721ED94E0007544FD /* Cube3D.cpp in Sources */,
 				A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */,
 				A27EDA3E2188048D00BE58A4 /* cStrWalker.cpp in Sources */,
@@ -1439,6 +1458,7 @@
 				A2A0F1AA1F56483B00C8D1F9 /* PlayImageView.cpp in Sources */,
 				A297C6911F57BC7300F4BAAD /* UIMathNumber.cpp in Sources */,
 				A27EDA3F2188048D00BE58A4 /* cMultiTouch.cpp in Sources */,
+				A215FE9022E076A100AA0BE7 /* PolyView.cpp in Sources */,
 				A28F459F1F4D5A8D00359D90 /* ClippingTest.cpp in Sources */,
 				A255D5201FC6CCBA000D7264 /* UINumberSelector.cpp in Sources */,
 				A2C87BFB219E937300C2FFC2 /* Slab.cpp in Sources */,

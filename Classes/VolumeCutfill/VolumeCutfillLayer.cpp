@@ -38,7 +38,10 @@ VolumeCutfillLayer::VolumeCutfillLayer()
 , currentQId(-1)
 , cubeSp3d(nullptr)
 , coneSp3d(nullptr)
-, sphereSp3d(nullptr) {
+, sphereSp3d(nullptr)
+, pyramidNumText(nullptr)
+, curBtn(nullptr)
+, curSp3d(nullptr) {
 
 }
 
@@ -153,13 +156,16 @@ bool VolumeCutfillLayer::init() {
     radioGroup->setSelectedButton(0);
 
     cubeBtn = Button::create();
-    cubeBtn->setPosition(Vec2(20, 200));
+    cubeBtn->setPosition(Vec2(20, 240));
     cubeBtn->setAnchorPoint(Vec2::ZERO);
     cubeBtn->setTitleColor(Color3B::BLACK);
     cubeBtn->setTitleText("立方体");
     cubeBtn->setTitleFontSize(24);
     cubeBtn->addClickEventListener([this](Ref* pSender) {
         if (curType3D == CUBE) return;
+
+        if (curSp3d) curSp3d->setVisible(false);
+        if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
 
         if (cubeSp3d == nullptr) {
             cubeSp3d = addSprite3DModel(loadModelCube(0.5f), cc3DLayer, Vec3::ZERO);
@@ -171,24 +177,24 @@ bool VolumeCutfillLayer::init() {
         cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
 
         curType3D = CUBE;
+        curBtn = cubeBtn;
+        curSp3d = cubeSp3d;
 
         cubeBtn->setTitleColor(Color3B::BLUE);
-        coneBtn->setTitleColor(Color3B::BLACK);
-        sphereBtn->setTitleColor(Color3B::BLACK);
-
-        if (coneSp3d) coneSp3d->setVisible(false);
-        if (sphereSp3d) sphereSp3d->setVisible(false);
     });
     addChild(cubeBtn);
 
     coneBtn = Button::create();
     coneBtn->setAnchorPoint(Vec2::ZERO);
-    coneBtn->setPosition(Vec2(20, 150));
+    coneBtn->setPosition(Vec2(20, 200));
     coneBtn->setTitleColor(Color3B::BLACK);
     coneBtn->setTitleText("圆锥体");
     coneBtn->setTitleFontSize(24);
     coneBtn->addClickEventListener([this](Ref* pSender) {
         if (curType3D == CONE) return;
+
+        if (curSp3d) curSp3d->setVisible(false);
+        if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
 
         if (coneSp3d == nullptr) {
             coneSp3d = addSprite3DModel(loadModelCone(128, 0.25f, 0.5f), cc3DLayer, Vec3::ZERO);
@@ -200,24 +206,82 @@ bool VolumeCutfillLayer::init() {
         cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
 
         curType3D = CONE;
+        curBtn = coneBtn;
+        curSp3d = coneSp3d;
 
         coneBtn->setTitleColor(Color3B::BLUE);
-        cubeBtn->setTitleColor(Color3B::BLACK);
-        sphereBtn->setTitleColor(Color3B::BLACK);
-
-        if (cubeSp3d) cubeSp3d->setVisible(false);
-        if (sphereSp3d) sphereSp3d->setVisible(false);
     });
     addChild(coneBtn);
 
+    pyramidBtn = Button::create();
+    pyramidBtn->setAnchorPoint(Vec2::ZERO);
+    pyramidBtn->setPosition(Vec2(20, 160));
+    pyramidBtn->setTitleColor(Color3B::BLACK);
+    pyramidBtn->setTitleText("凌锥");
+    pyramidBtn->setTitleFontSize(24);
+    pyramidBtn->addClickEventListener([this](Ref* pSender) {
+        if (curType3D == PYRAMID) return;
+
+        if (curSp3d) curSp3d->setVisible(false);
+        if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
+
+        auto pyramidSp3d = addSprite3DModel(loadModelPyramid(Value(pyramidNumText->getString()).asInt(), 0.7f, 0.9f), cc3DLayer, Vec3::ZERO);
+        pyramidSp3d->setColor(Color3B::YELLOW);
+
+        camquat.set(0.169140, 0.088621, 0.079981, 0.978338);
+        cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
+
+        curType3D = PYRAMID;
+        curBtn = pyramidBtn;
+        curSp3d = pyramidSp3d;
+
+        pyramidBtn->setTitleColor(Color3B::BLUE);
+    });
+    addChild(pyramidBtn);
+    auto minusText = Text::create();
+    minusText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    minusText->setPosition(Vec2(pyramidBtn->getPositionX() + pyramidBtn->getContentSize().width + 10, pyramidBtn->getPositionY() + pyramidBtn->getContentSize().height / 2));
+    minusText->setString("-");
+    minusText->setTouchEnabled(true);
+    minusText->setTextColor(Color4B::BLUE);
+    minusText->setFontSize(28);
+    minusText->addClickEventListener([this](Ref* pSender) {
+        int num = Value(pyramidNumText->getString()).asInt();
+        if (num <= 3) return;
+
+        pyramidNumText->setString(Value(num - 1).asString());
+    });
+    addChild(minusText);
+    pyramidNumText = Text::create();
+    pyramidNumText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    pyramidNumText->setPosition(Vec2(minusText->getPositionX() + minusText->getContentSize().width + 10, pyramidBtn->getPositionY() + pyramidBtn->getContentSize().height / 2));
+    pyramidNumText->setTextColor(Color4B::BLACK);
+    pyramidNumText->setString("3");
+    addChild(pyramidNumText);
+    auto plusText = Text::create();
+    plusText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    plusText->setPosition(Vec2(pyramidNumText->getPositionX() + pyramidNumText->getContentSize().width + 10, pyramidBtn->getPositionY() + pyramidBtn->getContentSize().height / 2));
+    plusText->setString("+");
+    plusText->setTouchEnabled(true);
+    plusText->setTextColor(Color4B::BLUE);
+    plusText->setFontSize(28);
+    plusText->addClickEventListener([this](Ref* pSender) {
+        int num = Value(pyramidNumText->getString()).asInt();
+        pyramidNumText->setString(Value(num + 1).asString());
+    });
+    addChild(plusText);
+
     sphereBtn = Button::create();
     sphereBtn->setAnchorPoint(Vec2::ZERO);
-    sphereBtn->setPosition(Vec2(20, 100));
+    sphereBtn->setPosition(Vec2(20, 120));
     sphereBtn->setTitleColor(Color3B::BLACK);
     sphereBtn->setTitleText("圆体");
     sphereBtn->setTitleFontSize(24);
     sphereBtn->addClickEventListener([this](Ref* pSender) {
         if (curType3D == SPHERE) return;
+
+        if (cubeSp3d) cubeSp3d->setVisible(false);
+        if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
 
         if (sphereSp3d == nullptr) {
             sphereSp3d = addSprite3DModel(loadModelSphere(0.5f, 128, 128), cc3DLayer, Vec3::ZERO);
@@ -229,13 +293,10 @@ bool VolumeCutfillLayer::init() {
         cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
 
         curType3D = SPHERE;
+        curBtn = sphereBtn;
+        curSp3d = sphereSp3d;
 
         sphereBtn->setTitleColor(Color3B::BLUE);
-        cubeBtn->setTitleColor(Color3B::BLACK);
-        coneBtn->setTitleColor(Color3B::BLACK);
-
-        if (cubeSp3d) cubeSp3d->setVisible(false);
-        if (coneSp3d) coneSp3d->setVisible(false);
     });
     addChild(sphereBtn);
 

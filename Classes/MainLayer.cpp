@@ -1,4 +1,4 @@
-﻿//
+//
 //  MainLayer.cpp
 //  CocosTest2
 //
@@ -132,44 +132,6 @@ bool MainLayer::init() {
 //    this->addChild(skeleton);
 //    
 //    skeleton->setAnimation(0, "drive", true);
-
-    auto scrollView = ScrollView::create();
-    scrollView->setBackGroundColor(Color3B::GRAY);
-    scrollView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-    scrollView->setPosition(Vec2(100, 200));
-    addChild(scrollView);
-
-    auto testImg = ImageView::create("paper_img_animal_dog.png");
-    testImg->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    scrollView->addChild(testImg);
-
-    float h = MIN(testImg->getContentSize().height, 200);
-    scrollView->setContentSize(Size(testImg->getContentSize().width, h));
-    scrollView->setInnerContainerSize(testImg->getContentSize());
-    testImg->setPosition(Vec2(0, scrollView->getInnerContainerSize().height));
-
-    scrollView->getInnerContainer()->setBackGroundColor(Color3B::YELLOW);
-    scrollView->getInnerContainer()->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-
-    auto testBtn = Button::create();
-    testBtn->setPosition(Vec2(50, 50));
-    testBtn->setTitleText("Test");
-    testBtn->setTitleFontSize(30);
-    testBtn->setTitleColor(Color3B::BLUE);
-    testBtn->addClickEventListener([this, scrollView](Ref* pSender) {
-        scrollView->setContentSize(Size(256, 100));
-    });
-    addChild(testBtn);
-
-    Vec2 lp1 = Vec2(1, 1);
-    Vec2 lp2 = Vec2(2, 2);
-    Vec2 lp3 = Vec2(2, 0);
-    Vec2 lp4 = Vec2(1, 2);
-
-    Vec2 v1 = (lp2 - lp1).getNormalized();
-    Vec2 v2 = (lp3 - lp4).getNormalized();
-    float radian = acosf(v1.dot(v2) / (v1.length() * v2.length()));
-    log("-----------------degree = %f", CC_RADIANS_TO_DEGREES(radian));
 
     return true;
 }
