@@ -284,7 +284,93 @@ cG3DefModelGen* loadModelPyramid(int side, float edge, float height) {
 }
 
 cG3DefModelGen* loadModelCylinder(int side, float r, float height) {
+    float perAngle = M_PI * 2 / side; //偏移的弧度
+    std::vector<Vec3> verts; //底部圆顶点数
+    for (int i = 0; i < side; i++) {
+        verts.push_back(Vec3(r*cosf(perAngle*(i+1)), r*sinf(perAngle*(i+1)), 0));
+    }
 
+    cG3DefModelGen* modelGen = preallocModel(side*3*2+side*4, side*3*2+side*6);
+
+    //顶部圆
+    Vec3 topPoint = Vec3(0, 0, height);
+    for (int i = 0; i < side; i++) {
+        int verStart = i*3;
+
+        modelGen->vers[verStart] = topPoint;
+        modelGen->vers[verStart+1] = verts[i] + Vec3(0, 0, height);
+        modelGen->vers[verStart+2] = verts[(i+1)%side] + Vec3(0, 0, height);
+
+        Vec3 normal = tri2normal(verts[i] + Vec3(0, 0, height), topPoint, verts[(i+1)%side] + Vec3(0, 0, height));
+        modelGen->nors[verStart] = normal;
+        modelGen->nors[verStart+1] = normal;
+        modelGen->nors[verStart+2] = normal;
+
+        modelGen->uvs[verStart] = Vec2::ZERO;
+        modelGen->uvs[verStart+1] = Vec2::UNIT_Y;
+        modelGen->uvs[verStart+2] = Vec2::ONE;
+
+        modelGen->idxs[verStart] = verStart;
+        modelGen->idxs[verStart+1] = verStart+1;
+        modelGen->idxs[verStart+2] = verStart+2;
+    }
+
+    //底部圆
+    for (int i = side - 1; i > -1; i--) {
+        int verStart = side*3+(i*3);
+
+        modelGen->vers[verStart] = Vec3::ZERO;
+        modelGen->vers[verStart+1] = verts[i];
+        modelGen->vers[verStart+2] = i == 0 ? verts[verts.size()-1] : verts[i-1];
+
+        Vec3 normal = tri2normal(verts[i], Vec3::ZERO, i == 0 ? verts[verts.size()-1] : verts[i-1]);
+        modelGen->nors[verStart] = normal;
+        modelGen->nors[verStart+1] = normal;
+        modelGen->nors[verStart+2] = normal;
+
+        modelGen->uvs[verStart] = Vec2::ZERO;
+        modelGen->uvs[verStart+1] = Vec2::UNIT_Y;
+        modelGen->uvs[verStart+2] = Vec2::ONE;
+
+        modelGen->idxs[verStart] = verStart;
+        modelGen->idxs[verStart+1] = verStart+1;
+        modelGen->idxs[verStart+2] = verStart+2;
+    }
+
+    //侧边圆环
+    for (int i = 0; i < side; i++) {
+        int verStart = side*3*2+(i*4); //顶点开始下标
+        int idxStart = side*3*2+(i*6); //索引开始下标
+
+        //每个面的4个顶点
+        modelGen->vers[verStart] = verts[i];
+        modelGen->vers[verStart+1] = verts[(i+1)%side];
+        modelGen->vers[verStart+2] = verts[(i+1)%side] + Vec3(0, 0, height);
+        modelGen->vers[verStart+3] = verts[i] + Vec3(0, 0, height);
+
+        //每个面的4个法向量
+        Vec3 normal = tri2normal(verts[(i+1)%side], verts[i], verts[(i+1)%side] + Vec3(0, 0, height));
+        modelGen->nors[verStart] = normal;
+        modelGen->nors[verStart+1] = normal;
+        modelGen->nors[verStart+2] = normal;
+        modelGen->nors[verStart+3] = normal;
+
+        //每个面的4个uv
+        modelGen->uvs[verStart] = Vec2::ZERO;
+        modelGen->uvs[verStart+1] = Vec2::UNIT_X;
+        modelGen->uvs[verStart+2] = Vec2::ONE;
+        modelGen->uvs[verStart+3] = Vec2::UNIT_Y;
+
+        //每个面的6个索引（每个面分成2个三角形，每个三角形3个索引）
+        modelGen->idxs[idxStart] = verStart;
+        modelGen->idxs[idxStart+1] = verStart+1;
+        modelGen->idxs[idxStart+2] = verStart+2;
+        modelGen->idxs[idxStart+3] = verStart;
+        modelGen->idxs[idxStart+4] = verStart+2;
+        modelGen->idxs[idxStart+5] = verStart+3;
+    }
+
+    return modelGen;
 }
 
 cG3DefModelGen* loadModelSphere(float r, int latCount, int lonCount) {

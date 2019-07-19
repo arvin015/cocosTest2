@@ -38,7 +38,9 @@ VolumeCutfillLayer::VolumeCutfillLayer()
 , currentQId(-1)
 , cubeSp3d(nullptr)
 , coneSp3d(nullptr)
+, pyramidSp3d(nullptr)
 , sphereSp3d(nullptr)
+, cylinderSp3d(nullptr)
 , pyramidNumText(nullptr)
 , curBtn(nullptr)
 , curSp3d(nullptr) {
@@ -225,7 +227,7 @@ bool VolumeCutfillLayer::init() {
         if (curSp3d) curSp3d->setVisible(false);
         if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
 
-        auto pyramidSp3d = addSprite3DModel(loadModelPyramid(Value(pyramidNumText->getString()).asInt(), 0.7f, 0.9f), cc3DLayer, Vec3::ZERO);
+        pyramidSp3d = addSprite3DModel(loadModelPyramid(Value(pyramidNumText->getString()).asInt(), 0.7f, 0.9f), cc3DLayer, Vec3::ZERO);
         pyramidSp3d->setColor(Color3B::YELLOW);
 
         camquat.set(0.169140, 0.088621, 0.079981, 0.978338);
@@ -280,7 +282,7 @@ bool VolumeCutfillLayer::init() {
     sphereBtn->addClickEventListener([this](Ref* pSender) {
         if (curType3D == SPHERE) return;
 
-        if (cubeSp3d) cubeSp3d->setVisible(false);
+        if (curSp3d) curSp3d->setVisible(false);
         if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
 
         if (sphereSp3d == nullptr) {
@@ -299,6 +301,35 @@ bool VolumeCutfillLayer::init() {
         sphereBtn->setTitleColor(Color3B::BLUE);
     });
     addChild(sphereBtn);
+
+    cylinderBtn = Button::create();
+    cylinderBtn->setAnchorPoint(Vec2::ZERO);
+    cylinderBtn->setPosition(Vec2(20, 80));
+    cylinderBtn->setTitleColor(Color3B::BLACK);
+    cylinderBtn->setTitleText("圆柱体");
+    cylinderBtn->setTitleFontSize(24);
+    cylinderBtn->addClickEventListener([this](Ref* pSender) {
+        if (curType3D == CYLINDER) return;
+
+        if (curSp3d) curSp3d->setVisible(false);
+        if (curBtn) curBtn->setTitleColor(Color3B::BLACK);
+
+        if (cylinderSp3d == nullptr) {
+            cylinderSp3d = addSprite3DModel(loadModelCylinder(128, 0.5f, 0.75f), cc3DLayer, Vec3::ZERO);
+            cylinderSp3d->setColor(Color3B::YELLOW);
+        }
+        cylinderSp3d->setVisible(true);
+
+        camquat.set(0.169140, 0.088621, 0.079981, 0.978338);
+        cc3DLayer->setCamLoc(camtarget, camquat, camoffset);
+
+        curType3D = CYLINDER;
+        curBtn = cylinderBtn;
+        curSp3d = cylinderSp3d;
+
+        cylinderBtn->setTitleColor(Color3B::BLUE);
+    });
+    addChild(cylinderBtn);
 
     return true;
 }

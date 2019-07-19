@@ -94,6 +94,7 @@ private:
         CONE,
         PYRAMID,
         SPHERE,
+        CYLINDER
     };
     Type3D curType3D = NON;
 
@@ -101,9 +102,12 @@ private:
     cocos2d::ui::Button* coneBtn;
     cocos2d::ui::Button* sphereBtn;
     cocos2d::ui::Button* pyramidBtn;
+    cocos2d::ui::Button* cylinderBtn;
     cocos2d::Sprite3D* cubeSp3d;
     cocos2d::Sprite3D* coneSp3d;
+    cocos2d::Sprite3D* pyramidSp3d;
     cocos2d::Sprite3D* sphereSp3d;
+    cocos2d::Sprite3D* cylinderSp3d;
     cocos2d::ui::Text* pyramidNumText;
     cocos2d::ui::Button* curBtn;
     cocos2d::Sprite3D* curSp3d;
