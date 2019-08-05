@@ -46,6 +46,7 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/FractionBar/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/VolumesOfCubes/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/VolumeCutfill/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/VectorTest/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/../../../Classes/DragDrop/*.cpp)
 
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
@@ -68,6 +69,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/FractionBar
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/VolumesOfCubes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/VolumeCutfill
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/VectorTest
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Classes/DragDrop
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END

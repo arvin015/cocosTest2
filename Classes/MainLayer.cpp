@@ -35,6 +35,7 @@
 #include "VolumesOfCubesLayer.h"
 #include "VolumeCutfillLayer.h"
 #include "VectorTestLayer.h"
+#include "DragDropLayer.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -52,7 +53,7 @@ int getArrLen(T &array) {
 
 const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
                         "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
-                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿", "向量测试"};
+                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿", "向量测试", "DragDrop"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -239,8 +240,13 @@ void MainLayer::onBtnClick(Ref* pSender) {
                 break;
             }
             case 18: {
-                auto* vecotrTestLayer = VectorTestLayer::create();
+                auto vecotrTestLayer = VectorTestLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(vecotrTestLayer);
+                break;
+            }
+            case 19: {
+                auto dragdropLayer = DragDropLayer::create();
+                getMainScene()->getRootLayer()->controller->pushView(dragdropLayer);
                 break;
             }
             default:
