@@ -327,7 +327,7 @@ public:
 
         y = _mm_mul_ss(y, z);   // y0 * (1.5 - vd * 0.5 * y0 * y0)
 
-		y = bt_splat_ps(y, 0x80);
+		y = bt_splat_ps(y, 0);
 		mVec128 = _mm_mul_ps(mVec128, y);
 
         #endif

@@ -82,6 +82,8 @@
 		A22177F121A2A6C700D05F66 /* gray_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A22177EE21A2A6C500D05F66 /* gray_dot.png */; };
 		A22177F221A2A6C700D05F66 /* white2.png in Resources */ = {isa = PBXBuildFile; fileRef = A22177F021A2A6C600D05F66 /* white2.png */; };
 		A224CE1F21B5015F00E668EE /* UIDrawNodeEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A224CE1D21B5015F00E668EE /* UIDrawNodeEx.cpp */; };
+		A225F7E5256B511F0038505E /* ScrollViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A225F7E3256B511F0038505E /* ScrollViewTest.cpp */; };
+		A225F7EC256B55920038505E /* edx_function_03.png in Resources */ = {isa = PBXBuildFile; fileRef = A225F7EB256B55920038505E /* edx_function_03.png */; };
 		A227029521918FC2009659DD /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A227029221918FC1009659DD /* DrawNode3D.cpp */; };
 		A229311A1F5577480089B2AE /* eight_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931101F5577480089B2AE /* eight_d.png */; };
 		A229311B1F5577480089B2AE /* five_d.png in Resources */ = {isa = PBXBuildFile; fileRef = A22931111F5577480089B2AE /* five_d.png */; };
@@ -168,7 +170,6 @@
 		A28F63141F53C3BD008ADA49 /* MainLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630D1F53C3BD008ADA49 /* MainLayer.cpp */; };
 		A28F63151F53C3BD008ADA49 /* NavigationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */; };
 		A28F63201F53C6AB008ADA49 /* DatasetInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */; };
-		A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */; };
 		A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */; };
 		A28F63431F53F138008ADA49 /* button_bar_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = A28F63421F53F138008ADA49 /* button_bar_delete.png */; };
 		A290ABE31F7F400900AA88B6 /* tank.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A290ABE01F7F400900AA88B6 /* tank.atlas */; };
@@ -217,6 +218,9 @@
 		A2A9F01B1F556FB500C9AFA4 /* three.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0111F556FB500C9AFA4 /* three.png */; };
 		A2A9F01C1F556FB500C9AFA4 /* two.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0121F556FB500C9AFA4 /* two.png */; };
 		A2A9F01D1F556FB500C9AFA4 /* zero.png in Resources */ = {isa = PBXBuildFile; fileRef = A2A9F0131F556FB500C9AFA4 /* zero.png */; };
+		A2AC92B52567965600529CBE /* UIComboBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AC92B02567965500529CBE /* UIComboBox.cpp */; };
+		A2AC92B62567965600529CBE /* UIImageController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AC92B22567965600529CBE /* UIImageController.cpp */; };
+		A2AC92BB25679A4300529CBE /* UICommonTableView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AC92BA25679A4300529CBE /* UICommonTableView.cpp */; };
 		A2ADD4C31F7BA380009F1B49 /* LoadDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */; };
 		A2ADD4C61F7BAB0F009F1B49 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADD4C41F7BAB0F009F1B49 /* loading.png */; };
 		A2ADD4C71F7BAB0F009F1B49 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = A2ADD4C51F7BAB0F009F1B49 /* white.png */; };
@@ -369,6 +373,9 @@
 		A22177F021A2A6C600D05F66 /* white2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white2.png; sourceTree = "<group>"; };
 		A224CE1D21B5015F00E668EE /* UIDrawNodeEx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawNodeEx.cpp; sourceTree = "<group>"; };
 		A224CE1E21B5015F00E668EE /* UIDrawNodeEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIDrawNodeEx.h; sourceTree = "<group>"; };
+		A225F7E3256B511F0038505E /* ScrollViewTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScrollViewTest.cpp; sourceTree = "<group>"; };
+		A225F7E4256B511F0038505E /* ScrollViewTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScrollViewTest.h; sourceTree = "<group>"; };
+		A225F7EB256B55920038505E /* edx_function_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edx_function_03.png; sourceTree = "<group>"; };
 		A227029221918FC1009659DD /* DrawNode3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawNode3D.cpp; sourceTree = "<group>"; };
 		A227029421918FC1009659DD /* DrawNode3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawNode3D.h; sourceTree = "<group>"; };
 		A22931101F5577480089B2AE /* eight_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eight_d.png; sourceTree = "<group>"; };
@@ -505,8 +512,6 @@
 		A28F630F1F53C3BD008ADA49 /* NavigationController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NavigationController.cpp; sourceTree = "<group>"; };
 		A28F63101F53C3BD008ADA49 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
 		A28F63181F53C6AB008ADA49 /* DatasetInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DatasetInfo.cpp; sourceTree = "<group>"; };
-		A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICommonTableView.cpp; sourceTree = "<group>"; };
-		A28F63341F53CC11008ADA49 /* UICommonTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonTableView.h; sourceTree = "<group>"; };
 		A28F633B1F53CC11008ADA49 /* AndroidModelUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidModelUtils.cpp; sourceTree = "<group>"; };
 		A28F633C1F53CC11008ADA49 /* AndroidModelUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidModelUtils.h; sourceTree = "<group>"; };
 		A28F63421F53F138008ADA49 /* button_bar_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bar_delete.png; sourceTree = "<group>"; };
@@ -575,6 +580,12 @@
 		A2A9F0111F556FB500C9AFA4 /* three.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = three.png; sourceTree = "<group>"; };
 		A2A9F0121F556FB500C9AFA4 /* two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = two.png; sourceTree = "<group>"; };
 		A2A9F0131F556FB500C9AFA4 /* zero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zero.png; sourceTree = "<group>"; };
+		A2AC92B02567965500529CBE /* UIComboBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIComboBox.cpp; sourceTree = "<group>"; };
+		A2AC92B22567965600529CBE /* UIImageController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIImageController.cpp; sourceTree = "<group>"; };
+		A2AC92B32567965600529CBE /* UIComboBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIComboBox.h; sourceTree = "<group>"; };
+		A2AC92B42567965600529CBE /* UIImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageController.h; sourceTree = "<group>"; };
+		A2AC92B925679A4300529CBE /* UICommonTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonTableView.h; sourceTree = "<group>"; };
+		A2AC92BA25679A4300529CBE /* UICommonTableView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UICommonTableView.cpp; sourceTree = "<group>"; };
 		A2ADA2731F590648000CA298 /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		A2ADD4C11F7BA380009F1B49 /* LoadDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadDialog.cpp; sourceTree = "<group>"; };
 		A2ADD4C21F7BA380009F1B49 /* LoadDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadDialog.h; sourceTree = "<group>"; };
@@ -734,6 +745,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A225F7EB256B55920038505E /* edx_function_03.png */,
 				A2ADE4CE1F4C2A31007C09BE /* background.mp3 */,
 				A297C68A1F57B46C00F4BAAD /* bee.png */,
 				A297C69E1F57DDE500F4BAAD /* black_frame.png */,
@@ -879,6 +891,8 @@
 				A24BD64F1F43EC4300A32ABF /* UIDrawView.h */,
 				A24E60271FC57088001912E7 /* CommonTest.cpp */,
 				A24E60281FC57088001912E7 /* CommonTest.h */,
+				A225F7E3256B511F0038505E /* ScrollViewTest.cpp */,
+				A225F7E4256B511F0038505E /* ScrollViewTest.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -1101,10 +1115,14 @@
 		A28F63321F53CC11008ADA49 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A2AC92BA25679A4300529CBE /* UICommonTableView.cpp */,
+				A2AC92B925679A4300529CBE /* UICommonTableView.h */,
+				A2AC92B02567965500529CBE /* UIComboBox.cpp */,
+				A2AC92B32567965600529CBE /* UIComboBox.h */,
+				A2AC92B22567965600529CBE /* UIImageController.cpp */,
+				A2AC92B42567965600529CBE /* UIImageController.h */,
 				A2784E251FD51AB300D400EF /* UICircleNode.cpp */,
 				A2784E271FD51AB300D400EF /* UICircleNode.h */,
-				A28F63331F53CC11008ADA49 /* UICommonTableView.cpp */,
-				A28F63341F53CC11008ADA49 /* UICommonTableView.h */,
 				A224CE1D21B5015F00E668EE /* UIDrawNodeEx.cpp */,
 				A224CE1E21B5015F00E668EE /* UIDrawNodeEx.h */,
 				A297C68F1F57BC7300F4BAAD /* UIMathNumber.cpp */,
@@ -1406,6 +1424,7 @@
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				A229311D1F5577480089B2AE /* nine_d.png in Resources */,
 				A255D51C1FC696C9000D7264 /* button_bar_plus.png in Resources */,
+				A225F7EC256B55920038505E /* edx_function_03.png in Resources */,
 				A2ADE4D81F4C3CAA007C09BE /* pew-pew-lei.wav in Resources */,
 				A2418BE322F7D6DE004E01A2 /* img_animal_rabbit.png in Resources */,
 				A28F459C1F4D5A3600359D90 /* hole_stencil.png in Resources */,
@@ -1462,7 +1481,6 @@
 				A28443C7221E3D59003E9E4F /* CutLayer.cpp in Sources */,
 				A215FE8F22E076A100AA0BE7 /* VectorTestLayer.cpp in Sources */,
 				A215014721ED94E0007544FD /* Cube3D.cpp in Sources */,
-				A28F633D1F53CC11008ADA49 /* UICommonTableView.cpp in Sources */,
 				A27EDA3E2188048D00BE58A4 /* cStrWalker.cpp in Sources */,
 				A2A0F1B31F56562100C8D1F9 /* NumberInTenCompareLayer.cpp in Sources */,
 				A24BD6501F43EC4300A32ABF /* UIDrawView.cpp in Sources */,
@@ -1496,6 +1514,7 @@
 				A27EDA342188048C00BE58A4 /* CC3DHitTest.cpp in Sources */,
 				A27B549E221AB6420093353A /* VolumeCutfillLayer.cpp in Sources */,
 				A229E01F21F6A66000E19C12 /* CubeSprite3D.cpp in Sources */,
+				A2AC92B52567965600529CBE /* UIComboBox.cpp in Sources */,
 				A2A0F1A81F56483B00C8D1F9 /* DragImageView.cpp in Sources */,
 				A279F4121FD6520200D7C091 /* AddAndSubtractLayer.cpp in Sources */,
 				A297C68E1F57BBE100F4BAAD /* UISpinner.cpp in Sources */,
@@ -1503,11 +1522,14 @@
 				A27EDA362188048D00BE58A4 /* cG3DefModelGen.cpp in Sources */,
 				A24E60291FC57088001912E7 /* CommonTest.cpp in Sources */,
 				A27EDA352188048C00BE58A4 /* cG3DefModel.cpp in Sources */,
+				A225F7E5256B511F0038505E /* ScrollViewTest.cpp in Sources */,
 				A27EDA392188048D00BE58A4 /* Fold3DLoader.cpp in Sources */,
+				A2AC92BB25679A4300529CBE /* UICommonTableView.cpp in Sources */,
 				A27B54A0221AB6420093353A /* Solid3D.cpp in Sources */,
 				A28F63401F53CC11008ADA49 /* AndroidModelUtils.cpp in Sources */,
 				A293B5951F4AD170009CF915 /* DrawViewTest.cpp in Sources */,
 				A21C39951F9050A8009644E8 /* ElectronicBoards.cpp in Sources */,
+				A2AC92B62567965600529CBE /* UIImageController.cpp in Sources */,
 				A2A0F1BC1F5677F600C8D1F9 /* NumberInTenCombineLayer.cpp in Sources */,
 				A21EB5C621D3103C00E4077C /* FractionBarLayer.cpp in Sources */,
 				A25697441FE12BBE00AB1827 /* PolygonSegment.cpp in Sources */,
@@ -1577,7 +1599,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;

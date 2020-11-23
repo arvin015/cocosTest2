@@ -48,29 +48,23 @@ bool DatasetTableView::init() {
 
 void DatasetTableView::layoutItem(Layout* itemLayout) {
     
-    RelativeLayoutParameter* rp1 = RelativeLayoutParameter::create();
-    rp1->setRelativeName("rpCenter");
-    rp1->setMargin(Margin(10, 0, 0, 0));
-    rp1->setAlign(RelativeLayoutParameter::RelativeAlign::PARENT_TOP_CENTER_HORIZONTAL);
-    
     ImageView* img = ImageView::create();
+    img->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+    img->setPosition(Vec2(itemLayout->getContentSize().width / 2, itemLayout->getContentSize().height - 80));
     img->setTag(100);
+    img->setScale(0.5f);
     itemLayout->addChild(img);
-    img->setLayoutParameter(rp1);
-    
-    RelativeLayoutParameter* rp2 = RelativeLayoutParameter::create();
-    rp2->setRelativeToWidgetName("rpCenter");
-    rp2->setAlign(RelativeLayoutParameter::RelativeAlign::LOCATION_BELOW_CENTER);
     
     Text* text = Text::create();
+    text->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    text->setPosition(Vec2(70, itemLayout->getContentSize().height - 14));
     text->setFontSize(30);
     text->setTextColor(Color4B::BLACK);
     text->setTag(200);
     itemLayout->addChild(text);
-    text->setLayoutParameter(rp2);
 }
 
-void DatasetTableView::setItemData(Layout* itemLayout, long itemIndex, bool isSelected) {
+void DatasetTableView::setItemData(Layout* itemLayout, long itemIndex, int row, bool isSelected) {
     
     DatasetInfo info = datasetList[itemIndex];
     

@@ -36,6 +36,7 @@
 #include "VolumeCutfillLayer.h"
 #include "VectorTestLayer.h"
 #include "DragDropLayer.h"
+#include "ScrollViewTest.h"
 
 USING_NS_CC;
 using namespace ui;
@@ -53,7 +54,7 @@ int getArrLen(T &array) {
 
 const string names[] = {"画板", "GridView", "动作", "节点裁剪", "10_Compare", "10_Singular",
                         "10_Combine", "10_Fly", "20_Sequence", "电子钉板", "UICommon", "AddSubtract",
-                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿", "向量测试", "DragDrop"};
+                        "Cutting", "FoldPaper", "Test3D", "分数棒", "数粒", "体积分割补偿", "向量测试", "DragDrop", "ScrollView"};
 
 inline int getMRow(int index, int col) {
     return index / col;
@@ -120,11 +121,6 @@ bool MainLayer::init() {
 //    }, 2.0f, "Audio");
     
     SimpleAudioEngine::getInstance()->preloadEffect("pew-pew-lei.wav"); //预加载音效
-
-    LoadDialog* loadDialog = LoadDialog::create();
-    loadDialog->setText("正在登录系统，请稍后...");
-    loadDialog->setCancelable(true);
-    loadDialog->show(this);
     
 //    spine::SkeletonAnimation* skeleton = spine::SkeletonAnimation::createWithJsonFile("tank.json", "tank.atlas");
 //    skeleton->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -247,6 +243,11 @@ void MainLayer::onBtnClick(Ref* pSender) {
             case 19: {
                 auto dragdropLayer = DragDropLayer::create();
                 getMainScene()->getRootLayer()->controller->pushView(dragdropLayer);
+                break;
+            }
+            case 20: {
+                auto scrollViewText = ScrollViewTest::create();
+                getMainScene()->getRootLayer()->controller->pushView(scrollViewText);
                 break;
             }
             default:

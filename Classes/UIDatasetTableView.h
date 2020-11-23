@@ -10,15 +10,15 @@
 #define UIDatasetTableView_h
 
 #include <stdio.h>
-#include "Common/UICommonTableView.h"
-
-typedef std::function<void(int)> OnGridItemClickedListener;
+#include "UICommonTableView.h"
 
 class DatasetInfo;
 
 class DatasetTableView : public CommonTableView, TableViewImpl {
     
 public:
+    
+    typedef std::function<void(int)> OnGridItemClickedListener;
     
     DatasetTableView();
     ~DatasetTableView();
@@ -37,7 +37,7 @@ public:
     /**
      * 设置Item数据
      */
-    virtual void setItemData(cocos2d::ui::Layout* itemLayout, long itemIndex, bool isSelected);
+    virtual void setItemData(cocos2d::ui::Layout* itemLayout, long itemIndex, int row, bool isSelected);
     
     /**
      * 点击Item回调
